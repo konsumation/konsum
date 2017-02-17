@@ -1,0 +1,53 @@
+{
+  "name": "konsum",
+  "version": "0.0.0-semantic-release",
+  "description": "",
+  "keywords": [],
+  "main": "dist/server.js",
+  "module": "src/server.js",
+  "scripts": {
+    "cover": "nyc npm test",
+    "test": "mocha tests/*_test.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
+    "prepublish": "rollup --output=dist/server.js -c -- src/server.js",
+    "pretest": "npm run prepublish",
+    "posttest": "markdown-doctest",
+    "precover": "npm run prepublish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k0nsti/konsum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/k0nsti/konsum/issues"
+  },
+  "homepage": "https://github.com/k0nsti/konsum#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "rollup": "^0.41.4",
+    "semantic-release": "^6.3.6",
+    "jsdoc-to-markdown": "^3.0.0",
+    "markdown-doctest": "^0.9.1",
+    "nyc": "^10.1.2"
+  },
+  "contributors": [{
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
+  "license": "BSD-2-Clause",
+  "engines": {
+    "node": ">=6.9.4"
+  },
+  "nyc": {
+    "include": [
+      "dist/**/*.js"
+    ],
+    "reporter": [
+      "lcov"
+    ],
+    "report-dir": "./coverage"
+  }
+}
