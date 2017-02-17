@@ -5,12 +5,15 @@
   "keywords": [],
   "main": "dist/server.js",
   "module": "src/server.js",
+  "bin": {
+    "konsum-server": "bin/konsum-server"
+  },
   "scripts": {
     "cover": "nyc npm test",
     "test": "mocha tests/*_test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
-    "prepublish": "rollup --output=dist/server.js -c -- src/server.js",
+    "prepublish": "rollup --output=bin/konsum-server -c -- src/server.js && chmod +x bin/konsum-server",
     "pretest": "npm run prepublish",
     "posttest": "markdown-doctest",
     "precover": "npm run prepublish"
