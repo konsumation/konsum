@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "dependencies": {
+    "commander": "^2.9.0",
     "sqlite3": "^3.1.8"
   },
   "devDependencies": {
