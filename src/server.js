@@ -2,27 +2,40 @@
 
 'use struct';
 
-const program = require('commander');
-const sqlite3 = require('sqlite3').verbose();
+const path = require('path'),
+program = require('commander'),
+sqlite3 = require('sqlite3').verbose();
+import {
+  expand
+}
+from 'config-expander';
 
 program
   .description('Konsum server')
 //  .version(module.exports.version)
-  .option('-db, --database <file>', 'database file')
+  .option('-c, --config <file>', 'use config from file')
   .parse(process.argv);
 
-const db = new sqlite3.Database(program.database);
+  const constants = {
+    basedir: path.dirname(program.config || process.cwd()),
+    installdir: path.resolve(__dirname, '..')
+  };
 
-db.serialize( () => {
-  db.run("CREATE TABLE lorem (info TEXT)");
+expand(program.config ? "${include('" + path.basename(program.config) + "')}" : { database: 'sample.sqlite'}, { constants })
+.then(config => {
+  const db = new sqlite3.Database(config.database);
 
-  var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-  for (let i = 0; i < 10; i++) {
-    stmt.run("Ipsum " + i);
-  }
-  stmt.finalize();
+  db.serialize( () => {
+    db.run("CREATE TABLE lorem (info TEXT)");
 
-  db.each("SELECT rowid AS id, info FROM lorem", (err, row) => console.log(row.id + ": " + row.info));
+    var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+    for (let i = 0; i < 10; i++) {
+      stmt.run("Ipsum " + i);
+    }
+    stmt.finalize();
+
+    db.each("SELECT rowid AS id, info FROM lorem", (err, row) => console.log(row.id + ": " + row.info));
+  });
+
+  db.close();
 });
-
-db.close();

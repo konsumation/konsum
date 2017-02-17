@@ -4,5 +4,6 @@
 export default {
   banner: '#!/usr/bin/env node',
   format: 'cjs',
-  plugins: []
+  plugins: [],
+  external: ['config-expander']
 };
