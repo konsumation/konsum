@@ -26,17 +26,15 @@ expand(program.config ? "${include('" + path.basename(program.config) + "')}" : 
   }, {
     constants
   })
-  .then(config => {
-    prepareDatabase(config.database).then(db => {
-      db.close();
-    });
-  });
+  .then(config => prepareDatabase(config).then(db => {
+    db.close();
+  }));
 
 
-function prepareDatabase(file) {
+function prepareDatabase(config) {
   const db = new sqlite3.Database(config.database);
 
-  return new Promise((fullull, reject) => {
+  return new Promise((fullfill, reject) => {
     db.serialize(() => {
       db.run("CREATE TABLE lorem (info TEXT)");
 
