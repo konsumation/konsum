@@ -16,7 +16,9 @@
     "prepublish": "rollup --output=bin/konsum-server -c -- src/server.js && chmod +x bin/konsum-server",
     "pretest": "npm run prepublish",
     "posttest": "markdown-doctest",
-    "precover": "npm run prepublish"
+    "precover": "npm run prepublish",
+    "prestart": "npm run prepublish",
+    "start": "node bin/konsum-server --config=config.json"
   },
   "repository": {
     "type": "git",
@@ -40,12 +42,10 @@
     "markdown-doctest": "^0.9.1",
     "nyc": "^10.1.2"
   },
-  "contributors": [
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=6.9.4"
