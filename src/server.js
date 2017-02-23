@@ -4,7 +4,11 @@
 
 const path = require('path'),
   program = require('commander'),
-  sqlite3 = require('sqlite3').verbose();
+  http = require('http'),
+  https = require('https'),
+  sqlite3 = require('sqlite3').verbose(),
+  Koa = require('koa');
+
 import {
   expand
 }
@@ -22,11 +26,23 @@ const constants = {
 };
 
 expand(program.config ? "${include('" + path.basename(program.config) + "')}" : {
-    database: 'sample.sqlite'
+    database: 'sample.sqlite',
+    http: {
+      port: 123456
+    }
   }, {
     constants
   })
   .then(config => prepareDatabase(config).then(db => {
+
+    const app = new Koa();
+
+    // if there is a cert configured use https otherwise plain http
+    const server = config.http.cert ? https.createServer(config.http, app.callback()) : http.createServer(app.callback());
+    server.on('error', err => console.log(err));
+
+    app.listen(config.http.port, () => console.log(`Listening on port ${config.http.port}`));
+
     db.close();
   }));
 
