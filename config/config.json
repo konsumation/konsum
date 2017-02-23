@@ -1,0 +1,8 @@
+{
+  "database": "sample.sqlite",
+  "http": {
+    "port": 12345,
+    "_cert": "${document('cert.pem')}",
+    "key": "${document('key.pem')}"
+  }
+}

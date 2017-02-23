@@ -52,9 +52,9 @@ function prepareDatabase(config) {
 
   return new Promise((fullfill, reject) => {
     db.serialize(() => {
-      db.run("CREATE TABLE lorem (info TEXT)");
+      //db.run("CREATE TABLE lorem (info TEXT)");
 
-      var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+      const stmt = db.prepare("INSERT INTO lorem VALUES (?)");
       for (let i = 0; i < 10; i++) {
         stmt.run("Ipsum " + i);
       }

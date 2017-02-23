@@ -1,6 +1,0 @@
-{
-  "database": "sample.sqlite",
-  "http": {
-    "port": 12345
-  }
-}
