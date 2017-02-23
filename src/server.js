@@ -14,6 +14,11 @@ import {
 }
 from 'config-expander';
 
+import {
+  prepareDatabase
+}
+from './database';
+
 program
   .description('Konsum server')
   //  .version(module.exports.version)
@@ -25,14 +30,14 @@ const constants = {
   installdir: path.resolve(__dirname, '..')
 };
 
-expand(program.config ? "${include('" + path.basename(program.config) + "')}" : {
-    database: 'sample.sqlite',
-    http: {
-      port: 123456
-    }
-  }, {
-    constants
-  })
+const defaultConfig = {
+  database: 'sample.sqlite',
+  http: {
+    port: 123456
+  }
+};
+
+expand(program.config ? "${include('" + path.basename(program.config) + "')}" : defaultConfig, { constants })
   .then(config => prepareDatabase(config).then(db => {
 
     const app = new Koa();
@@ -45,24 +50,3 @@ expand(program.config ? "${include('" + path.basename(program.config) + "')}" : 
 
     db.close();
   }));
-
-
-function prepareDatabase(config) {
-  const db = new sqlite3.Database(config.database);
-
-  return new Promise((fullfill, reject) => {
-    db.serialize(() => {
-      //db.run("CREATE TABLE lorem (info TEXT)");
-
-      const stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-      for (let i = 0; i < 10; i++) {
-        stmt.run("Ipsum " + i);
-      }
-      stmt.finalize();
-
-      db.each("SELECT rowid AS id, info FROM lorem", (err, row) => console.log(row.id + ": " + row.info));
-
-      fullfill(db);
-    });
-  });
-}
