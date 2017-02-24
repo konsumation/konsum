@@ -15,3 +15,7 @@ token setup
 openssl genrsa -out demo.rsa 1024
 openssl rsa -in demo.rsa -pubout > demo.rsa.pub
 ```
+
+test with:
+
+http://localhost:12345/login?user=admin&password=start123
