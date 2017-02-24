@@ -3,6 +3,13 @@
   "http": {
     "port": 12345,
     "_cert": "${document('cert.pem')}",
-    "key": "${document('key.pem')}"
+    "key": "${document('key.pem')}",
+    "auth": {
+      "jwt": {
+        "expires": "1h",
+        "public": "${document('demo.rsa.pub')}",
+        "private": "${document('demo.rsa')}"
+      }
+    }
   }
 }
