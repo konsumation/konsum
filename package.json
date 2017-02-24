@@ -9,12 +9,12 @@
     "konsum-server": "bin/konsum-server"
   },
   "scripts": {
-    "cover": "nyc npm test",
-    "test": "mocha tests/*_test.js",
+    "cover": "rollup -c tests/rollup.config.js && mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
+    "test": "mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "prepublish": "rollup --output=bin/konsum-server -c -- src/server.js && chmod +x bin/konsum-server",
-    "pretest": "npm run prepublish",
+    "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "markdown-doctest",
     "precover": "npm run prepublish",
     "prestart": "npm run prepublish",
@@ -38,28 +38,26 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "rollup": "^0.41.4",
-    "semantic-release": "^6.3.6",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
-    "nyc": "^10.1.2"
+    "rollup": "^0.41.4",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-istanbul": "^1.1.0",
+    "rollup-plugin-multi-entry": "^2.0.1",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "semantic-release": "^6.3.6"
   },
-  "contributors": [{
-    "name": "Markus Felten",
-    "email": "markus.felten@gmx.de"
-  }],
+  "contributors": [
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=6.9.4"
-  },
-  "nyc": {
-    "include": [
-      "dist/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
-    "report-dir": "./coverage"
   }
 }
