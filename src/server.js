@@ -33,7 +33,9 @@ const constants = {
 };
 
 const defaultConfig = {
-  database: 'sample.sqlite',
+  database: {
+    file : 'sample.sqlite'
+  },
   http: {
     port: 123456
   }

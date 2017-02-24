@@ -5,7 +5,7 @@
 const  sqlite3 = require('sqlite3').verbose();
 
 export function prepareDatabase(config) {
-  const db = new sqlite3.Database(config.database);
+  const db = new sqlite3.Database(config.database.file);
 
   return new Promise((fullfill, reject) => {
     db.serialize(() => {
