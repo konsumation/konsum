@@ -58,6 +58,6 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=6.9.4"
+    "node": ">=7.6"
   }
 }
