@@ -46,5 +46,5 @@ router.addRoute('GET', '/login', (ctx, next) => new Promise((fullfill, reject) =
 app.use(router.middleware());
 app.listen(config.http.port, () => console.log(`Listening on port ${config.http.port}`));
 
-return Promise.resolve({ app, server});
+return Promise.resolve({ app, server });
 }

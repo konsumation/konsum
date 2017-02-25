@@ -20,22 +20,34 @@ chai.use(require('chai-http'));
 const request = chai.request;
 
 const config = {
-  http: { port: 12345,
-  auth: { jwt: {
-    public: fs.readFileSync(path.join(__dirname,'..','config','demo.rsa.pub')),
-    private: fs.readFileSync(path.join(__dirname,'..','config','demo.rsa'))
-  }}
-}
+  http: {
+    port: 12345,
+    auth: {
+      jwt: {
+        public: fs.readFileSync(path.join(__dirname,'..','config','demo.rsa.pub')),
+        private: fs.readFileSync(path.join(__dirname,'..','config','demo.rsa'))
+      }
+    }
+  }
 };
 
 describe('server', () => {
-    it('can /login', () =>
-      prepareHttpServer(config).then(({app,server}) => {
-        const a = server.listen();
-        return request(a)
-          .get('/login?user=admin&password=start123').then(res => {
-            expect(res).to.have.status(200);
-          }).catch(err => {throw err;});
-      })
-    );
+  it('can /login', () =>
+    prepareHttpServer(config).then(( { app, server }) =>
+      request(server.listen())
+        .get('/login?user=admin&password=start123')
+          .then(res => expect(res).to.have.status(200))
+          .catch(err => { throw err; })
+    )
+  );
+  /*
+  it('fails with invalid credentials /login', () =>
+    prepareHttpServer(config).then(( { app, server }) =>
+      request(server.listen())
+        .get('/login?user=admin&password=unknown')
+          .then(res => expect(res).to.have.status(200))
+          .catch(err => { throw err; })
+    )
+  );
+  */
 });
