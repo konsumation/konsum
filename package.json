@@ -30,7 +30,7 @@
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "dependencies": {
     "commander": "^2.9.0",
-    "config-expander": "^6.4.0",
+    "config-expander": "^7.0.0",
     "koa": "^2.0.1",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^2.2.2",
