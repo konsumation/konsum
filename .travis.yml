@@ -12,6 +12,7 @@ cache:
 notifications:
   email:
     - markus.felten@gmx.de
+    - kkarpman@clickforit.de
 before_install:
   - npm i -g npm@latest
 before_script:
