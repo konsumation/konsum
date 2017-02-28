@@ -18,6 +18,20 @@
 konsum
 ======
 
+run
+===
+
+```shell
+konsum --config=myConfig.json
+```
+
+install
+=======
+
+```shell
+npm -g install konsum
+```
+
 how to configure
 ================
 
