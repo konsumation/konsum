@@ -1,6 +1,9 @@
 konsum
 ======
 
+how to configure
+================
+
 create self signed cert
 =======================
 
