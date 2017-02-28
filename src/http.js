@@ -45,13 +45,11 @@ export function prepareHttpServer(config) {
 
   app.use(router.middleware());
 
-  /*
-  app.use(KoaJWT({
+  const restricted = KoaJWT({
     secret: config.http.auth.jwt.public
-  }));
-  */
+  });
 
-  router.addRoute('GET', '/values', (ctx, next) => {
+  router.addRoute('GET', '/values', restricted, (ctx, next) => {
     ctx.body = [{
       date: new Date(),
       value: 1.0
