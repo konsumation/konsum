@@ -12,7 +12,6 @@
     "cover": "rollup -c tests/rollup.config.js && mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
     "test": "mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "prepublish": "rollup --output=bin/konsum-server -c -- src/server.js && chmod +x bin/konsum-server",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "markdown-doctest",
@@ -50,12 +49,10 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "semantic-release": "^6.3.6"
   },
-  "contributors": [
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=7.6"

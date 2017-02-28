@@ -24,6 +24,5 @@ script:
 after_script:
   - codecov
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-  - npm run docs
 after_success:
   - npm run semantic-release
