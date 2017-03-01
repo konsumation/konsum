@@ -41,13 +41,16 @@ const defaultConfig = {
   }
 };
 
-expand(program.config ? "${include('" + path.basename(program.config) + "')}" : defaultConfig, {
-    constants
-  })
-  .then(config => Promise.all([
-    prepareDatabase(config),
-    prepareHttpServer(config)])
-  .then(([db,http]) => {
+main();
 
-    db.close();
-  }));
+async function main() {
+  const config = await expand(program.config
+        ? "${include('" + path.basename(program.config) + "')}"
+        : defaultConfig,
+        { constants });
+
+  const db = await prepareDatabase(config);
+  const http = await prepareHttpServer(config, db);
+
+  db.close();
+}

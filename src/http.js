@@ -10,8 +10,7 @@ const http = require('http'),
   KoaJWT = require('koa-jwt'),
   Router = require('koa-better-router');
 
-
-export function prepareHttpServer(config) {
+export function prepareHttpServer(config, database) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
   const server = config.http.cert ? https.createServer(config.http, app.callback()) : http.createServer(app.callback());
@@ -50,6 +49,9 @@ export function prepareHttpServer(config) {
   });
 
   router.addRoute('GET', '/values', restricted, (ctx, next) => {
+
+    //database.each('SELECT value,date FROM value', (err, row) => console.log(row.id + ": " + row.info));
+
     ctx.body = [{
       date: new Date(),
       value: 1.0
