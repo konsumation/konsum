@@ -18,7 +18,7 @@ export function prepareHttpServer(config) {
   server.on('error', err => console.log(err));
 
   const router = Router();
-  router.addRoute('GET', '/login', (ctx, next) => new Promise((fullfill, reject) => {
+  router.addRoute('GET', '/login', (ctx, next) => {
     const q = querystring.parse(ctx.request.querystring);
 
     if (q.user === 'admin' && q.password === 'start123') {
@@ -40,8 +40,8 @@ export function prepareHttpServer(config) {
         message: 'Authentication failed'
       };
     }
-    fullfill(next());
-  }));
+    return next();
+  });
 
   app.use(router.middleware());
 
@@ -61,6 +61,6 @@ export function prepareHttpServer(config) {
   app.listen(config.http.port, () => console.log(`Listening on port ${config.http.port}`));
 
   return Promise.resolve({
-    app, server, router
+    app, server, router, restricted
   });
 }
