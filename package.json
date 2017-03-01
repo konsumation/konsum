@@ -6,18 +6,18 @@
   "main": "dist/server.js",
   "module": "src/server.js",
   "bin": {
-    "konsum-server": "bin/konsum-server"
+    "konsum": "bin/konsum"
   },
   "scripts": {
     "cover": "rollup -c tests/rollup.config.js && mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
     "test": "mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "prepublish": "rollup --output=bin/konsum-server -c -- src/server.js && chmod +x bin/konsum-server",
+    "prepublish": "rollup --output=bin/konsum -c -- src/server.js && chmod +x bin/konsum",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "markdown-doctest",
     "precover": "npm run prepublish",
     "prestart": "npm run prepublish",
-    "start": "node bin/konsum-server --config=config/config.json"
+    "start": "node bin/konsum --config=config/config.json"
   },
   "repository": {
     "type": "git",
