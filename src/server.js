@@ -3,7 +3,7 @@
 'use struct';
 
 const path = require('path'),
-  program = require('commander'),
+  program = require('caporal'),
   sqlite3 = require('sqlite3').verbose();
 
 import {
@@ -23,34 +23,33 @@ from './http';
 
 program
   .description('Konsum server')
-  //  .version(module.exports.version)
+  .version(require(path.join(__dirname,'..','package.json')).version)
   .option('-c, --config <file>', 'use config from file')
+  .action(async (args, options, logger) => {
+    const constants = {
+      basedir: path.dirname(options.config || process.cwd()),
+      installdir: path.resolve(__dirname, '..')
+    };
+
+    const defaultConfig = {
+      database: {
+        file : 'sample.sqlite'
+      },
+      http: {
+        port: 123456
+      }
+    };
+
+    const config = await expand(options.config
+          ? "${include('" + path.basename(options.config) + "')}"
+          : defaultConfig,
+          { constants });
+
+    const db = await prepareDatabase(config);
+    const http = await prepareHttpServer(config, db);
+
+    db.close();
+  });
+
+program
   .parse(process.argv);
-
-const constants = {
-  basedir: path.dirname(program.config || process.cwd()),
-  installdir: path.resolve(__dirname, '..')
-};
-
-const defaultConfig = {
-  database: {
-    file : 'sample.sqlite'
-  },
-  http: {
-    port: 123456
-  }
-};
-
-main();
-
-async function main() {
-  const config = await expand(program.config
-        ? "${include('" + path.basename(program.config) + "')}"
-        : defaultConfig,
-        { constants });
-
-  const db = await prepareDatabase(config);
-  const http = await prepareHttpServer(config, db);
-
-  db.close();
-}

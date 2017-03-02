@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "dependencies": {
-    "commander": "^2.9.0",
+    "caporal": "^0.3.0",
     "config-expander": "^7.0.0",
     "koa": "^2.0.1",
     "koa-better-router": "^2.1.1",
@@ -49,10 +49,12 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "semantic-release": "^6.3.6"
   },
-  "contributors": [{
-    "name": "Markus Felten",
-    "email": "markus.felten@gmx.de"
-  }],
+  "contributors": [
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
   "license": "BSD-2-Clause",
   "engines": {
     "node": ">=7.6"
