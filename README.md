@@ -18,6 +18,8 @@
 konsum
 ======
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/k0nsti/konsum.svg)](https://greenkeeper.io/)
+
 run
 ===
 
