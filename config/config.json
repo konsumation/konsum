@@ -1,6 +1,12 @@
 {
   "database": {
-    "file" : "sample.sqlite"
+    "file": "sample.sqlite"
+  },
+  "users": {
+    "admin": {
+      "password": "start123",
+      "roles": ["admin"]
+    }
   },
   "http": {
     "port": 12345,

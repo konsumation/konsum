@@ -10,22 +10,28 @@ const chai = require('chai'),
   fs = require('fs'),
   path = require('path');
 
-  import
-  {
-    prepareHttpServer
-  } from '../src/http';
+import {
+  prepareHttpServer
+}
+from '../src/http';
 
 chai.use(require('chai-http'));
 
 const request = chai.request;
 
 const config = {
+  users: {
+    admin: {
+      password: "start123",
+      roles: ["admin"]
+    }
+  },
   http: {
     port: 12345,
     auth: {
       jwt: {
-        public: fs.readFileSync(path.join(__dirname,'..','config','demo.rsa.pub')),
-        private: fs.readFileSync(path.join(__dirname,'..','config','demo.rsa'))
+        public: fs.readFileSync(path.join(__dirname, '..', 'config', 'demo.rsa.pub')),
+        private: fs.readFileSync(path.join(__dirname, '..', 'config', 'demo.rsa'))
       }
     }
   }
@@ -33,11 +39,15 @@ const config = {
 
 describe('server', () => {
   it('can /login', () =>
-    prepareHttpServer(config).then(( { app, server }) =>
+    prepareHttpServer(config).then(({
+        app, server
+      }) =>
       request(server.listen())
-        .get('/login?user=admin&password=start123')
-          .then(res => expect(res).to.have.status(200))
-          .catch(err => { throw err; })
+      .get('/login?user=admin&password=start123')
+      .then(res => expect(res).to.have.status(200))
+      .catch(err => {
+        throw err;
+      })
     )
   );
   /*

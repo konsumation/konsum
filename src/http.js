@@ -19,8 +19,9 @@ export function prepareHttpServer(config, database) {
   const router = Router();
   router.addRoute('GET', '/login', (ctx, next) => {
     const q = querystring.parse(ctx.request.querystring);
+    const user = config.users[q.user];
 
-    if (q.user === 'admin' && q.password === 'start123') {
+    if (user !== undefined && user.password === q.password) {
       const claims = {
         permissions: 'all',
         iss: 'http://myDomain'
