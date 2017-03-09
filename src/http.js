@@ -10,6 +10,7 @@ const http = require('http'),
   KoaJWT = require('koa-jwt'),
   Router = require('koa-better-router');
 
+
 export function prepareHttpServer(config, database) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
@@ -17,19 +18,25 @@ export function prepareHttpServer(config, database) {
   server.on('error', err => console.log(err));
 
   const router = Router();
+
+  /**
+   * request api token
+   */
   router.addRoute('GET', '/login', (ctx, next) => {
     const q = querystring.parse(ctx.request.querystring);
     const user = config.users[q.user];
 
     if (user !== undefined && user.password === q.password) {
       const claims = {
-        permissions: 'all',
+        permissions: user.roles.join(','),
         iss: 'http://myDomain'
       };
-      const token = jsonwebtoken.sign(claims, config.http.auth.jwt.private, {
-        algorithm: 'RS256',
-        expiresIn: config.http.auth.jwt.expires || '12h'
-      });
+      const token = jsonwebtoken.sign(claims, config.http.auth.jwt.private,
+        mergeDefaults({
+          algorithm: 'RS256',
+          expiresIn: '12h'
+        }, config.http.auth.jwt)
+      );
       ctx.status = 200;
       ctx.body = {
         token, message: 'Successfully logged in!'
@@ -66,4 +73,14 @@ export function prepareHttpServer(config, database) {
   return Promise.resolve({
     app, server, router, restricted
   });
+}
+
+function mergeDefaults(a1, a2) {
+  const t = {};
+
+  if (a2) {
+    Object.keys(a1).forEach(k => t[k] = a2[k]);
+  }
+
+  return Object.assign(a1, t);
 }

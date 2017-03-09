@@ -14,7 +14,7 @@
     "key": "${document('key.pem')}",
     "auth": {
       "jwt": {
-        "expires": "1h",
+        "expiresIn": "1h",
         "public": "${document('demo.rsa.pub')}",
         "private": "${document('demo.rsa')}"
       }
