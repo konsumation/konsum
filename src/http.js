@@ -20,7 +20,7 @@ export function prepareHttpServer(config, database) {
   const router = Router();
 
   /**
-   * request api token
+   * login to request api token
    */
   router.addRoute('GET', '/login', (ctx, next) => {
     const q = querystring.parse(ctx.request.querystring);
@@ -52,21 +52,25 @@ export function prepareHttpServer(config, database) {
 
   app.use(router.middleware());
 
+  // middleware to restrict access to token holding requests
   const restricted = KoaJWT({
     secret: config.http.auth.jwt.public
   });
 
-  router.addRoute('GET', '/values', restricted, (ctx, next) => {
-
-    //database.each('SELECT value,date FROM value', (err, row) => console.log(row.id + ": " + row.info));
-
-    ctx.body = [{
-      date: new Date(),
-      value: 1.0
-    }];
-
-    return next();
-  });
+  router.addRoute('GET', '/values', /*restricted,*/ (ctx, next) =>
+    new Promise((fullfill, reject) =>
+      database.all('SELECT date, type, amount FROM Konsum', (err, rows) => {
+        if (err) {
+          ctx.status = 401;
+          ctx.body = err;
+          reject(err);
+        } else {
+          ctx.body = rows;
+          fullfill(next());
+        }
+      })
+    )
+  );
 
   app.listen(config.http.port, () => console.log(`Listening on port ${config.http.port}`));
 

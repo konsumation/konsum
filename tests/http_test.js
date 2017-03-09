@@ -15,6 +15,11 @@ import {
 }
 from '../src/http';
 
+import {
+  prepareDatabase
+}
+from '../src/database';
+
 chai.use(require('chai-http'));
 
 const request = chai.request;
@@ -27,6 +32,9 @@ function setPort(config, port) {
 }
 
 const config = {
+  database: {
+    file: "test.sqlite"
+  },
   users: {
     admin: {
       password: "start123",
@@ -43,7 +51,7 @@ const config = {
   }
 };
 
-describe('server', () => {
+describe('server', async() => {
   it('can /login', () =>
     prepareHttpServer(setPort(config, 12345)).then(({
         app, server
@@ -60,11 +68,30 @@ describe('server', () => {
       request(server.listen())
       .get('/login?user=admin&password=unknown')
       .then(res => expect(res).to.have.status(401))
-      .catch(err => {
-
-        //console.log(err);
-        //throw err;
-      })
+      .catch(err => {})
     )
   );
+
+  const database = await prepareDatabase(config);
+
+  it('can get /values', () =>
+    prepareHttpServer(setPort(config, 12347), database).then(({
+      app, server
+    }) => {
+      /* */
+      const r = request(server.listen());
+      return r.get('/login?user=admin&password=start123')
+        .then(res => {
+          const token = res.body.token;
+          //console.log(token);
+          return r.get('/values?jwt=' + token)
+            .set('Authorization', `Bearer ${token}`)
+            .then(res => {
+              console.log(res.body);
+              return expect(res).to.have.status(200);
+            });
+        });
+      /* */
+    }));
+
 });

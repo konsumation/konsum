@@ -27,7 +27,7 @@ program
   .option('-c, --config <file>', 'use config from file')
   .action(async(args, options, logger) => {
 
-    // some constants to be used while loading the configuration
+    // some constants used while loading the configuration
     const constants = {
       basedir: path.dirname(options.config || process.cwd()), // where is the config file located
       installdir: path.resolve(__dirname, '..') // make references to the installdir possible
