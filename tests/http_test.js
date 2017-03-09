@@ -51,9 +51,6 @@ describe('server', () => {
       request(server.listen())
       .get('/login?user=admin&password=start123')
       .then(res => expect(res).to.have.status(200))
-      .catch(err => {
-        throw err;
-      })
     )
   );
   it('fails with invalid credentials /login', () =>
