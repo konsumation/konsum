@@ -29,8 +29,8 @@
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "dependencies": {
     "caporal": "^0.3.0",
-    "config-expander": "^7.0.0",
-    "koa": "^2.0.1",
+    "config-expander": "^7.0.1",
+    "koa": "^2.1.0",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^3.0.0",
     "sqlite3": "^3.1.8"
@@ -39,10 +39,10 @@
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
-    "rollup": "^0.41.4",
+    "mocha": "^3.2.0",
+    "rollup": "^0.41.5",
     "rollup-plugin-commonjs": "^8.0.0",
     "rollup-plugin-istanbul": "^1.1.0",
     "rollup-plugin-multi-entry": "^2.0.1",
