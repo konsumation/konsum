@@ -44,6 +44,6 @@ http://localhost:12345/login?user=admin&password=start123
 
 and exec a request
 
-´´´shell
+```shell
 curl -H 'Authorization: Baerer $token' http://localhost:12345/values
-´´´
+```
