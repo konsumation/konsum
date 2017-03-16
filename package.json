@@ -30,7 +30,7 @@
   "dependencies": {
     "caporal": "^0.3.0",
     "config-expander": "^7.0.1",
-    "koa": "^2.1.0",
+    "koa": "^2.2.0",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^3.0.0",
     "sqlite3": "^3.1.8"
@@ -42,8 +42,8 @@
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.2.0",
-    "rollup": "^0.41.5",
-    "rollup-plugin-commonjs": "^8.0.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-istanbul": "^1.1.0",
     "rollup-plugin-multi-entry": "^2.0.1",
     "rollup-plugin-node-resolve": "^2.0.0",
