@@ -25,12 +25,12 @@ from '../src/database';
 
 
 //select from table,
-xit('table exist??? after create', async() => {
+it('table exist??? after create', async() => {
   const x = await prepareDatabase(config);
 
   db.serialize(function() {
     db.run("INSERT INTO Konsum (date,amount,type) values ('31012017',120.5,'strom')");
-    db.each('SELECT date,amount,type info FROM Konsum', function(err, row) {
+    db.each('SELECT date,amount,type FROM Konsum', function(err, row) {
       console.log(row);
     });
   });
