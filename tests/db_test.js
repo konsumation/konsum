@@ -4,19 +4,15 @@
 'use strict';
 
 const chai = require('chai'),
-  fs = require('fs');
-const sqlite3 = require('sqlite3').verbose();
-const tmp = require('tmp');
-const tmpObj = tmp.tmpNameSync();
-console.log(tmpObj);
+  sqlite3 = require('sqlite3').verbose(),
+  tmp = require('tmp'),
+  tmpObj = tmp.tmpNameSync();
 
 const config = {
   database: {
     file: tmpObj
   }
 };
-
-const db = new sqlite3.Database(config.database.file);
 
 import {
   prepareDatabase
@@ -26,14 +22,14 @@ from '../src/database';
 
 //select from table,
 it('table exist??? after create', async() => {
-  const x = await prepareDatabase(config);
+  const database = await prepareDatabase(config);
 
-  db.serialize(function() {
-    db.run("INSERT INTO Konsum (date,amount,type) values ('31012017',120.5,'strom')");
-    db.each('SELECT date,amount,type FROM Konsum', function(err, row) {
-      console.log(row);
-    });
+  database.serialize(() => {
+    database.run("INSERT INTO Konsum (date,amount,type) values ('31012017',120.5,'strom')");
+    database.each('SELECT date,amount,type FROM Konsum', (err, row) =>
+      chai.assert.equal(row.type, 'strom')
+    );
   });
 
-  db.close();
+  database.close();
 });
