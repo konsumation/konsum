@@ -15,19 +15,32 @@ const config = {
 };
 
 import {
-  prepareDatabase
+  prepareDatabase //,
+  //insertIntoDatabase
 }
 from '../src/database';
 
 
 //select from table,
-it('table exist??? after create', async() => {
+it('insert after create', async() => {
   const database = await prepareDatabase(config);
 
   database.serialize(() => {
     database.run("INSERT INTO Konsum (date,amount,type) values ('31012017',120.5,'strom')");
     database.each('SELECT date,amount,type FROM Konsum', (err, row) =>
       chai.assert.equal(row.type, 'strom')
+    );
+  });
+
+  database.close();
+});
+
+xit('insert as a function', async() => {
+  const insert = await insertIntoDatabase(config, '31012017', 120.5, 'insert');
+
+  database.serialize(() => {
+    database.each('SELECT date,amount,type FROM Konsum', (err, row) =>
+      chai.assert.equal(row.type, 'insert')
     );
   });
 

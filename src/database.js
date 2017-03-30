@@ -20,3 +20,16 @@ export function prepareDatabase(config) {
     });
   });
 }
+/*
+export function insertIntoDatabase(config, date, amount, type) {
+  const db = await prepareDatabase(config);
+
+  return new Promise((fullfill, reject) => {
+    db.serialize(() => {
+      db.run("INSERT INTO Konsum (date,amount,type) values (date, amount, type)");
+
+      fullfill(db);
+    });
+  });
+}
+*/
