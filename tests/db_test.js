@@ -15,8 +15,8 @@ const config = {
 };
 
 import {
-  prepareDatabase //,
-  //insertIntoDatabase
+  prepareDatabase,
+  insertIntoDatabase
 }
 from '../src/database';
 
@@ -35,8 +35,9 @@ it('insert after create', async() => {
   database.close();
 });
 
-xit('insert as a function', async() => {
-  const insert = await insertIntoDatabase(config, '31012017', 120.5, 'insert');
+it('insert as a function', async() => {
+  const database = await prepareDatabase(config);
+  const insert = await insertIntoDatabase(database, '31012017', 120.5, 'insert');
 
   database.serialize(() => {
     database.each('SELECT date,amount,type FROM Konsum', (err, row) =>

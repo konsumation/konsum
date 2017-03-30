@@ -20,10 +20,8 @@ export function prepareDatabase(config) {
     });
   });
 }
-/*
-export function insertIntoDatabase(config, date, amount, type) {
-  const db = await prepareDatabase(config);
 
+export function insertIntoDatabase(db, date, amount, type) {
   return new Promise((fullfill, reject) => {
     db.serialize(() => {
       db.run("INSERT INTO Konsum (date,amount,type) values (date, amount, type)");
@@ -32,4 +30,3 @@ export function insertIntoDatabase(config, date, amount, type) {
     });
   });
 }
-*/
