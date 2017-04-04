@@ -29,7 +29,7 @@
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "dependencies": {
     "caporal": "^0.4.0",
-    "config-expander": "^7.0.1",
+    "config-expander": "^7.0.2",
     "koa": "^2.2.0",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^3.0.1",
