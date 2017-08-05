@@ -9,15 +9,16 @@
     "konsum": "bin/konsum"
   },
   "scripts": {
-    "cover": "rollup -c tests/rollup.config.js && mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
-    "test": "mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
+    "cover": "nyc ava && mocha --reporter tests/istanbul.reporter.js build/bundle.test.js",
+    "test": "ava",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "prepublish": "rollup --output=bin/konsum -c -- src/server.js && chmod +x bin/konsum",
     "pretest": "rollup -c tests/rollup.config.js",
-    "posttest": "markdown-doctest",
-    "precover": "npm run prepublish",
+    "posttest": "npm run prepare && markdown-doctest",
+    "precover": "rollup -c tests/rollup.config.js",
     "prestart": "npm run prepublish",
-    "start": "node bin/konsum --config=config/config.json"
+    "start": "node bin/konsum --config=config/config.json",
+    "prepare": "rollup -c -- src/server.js && chmod +x bin/konsum",
+    "docs": "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md"
   },
   "repository": {
     "type": "git",
@@ -36,18 +37,21 @@
     "sqlite3": "^3.1.9"
   },
   "devDependencies": {
-    "chai": "^4.0.2",
     "chai-http": "^3.0.0",
-    "istanbul": "^0.4.5",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
-    "mocha": "^3.3.0",
-    "rollup": "^0.42.0",
-    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup": "^0.45.2",
+    "rollup-plugin-commonjs": "^8.1.0",
     "rollup-plugin-istanbul": "^1.1.0",
     "rollup-plugin-multi-entry": "^2.0.1",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "semantic-release": "^6.3.6"
+    "semantic-release": "^6.3.6",
+    "jsdoc-babel": "^0.3.0",
+    "nyc": "^11.1.0",
+    "ava": "^0.21.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "xo": "^0.19.0"
   },
   "contributors": [
     {
@@ -57,6 +61,24 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=7.6"
+    "node": ">=8.2.1"
+  },
+  "xo": {
+    "space": true
+  },
+  "ava": {
+    "files": ["build/test-bundle.js"],
+    "presets": ["stage-3"],
+    "require": ["babel-register"]
+  },
+  "nyc": {
+    "include": ["build/test-bundle.js"],
+    "reporter": ["lcov"],
+    "report-dir": "./build/coverage"
+  },
+  "template": {
+    "repository": {
+      "url": "https://github.com/arlac77/npm-package-template.git"
+    }
   }
 }

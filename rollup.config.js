@@ -1,12 +1,19 @@
-/* jslint node: true, esnext: true */
-'use strict';
-
-import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import babel from 'rollup-plugin-babel';
+import pkg from './package.json';
 
 export default {
-  banner: '#!/usr/bin/env node',
-  format: 'cjs',
-  plugins: [nodeResolve(), commonjs()],
-  external: ['config-expander']
+  targets: [
+    {
+      dest: pkg.konsum,
+      format: 'cjs'
+    }
+  ],
+  plugins: [
+    babel({
+      babelrc: false,
+      presets: ['stage-3'],
+      exclude: 'node_modules/**'
+    })
+  ],
+  external: ['expression-expander', 'pratt-parser']
 };
