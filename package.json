@@ -17,9 +17,8 @@
     "precover": "rollup -c tests/rollup.config.js",
     "prestart": "npm run prepublish",
     "start": "node bin/konsum --config=config/config.json",
-    "prepare": "rollup -c -- src/server.js",
-    "docs": "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md",
-    "prepublish": "undefined && chmod +x bin/konsum"
+    "prepare": "rollup -c -- src/server.js && chmod +x bin/konsum",
+    "docs": "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md"
   },
   "repository": {
     "type": "git",
@@ -68,23 +67,13 @@
     "space": true
   },
   "ava": {
-    "files": [
-      "build/test-bundle.js"
-    ],
-    "presets": [
-      "stage-3"
-    ],
-    "require": [
-      "babel-register"
-    ]
+    "files": ["build/test-bundle.js"],
+    "presets": ["stage-3"],
+    "require": ["babel-register"]
   },
   "nyc": {
-    "include": [
-      "build/test-bundle.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["build/test-bundle.js"],
+    "reporter": ["lcov"],
     "report-dir": "./build/coverage"
   },
   "template": {
