@@ -41,7 +41,7 @@
     "istanbul": "^0.4.5",
     "jsdoc-to-markdown": "^3.0.0",
     "markdown-doctest": "^0.9.1",
-    "mocha": "^4.0.0",
+    "mocha": "^4.0.1",
     "rollup": "^0.47.0",
     "rollup-plugin-commonjs": "^8.2.0",
     "rollup-plugin-istanbul": "^1.1.0",
