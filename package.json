@@ -43,7 +43,7 @@
     "markdown-doctest": "^0.9.1",
     "mocha": "^4.0.1",
     "rollup": "^0.47.0",
-    "rollup-plugin-commonjs": "^8.2.0",
+    "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-istanbul": "^1.1.0",
     "rollup-plugin-multi-entry": "^2.0.1",
     "rollup-plugin-node-resolve": "^3.0.0",
