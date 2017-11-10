@@ -4,9 +4,8 @@ import istanbul from 'rollup-plugin-istanbul';
 import multiEntry from 'rollup-plugin-multi-entry';
 
 export default {
-  entry: 'tests/*-test.js',
-  format: 'cjs',
-  dest: 'build/bundle.test.js',
+  input: 'tests/**/*-test.js',
+
   plugins: [
     istanbul({
       exclude: ['tests/*.js', 'node_modules/**/*']
@@ -17,5 +16,12 @@ export default {
     commonjs(),
     multiEntry()
   ],
-  external: ['buffer']
+
+  external: ['buffer'],
+
+  output: {
+    file: 'build/bundle-test.js',
+    format: 'cjs',
+    sourcemap: true
+  }
 };
