@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "dependencies": {
-    "caporal": "^0.8.0",
+    "caporal": "^0.9.0",
     "config-expander": "^9.0.0",
     "koa": "^2.4.1",
     "koa-better-router": "^2.1.1",
