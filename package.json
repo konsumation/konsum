@@ -46,7 +46,7 @@
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-istanbul": "^2.0.0",
     "rollup-plugin-multi-entry": "^2.0.2",
-    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
     "semantic-release": "^12.2.2"
   },
   "contributors": [
