@@ -39,7 +39,7 @@
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
     "istanbul": "^0.4.5",
-    "jsdoc-to-markdown": "^3.0.0",
+    "jsdoc-to-markdown": "^4.0.0",
     "markdown-doctest": "^0.9.1",
     "mocha": "^4.0.1",
     "rollup": "^0.54.1",
