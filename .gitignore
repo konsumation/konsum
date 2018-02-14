@@ -1,12 +1,11 @@
-coverage
 node_modules
 build
 dist
-bin
-out
 *.log
 *.dump
 .DS_Store
 .nyc_output
 .test
 .tmp
+
+bin
