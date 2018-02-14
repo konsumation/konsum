@@ -1,10 +1,7 @@
-/* global describe, it, xit, before, after */
-/* jslint node: true, esnext: true */
+import { prepareDatabase, insertIntoDatabase } from '../src/database';
+import test from 'ava';
 
-'use strict';
-
-const chai = require('chai'),
-  sqlite3 = require('sqlite3').verbose(),
+const sqlite3 = require('sqlite3').verbose(),
   tmp = require('tmp'),
   tmpObj = tmp.tmpNameSync();
 
@@ -14,36 +11,45 @@ const config = {
   }
 };
 
-import {
-  prepareDatabase,
-  insertIntoDatabase
-}
-from '../src/database';
-
-
 //select from table,
-it('insert after create', async() => {
+test('insert after create', async t => {
   const database = await prepareDatabase(config);
 
-  database.serialize(() => {
-    database.run("INSERT INTO Konsum (date,amount,type) values ('31012017',120.5,'strom')");
-    database.each('SELECT date,amount,type FROM Konsum', (err, row) =>
-      chai.assert.equal(row.type, 'strom')
-    );
+  const p = new Promise((resolve, reject) => {
+    database.serialize(() => {
+      database.run(
+        "INSERT INTO Konsum (date,amount,type) values ('31012017',120.5,'strom')"
+      );
+      database.each('SELECT date,amount,type FROM Konsum', (err, row) =>
+        resolve(row)
+      );
+    });
   });
+
+  const row = await p;
+  t.is(row.type, 'strom');
 
   database.close();
 });
 
-it('insert as a function', async() => {
+test('insert as a function', async t => {
   const database = await prepareDatabase(config);
-  const insert = await insertIntoDatabase(database, '31012017', 120.5, 'insert');
+  const insert = await insertIntoDatabase(
+    database,
+    '31012017',
+    120.5,
+    'insert'
+  );
 
-  database.serialize(() => {
-    database.each('SELECT date,amount,type FROM Konsum', (err, row) =>
-      chai.assert.equal(row.type, 'insert')
-    );
+  const p = new Promise((resolve, reject) => {
+    database.serialize(() => {
+      database.each('SELECT date,amount,type FROM Konsum', (err, row) =>
+        resolve(row)
+      );
+    });
   });
+  const row = await p;
+  t.is(row.type, 'insert');
 
   database.close();
 });

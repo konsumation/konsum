@@ -1,28 +1,10 @@
-/* global describe, it, xit, before, after */
-/* jslint node: true, esnext: true */
+import test from 'ava';
+const got = require('got');
+const fs = require('fs');
+const { join } = require('path');
 
-'use strict';
-
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  fs = require('fs'),
-  path = require('path');
-
-import {
-  prepareHttpServer
-}
-from '../src/http';
-
-import {
-  prepareDatabase
-}
-from '../src/database';
-
-chai.use(require('chai-http'));
-
-const request = chai.request;
+import { prepareHttpServer } from '../src/http';
+import { prepareDatabase } from '../src/database';
 
 function setPort(config, port) {
   config = Object.assign({}, config);
@@ -33,65 +15,71 @@ function setPort(config, port) {
 
 const config = {
   database: {
-    file: "test.sqlite"
+    file: 'test.sqlite'
   },
   users: {
     admin: {
-      password: "start123",
-      roles: ["admin"]
+      password: 'start123',
+      roles: ['admin']
     }
   },
   http: {
     auth: {
       jwt: {
-        public: fs.readFileSync(path.join(__dirname, '..', 'config', 'demo.rsa.pub')),
-        private: fs.readFileSync(path.join(__dirname, '..', 'config', 'demo.rsa'))
+        public: fs.readFileSync(
+          join(__dirname, '..', 'config', 'demo.rsa.pub')
+        ),
+        private: fs.readFileSync(join(__dirname, '..', 'config', 'demo.rsa'))
       }
     }
   }
 };
 
-describe('server', async() => {
-  it('can /login', () =>
-    prepareHttpServer(setPort(config, 12345)).then(({
-        app, server
-      }) =>
-      request(server.listen())
-      .get('/login?user=admin&password=start123')
-      .then(res => expect(res).to.have.status(200))
-    )
-  );
-  it('fails with invalid credentials /login', () =>
-    prepareHttpServer(setPort(config, 12346)).then(({
-        app, server
-      }) =>
-      request(server.listen())
-      .get('/login?user=admin&password=unknown')
-      .then(res => expect(res).to.have.status(401))
-      .catch(err => {})
-    )
+test('server can /login', async t => {
+  const { app, server } = await prepareHttpServer(setPort(config, 12345));
+
+  server.listen();
+
+  const response = await got(
+    'http://localhost:12345/login?user=admin&password=start123'
   );
 
+  t.is(response.statusCode, 200);
+});
+
+test('fails with invalid credentials /login', async t => {
+  const { app, server } = await prepareHttpServer(setPort(config, 12346));
+
+  server.listen();
+
+  try {
+    const response = await got(
+      'http://localhost:12346/login?user=admin&password=unknown'
+    );
+  } catch (error) {
+    t.is(error.statusCode, 401);
+  }
+});
+
+/*
   const database = await prepareDatabase(config);
 
   it('can get /values', () =>
-    prepareHttpServer(setPort(config, 12347), database).then(({
-      app, server
-    }) => {
-      /* */
-      const r = request(server.listen());
-      return r.get('/login?user=admin&password=start123')
-        .then(res => {
+    prepareHttpServer(setPort(config, 12347), database).then(
+      ({ app, server }) => {
+        const r = request(server.listen());
+        return r.get('/login?user=admin&password=start123').then(res => {
           const token = res.body.token;
           //console.log(token);
-          return r.get('/values?jwt=' + token)
+          return r
+            .get('/values?jwt=' + token)
             .set('Authorization', `Bearer ${token}`)
             .then(res => {
               console.log(res.body);
               return expect(res).to.have.status(200);
             });
         });
-      /* */
-    }));
-
+      }
+    ));
 });
+*/
