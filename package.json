@@ -1,8 +1,8 @@
 {
   "name": "konsum",
   "version": "0.0.0-semantic-release",
-  "main": "dist/server.js",
-  "module": "src/server.js",
+  "main": "dist/konsum.js",
+  "module": "src/konsum.js",
   "description": "",
   "keywords": [],
   "contributors": [
@@ -22,7 +22,6 @@
     "docs": "documentation readme src/expander.js --section=API",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
-    "prepublish": "chmod +x bin/konsum",
     "precover": "rollup -c tests/rollup.config.js",
     "prepare": "rollup -c",
     "lint": "documentation lint src/expander.js",
@@ -45,13 +44,14 @@
     "nyc": "^11.5.0",
     "rollup": "^0.58.0",
     "rollup-plugin-commonjs": "^9.0.0",
+    "rollup-plugin-executable": "^1.2.0",
     "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "semantic-release": "^15.1.5",
     "travis-deploy-once": "^4.3.4"
   },
   "engines": {
-    "node": ">=8.9.4"
+    "node": ">=8.9.11"
   },
   "repository": {
     "type": "git",
@@ -65,21 +65,12 @@
     "babel": {
       "presets": []
     },
-    "files": [
-      "build/*-test.js"
-    ],
-    "require": [
-      "babel-register"
-    ]
+    "files": ["build/*-test.js"],
+    "require": ["babel-register"]
   },
   "nyc": {
-    "include": [
-      "build/*-test.js",
-      "src/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["build/*-test.js", "src/**/*.js"],
+    "reporter": ["lcov"],
     "report-dir": "./build/coverage"
   },
   "xo": {
