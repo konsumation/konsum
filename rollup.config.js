@@ -1,10 +1,11 @@
 import cleanup from "rollup-plugin-cleanup";
-import json from "rollup-plugin-json";
 import resolve from "rollup-plugin-node-resolve";
-import pkg from './package.json';
-import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import executable from 'rollup-plugin-executable';
+import commonjs from "rollup-plugin-commonjs";
+import executable from "rollup-plugin-executable";
+import json from "rollup-plugin-json";
+import pkg from "./package.json";
+
+const external = ["config-expander"];
 
 export default [
   ...Object.keys(pkg.bin).map(name => {
@@ -12,20 +13,32 @@ export default [
       input: `src/${name}.js`,
       output: {
         file: pkg.bin[name],
-        format: 'cjs',
-        banner: '#!/usr/bin/env node'
+        format: "cjs",
+        banner:
+          '#!/bin/sh\n":" //# comment; exec /usr/bin/env node --experimental-modules --experimental-worker "$0" "$@"',
+        interop: false
       },
-      external: ['config-expander'],
-      plugins: [nodeResolve(), commonjs(), executable()]
+      external,
+      plugins: [
+        resolve(),
+        commonjs(),
+        json({
+          include: "package.json",
+          preferConst: true,
+          compact: true
+        }),
+        cleanup(),
+        executable()
+      ],
     };
   }),
   {
     input: pkg.module,
     output: {
       file: pkg.main,
-      format: 'cjs'
+      format: "cjs"
     },
-    external: ['config-expander'],
-    plugins: [nodeResolve(), commonjs()]
+    external,
+    plugins: [resolve(), commonjs()]
   }
 ];

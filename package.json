@@ -23,7 +23,6 @@
     "test": "ava",
     "semantic-release": "semantic-release",
     "docs": "documentation readme src/konsum.js --section=API",
-    "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
     "lint": "documentation lint src/konsum.js",
