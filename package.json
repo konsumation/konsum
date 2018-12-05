@@ -31,7 +31,7 @@
     "start": "node bin/konsum --config=config/config.json"
   },
   "dependencies": {
-    "caporal": "^0.10.0",
+    "caporal": "^1.0.0",
     "config-expander": "^9.1.2",
     "koa": "^2.5.0",
     "koa-better-router": "^2.1.1",
