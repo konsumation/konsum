@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "caporal": "^1.0.0",
-    "config-expander": "^9.1.2",
+    "config-expander": "^9.1.9",
     "koa": "^2.5.0",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^3.3.2",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "ava": "^1.0.0-rc.2",
     "documentation": "^8.1.2",
-    "got": "^8.3.0",
+    "got": "^9.0.0",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.67.4",
     "rollup-plugin-commonjs": "^9.2.0",
