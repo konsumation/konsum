@@ -1,6 +1,9 @@
 {
   "name": "konsum",
   "version": "0.0.0-semantic-release",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/konsum.js",
   "module": "src/konsum.js",
   "description": "",
@@ -16,42 +19,43 @@
     "konsum": "bin/konsum"
   },
   "scripts": {
-    "cover": "nyc --temp-directory build/nyc ava",
+    "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
     "test": "ava",
     "semantic-release": "semantic-release",
-    "docs": "documentation readme src/expander.js --section=API",
+    "docs": "documentation readme src/konsum.js --section=API",
     "pretest": "rollup -c tests/rollup.config.js",
     "posttest": "npm run prepare && markdown-doctest",
-    "precover": "rollup -c tests/rollup.config.js",
     "prepare": "rollup -c",
-    "lint": "documentation lint src/expander.js",
+    "lint": "documentation lint src/konsum.js",
     "travis-deploy-once": "travis-deploy-once",
     "start": "node bin/konsum --config=config/config.json"
   },
   "dependencies": {
-    "caporal": "^0.10.0",
+    "caporal": "^1.0.0",
     "config-expander": "^9.1.9",
     "koa": "^2.5.0",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^3.3.2",
-    "sqlite3": "4.0.1"
+    "sqlite3": "4.0.4"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "documentation": "^7.0.0",
+    "ava": "^1.0.0-rc.2",
+    "documentation": "^8.1.2",
     "got": "^8.3.0",
     "markdown-doctest": "^0.9.1",
-    "nyc": "^11.8.0",
-    "rollup": "^0.59.1",
-    "rollup-plugin-commonjs": "^9.0.0",
-    "rollup-plugin-executable": "^1.2.0",
-    "rollup-plugin-multi-entry": "^2.0.2",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "semantic-release": "^15.4.1",
-    "travis-deploy-once": "^5.0.0"
+    "rollup": "^0.67.4",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-executable": "^1.3.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "semantic-release": "^15.12.4",
+    "travis-deploy-once": "^5.0.9",
+    "c8": "^3.2.1",
+    "esm": "^3.0.84",
+    "rollup-plugin-cleanup": "^3.0.0",
+    "rollup-plugin-json": "^3.1.0"
   },
   "engines": {
-    "node": ">=8.9.11"
+    "node": ">=10.14.1"
   },
   "repository": {
     "type": "git",
@@ -62,19 +66,19 @@
   },
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "ava": {
-    "babel": {
-      "presets": []
-    },
-    "files": ["build/*-test.js"],
-    "require": ["babel-register"]
-  },
-  "nyc": {
-    "include": ["build/*-test.js", "src/**/*.js"],
-    "reporter": ["lcov"],
-    "report-dir": "./build/coverage"
-  },
-  "xo": {
-    "space": true
+    "babel": false,
+    "files": [
+      "tests/*-test.js",
+      "tests/*-test.mjs"
+    ],
+    "require": [
+      "esm"
+    ],
+    "extensions": [
+      "js",
+      "mjs"
+    ],
+    "compileEnhancements": false
   },
   "template": {
     "repository": {
