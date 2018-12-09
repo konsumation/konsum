@@ -13,7 +13,6 @@ export function prepareHttpServer(config, database) {
     ? https.createServer(config.http, app.callback())
     : http.createServer(app.callback());
   server.on('error', err => console.log(err));
-
   const router = Router();
 
   /**
@@ -63,18 +62,24 @@ export function prepareHttpServer(config, database) {
   router.addRoute(
     'GET',
     '/values',
-    /*restricted,*/ (ctx, next) =>
+    /*restricted,*/(ctx, next) =>
       new Promise((fullfill, reject) =>
-        database.all('SELECT date, type, amount FROM Konsum', (err, rows) => {
-          if (err) {
+        database.createReadStream()
+          .on('data', function (data) {
+            console.log(data.key, '=', data.value);
+          })
+          .on('error', function (err) {
             ctx.status = 401;
             ctx.body = err;
             reject(err);
-          } else {
-            ctx.body = rows;
+          })
+          .on('close', function () {
+            console.log('Stream closed')
+          })
+          .on('end', function () {
+            ctx.body = data;
             fullfill(next());
-          }
-        })
+          })
       )
   );
 

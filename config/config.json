@@ -1,6 +1,6 @@
 {
   "database": {
-    "file": "sample.sqlite"
+    "file": "konsumdb"
   },
   "users": {
     "admin": {

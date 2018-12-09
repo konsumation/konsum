@@ -1,6 +1,5 @@
 const path = require('path'),
-  program = require('caporal'),
-  sqlite3 = require('sqlite3').verbose();
+  program = require('caporal');
 
 import { expand } from 'config-expander';
 import { prepareDatabase } from './database';
@@ -20,7 +19,7 @@ program
     // default config if none is given
     const defaultConfig = {
       database: {
-        file: 'sample.sqlite'
+        file: 'level.db'
       },
       http: {
         port: 123456

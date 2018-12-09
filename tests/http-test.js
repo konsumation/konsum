@@ -15,7 +15,7 @@ function setPort(config, port) {
 
 const config = {
   database: {
-    file: 'test.sqlite'
+    file: 'level.db'
   },
   users: {
     admin: {
