@@ -62,7 +62,7 @@ export function prepareHttpServer(config, database) {
   router.addRoute(
     'GET',
     '/values',
-    /*restricted,*/(ctx, next) =>
+      /*restricted,*/(ctx, next) =>
       new Promise((fullfill, reject) =>
         database.createReadStream()
           .on('data', function (data) {
@@ -105,9 +105,8 @@ export function prepareHttpServer(config, database) {
 function mergeDefaults(a1, a2) {
   const t = {};
 
-  if (a2) {
-    Object.keys(a1).forEach(k => (t[k] = a2[k]));
-  }
+  Object.keys(a1).forEach(k => (t[k] = a2[k] ? a2[k] : a1[k]));
+
 
   return Object.assign({}, a1, t);
 }
