@@ -7,5 +7,6 @@ dist
 .DS_Store
 .test
 .tmp
+
 konsumdb
 bin
