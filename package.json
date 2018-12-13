@@ -54,7 +54,7 @@
     "rollup-plugin-json": "^3.1.0"
   },
   "engines": {
-    "node": ">=10.14.1"
+    "node": ">=10.14.2"
   },
   "repository": {
     "type": "git",
