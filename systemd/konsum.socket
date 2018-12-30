@@ -1,0 +1,3 @@
+[Socket]
+ListenStream=/run/konsum/socket
+MaxConnections=4

@@ -5,7 +5,7 @@
     "access": "public"
   },
   "module": "src/konsum.js",
-  "description": "",
+  "description": "collect resource usage in a home environment",
   "keywords": [],
   "contributors": [
     {
@@ -24,7 +24,8 @@
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
     "lint": "documentation lint src/konsum.js",
-    "start": "node bin/konsum --config=config/config.json"
+    "start": "node bin/konsum --config=config/config.json",
+    "package": "npm-pkgbuild -i /services/konsum"
   },
   "dependencies": {
     "caporal": "^1.0.0",
@@ -36,18 +37,19 @@
   },
   "devDependencies": {
     "ava": "^1.0.1",
+    "c8": "^3.2.1",
     "documentation": "^9.1.1",
+    "esm": "^3.0.84",
     "got": "^9.5.0",
     "markdown-doctest": "^0.9.1",
+    "npm-pkgbuild": "^1.4.7",
     "rollup": "^1.0.0",
+    "rollup-plugin-cleanup": "^3.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-executable": "^1.3.0",
+    "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-resolve": "^4.0.0",
-    "semantic-release": "^15.13.2",
-    "c8": "^3.2.1",
-    "esm": "^3.0.84",
-    "rollup-plugin-cleanup": "^3.1.0",
-    "rollup-plugin-json": "^3.1.0"
+    "semantic-release": "^15.13.2"
   },
   "engines": {
     "node": ">=10.15.0"
@@ -74,6 +76,16 @@
       "mjs"
     ],
     "compileEnhancements": false
+  },
+  "pacman": {
+    "groups": "web",
+    "backup": "usr/lib/systemd/system/konsum.service",
+    "install": "pacman/pacman.install"
+  },
+  "systemd": {
+    "units": {
+      "konsum": "systemd/{{unit}}*"
+    }
   },
   "template": {
     "repository": {
