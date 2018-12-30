@@ -4,6 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "main": "{{main}}",
   "module": "src/konsum.js",
   "description": "",
   "keywords": [],
