@@ -66,21 +66,21 @@ export function prepareHttpServer(config, database) {
       new Promise((fullfill, reject) =>
         database
           .createReadStream()
-          .on("data", function(data) {
+          .on("data", data => {
             console.log(data.key, "=", data.value);
             console.log('data.key, "=", data.value');
-            ctx.body = Object.assign(ctx.body,data);
+            ctx.body = Object.assign(ctx.body, data);
           })
-          .on("error", function(err) {
+          .on("error", err => {
             ctx.status = 401;
             ctx.body = err;
             reject(err);
           })
-          .on("close", function() {
+          .on("close", () => {
             console.log("Stream closed");
           })
-          .on("end", function() {
-            console.log('Stream ended');
+          .on("end", () => {
+            console.log("Stream ended");
             fullfill(next());
           })
       )
