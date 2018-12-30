@@ -5,7 +5,7 @@ import executable from "rollup-plugin-executable";
 import json from "rollup-plugin-json";
 import pkg from "./package.json";
 
-const external = ["config-expander"];
+const external = ["path", "config-expander"];
 
 export default [
   ...Object.keys(pkg.bin).map(name => {
@@ -29,16 +29,7 @@ export default [
         }),
         cleanup(),
         executable()
-      ],
+      ]
     };
-  }),
-  {
-    input: pkg.module,
-    output: {
-      file: pkg.main,
-      format: "cjs"
-    },
-    external,
-    plugins: [resolve(), commonjs()]
-  }
+  })
 ];

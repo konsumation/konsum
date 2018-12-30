@@ -1,25 +1,26 @@
-const path = require('path'),
-  program = require('caporal');
+const program = require("caporal");
 
-import { expand } from 'config-expander';
-import { prepareDatabase } from './database';
-import { prepareHttpServer } from './http';
+import { dirname, resolve, basename } from "path";
+import { expand } from "config-expander";
+import { prepareDatabase } from "./database";
+import { prepareHttpServer } from "./http";
+import { version } from "../package.json";
 
 program
-  .description('Konsum server')
-  .version(require(path.join(__dirname, '..', 'package.json')).version)
-  .option('-c, --config <file>', 'use config from file')
+  .description("Konsum server")
+  .version(version)
+  .option("-c, --config <file>", "use config from file")
   .action(async (args, options, logger) => {
     // some constants used while loading the configuration
     const constants = {
-      basedir: path.dirname(options.config || process.cwd()), // where is the config file located
-      installdir: path.resolve(__dirname, '..') // make references to the installdir possible
+      basedir: dirname(options.config || process.cwd()), // where is the config file located
+      installdir: resolve(__dirname, "..") // make references to the installdir possible
     };
 
     // default config if none is given
     const defaultConfig = {
       database: {
-        file: 'level.db'
+        file: "level.db"
       },
       http: {
         port: 123456
@@ -29,7 +30,7 @@ program
     // load config and expand expressions ${something} inside
     const config = await expand(
       options.config
-        ? "${include('" + path.basename(options.config) + "')}"
+        ? "${include('" + basename(options.config) + "')}"
         : defaultConfig,
       {
         constants
