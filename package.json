@@ -88,7 +88,7 @@
     "install": "pacman/pacman.install",
     "installdir": "/services/konsum",
     "content": {
-      "/usr/lib/tmpfiles.d/{{name}}.conf": "pacman/tmpfiles.conf"
+      "/usr/lib/tmpfiles.d/konsum.conf": "pacman/tmpfiles.conf"
     }
   },
   "systemd": {
