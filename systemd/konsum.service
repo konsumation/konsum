@@ -3,11 +3,15 @@ Description={{description}}
 
 [Service]
 Type=notify
-ExecStart={{installdir}}/bin/konsum
+ExecStart={{installdir}}/bin/{{name}}
 TimeoutStartSec=20
 StandardOutput=syslog
 User=nobody
 Group=nobody
+
+RuntimeDirectory={{name}}
+StateDirectory={{name}}
+ConfigurationDirectory={{name}}
 
 [Install]
 WantedBy=multi-user.target
