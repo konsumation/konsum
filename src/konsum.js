@@ -9,11 +9,13 @@ import { version } from "../package.json";
 program
   .description("Konsum server")
   .version(version)
-  .option("-c, --config <file>", "use config from file")
+  .option("-c, --config <directory>", "use config from directory")
   .action(async (args, options, logger) => {
+    const configDir = process.env.CONFIGURATION_DIRECTORY || options.config;
+
     // some constants used while loading the configuration
     const constants = {
-      basedir: dirname(options.config || process.cwd()), // where is the config file located
+      basedir: configDir || process.cwd(), // where is the config file located
       installdir: resolve(__dirname, "..") // make references to the installdir possible
     };
 
@@ -29,8 +31,8 @@ program
 
     // load config and expand expressions ${something} inside
     const config = await expand(
-      options.config
-        ? "${include('" + basename(options.config) + "')}"
+      configDir
+        ? "${include('" + join(configDir, "config.json") + "')}"
         : defaultConfig,
       {
         constants
