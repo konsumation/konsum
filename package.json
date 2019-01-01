@@ -21,7 +21,7 @@
     "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
     "docs": "documentation readme src/konsum.js --section=API",
     "lint": "documentation lint src/konsum.js",
-    "package": "npm-pkgbuild -i /services/konsum",
+    "package": "npm-pkgbuild pkgbuild pacman makepkg",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
     "start": "node bin/konsum --config=config/config.json",
@@ -83,13 +83,17 @@
     }
   },
   "pacman": {
-    "groups": "web",
+    "groups": "home-automation",
     "backup": "usr/lib/systemd/system/konsum.service",
-    "install": "pacman/pacman.install"
+    "install": "pacman/pacman.install",
+    "installdir": "/services/konsum",
+    "content": {
+      "/usr/lib/tmpfiles.d/{{name}}.conf": "pacman/tmpfiles.conf"
+    }
   },
   "systemd": {
     "units": {
-      "konsum": "systemd/{{unit}}*"
+      "konsum": "systemd/konsum*"
     }
   }
 }
