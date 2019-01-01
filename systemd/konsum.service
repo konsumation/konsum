@@ -1,5 +1,6 @@
 [Unit]
 Description={{description}}
+After=network.target network-online.target
 
 [Service]
 Type=notify
