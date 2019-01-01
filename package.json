@@ -19,13 +19,13 @@
   },
   "scripts": {
     "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
-    "test": "ava",
     "docs": "documentation readme src/konsum.js --section=API",
+    "lint": "documentation lint src/konsum.js",
+    "package": "npm-pkgbuild -i /services/konsum",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
-    "lint": "documentation lint src/konsum.js",
     "start": "node bin/konsum --config=config/config.json",
-    "package": "npm-pkgbuild -i /services/konsum"
+    "test": "ava"
   },
   "dependencies": {
     "caporal": "^1.0.0",
@@ -77,6 +77,11 @@
     ],
     "compileEnhancements": false
   },
+  "template": {
+    "repository": {
+      "url": "https://github.com/arlac77/npm-package-template.git"
+    }
+  },
   "pacman": {
     "groups": "web",
     "backup": "usr/lib/systemd/system/konsum.service",
@@ -85,11 +90,6 @@
   "systemd": {
     "units": {
       "konsum": "systemd/{{unit}}*"
-    }
-  },
-  "template": {
-    "repository": {
-      "url": "https://github.com/arlac77/npm-package-template.git"
     }
   }
 }
