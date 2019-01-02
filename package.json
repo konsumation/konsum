@@ -86,9 +86,10 @@
     "groups": "home-automation",
     "backup": "/etc/${name}/config.json",
     "install": "pacman/pacman.install",
-    "installdir": "/services/konsum",
+    "installdir": "/services/${name}",
     "content": {
-      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf"
+      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
+      "/etc/${name}/config.conf": "config/config.json"
     }
   },
   "systemd": {
