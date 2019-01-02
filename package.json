@@ -84,7 +84,7 @@
   },
   "pacman": {
     "groups": "home-automation",
-    "backup": "usr/lib/systemd/system/konsum.service",
+    "backup": "/etc/${name}/config.json",
     "install": "pacman/pacman.install",
     "installdir": "/services/konsum",
     "content": {
@@ -93,7 +93,7 @@
   },
   "systemd": {
     "units": {
-      "konsum": "systemd/konsum*"
+      "${name}": "systemd/${name}*"
     }
   }
 }
