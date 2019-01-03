@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "caporal": "^1.0.0",
-    "config-expander": "^9.1.10",
+    "config-expander": "^9.1.11",
     "koa": "^2.5.0",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^3.3.2",
