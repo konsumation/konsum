@@ -11,7 +11,7 @@ program
   .version(version)
   .option("-c, --config <directory>", "use config from directory")
   .action(async (args, options, logger) => {
-    const configDir = process.env.CONFIGURATION_DIRECTORY || options.config;
+    const configDir = options.config;
 
     console.log(`configDir: ${configDir}`);
 
