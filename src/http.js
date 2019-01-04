@@ -101,9 +101,9 @@ export function prepareHttpServer(config, database) {
 /**
  * Merges two objects.
  * Overwrite all keys in a1 with the corresponding values from a2
- * @param {object} a1
- * @param {object} a2
- * @return {object} merged result
+ * @param {Object} a1
+ * @param {Object} a2
+ * @return {Object} merged result
  */
 function mergeDefaults(a1, a2) {
   const t = {};
