@@ -5,7 +5,18 @@ import executable from "rollup-plugin-executable";
 import json from "rollup-plugin-json";
 import pkg from "./package.json";
 
-const external = ["path", "config-expander"];
+const external = [
+  "http",
+  "https",
+  "path",
+  "url",
+  "os",
+  "koa",
+  "koa-better-router",
+  //"querystring",
+  "jsonwebtoken",
+  "config-expander"
+];
 
 export default [
   ...Object.keys(pkg.bin).map(name => {

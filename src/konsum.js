@@ -1,6 +1,6 @@
 const program = require("caporal");
 
-import { dirname, resolve, basename } from "path";
+import { resolve } from "path";
 import { expand } from "config-expander";
 import { prepareDatabase } from "./database";
 import { prepareHttpServer } from "./http";

@@ -1,17 +1,17 @@
-const http = require("http"),
-  https = require("https"),
-  querystring = require("querystring"),
-  jsonwebtoken = require("jsonwebtoken"),
-  Koa = require("koa"),
-  KoaJWT = require("koa-jwt"),
-  Router = require("koa-better-router");
+import { createServer as httpCreateServer } from "http";
+import { createServer as httpsCreateServer } from "https";
+import Koa from "koa";
+import jsonwebtoken from "jsonwebtoken";
+import KoaJWT from "koa-jwt";
+import Router from "koa-better-router";
+import { parse } from "querystring";
 
 export function prepareHttpServer(config, database) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
   const server = config.http.cert
-    ? https.createServer(config.http, app.callback())
-    : http.createServer(app.callback());
+    ? httpsCreateServer(config.http, app.callback())
+    : httpCreateServer(app.callback());
   server.on("error", err => console.log(err));
   const router = Router();
 
@@ -19,7 +19,7 @@ export function prepareHttpServer(config, database) {
    * login to request api token
    */
   router.addRoute("GET", "/login", (ctx, next) => {
-    const q = querystring.parse(ctx.request.querystring);
+    const q = parse(ctx.request.querystring);
     const user = config.users[q.user];
 
     if (user !== undefined && user.password === q.password) {
