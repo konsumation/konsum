@@ -84,7 +84,7 @@
   },
   "pacman": {
     "groups": "home-automation",
-    "backup": "/etc/${name}/config.json",
+    "backup": "etc/${name}/config.json",
     "install": "pacman/install.sh",
     "installdir": "/services/${name}",
     "content": {
