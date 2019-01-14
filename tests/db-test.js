@@ -22,12 +22,12 @@ test('insert after create', async t => {
 
 
 
-test.skip('test db', async t => {
+test.cb('test db', t => {
   const db = level('./mydb')
   db.put('k1', 'v1');
   db.put('k2', 'v2');
   //console.log(await db.get('k1'));~
-  await db.createReadStream()
+   db.createReadStream()
     .on('data', function (data) {
       console.log('hallo')
       console.log(data.key, '=', data.value)
@@ -40,6 +40,7 @@ test.skip('test db', async t => {
     })
     .on('end', function () {
       console.log('Stream ended')
+      t.end();
     })
 
 });
