@@ -3,7 +3,6 @@ pre_install() {
 	useradd -m -g {{name}} {{name}}
 }
 
-
 post_install() {
 	systemctl daemon-reload
 	systemctl enable {{name}}
