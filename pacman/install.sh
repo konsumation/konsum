@@ -1,3 +1,8 @@
+pre_install() {
+	groupadd {{name}}
+	useradd -m -g {{name}} {{name}}
+}
+
 
 post_install() {
 	systemctl daemon-reload
