@@ -3,7 +3,7 @@ Description={{description}}
 After=network.target network-online.target
 
 [Service]
-Type=notify
+#Type=notify
 ExecStart={{installdir}}/bin/{{name}} --config=/etc/{{name}}
 TimeoutStartSec=20
 StandardOutput=syslog

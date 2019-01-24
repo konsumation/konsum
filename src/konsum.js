@@ -12,8 +12,6 @@ program
   .action(async (args) => {
     const configDir = process.env.CONFIGURATION_DIRECTORY || program.config;
 
-    console.log(`configDir: ${configDir}`);
-
     // some constants used while loading the configuration
     const constants = {
       basedir: configDir || process.cwd(), // where is the config file located
