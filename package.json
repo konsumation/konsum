@@ -28,7 +28,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "caporal": "^1.0.0",
+    "commander": "^2.19.0",
     "config-expander": "^10.0.1",
     "koa": "^2.5.0",
     "koa-better-router": "^2.1.1",

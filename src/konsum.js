@@ -1,6 +1,5 @@
-const program = require("caporal");
-
-import { resolve } from "path";
+import program  from "commander";
+import { resolve,join } from "path";
 import { expand } from "config-expander";
 import { prepareDatabase } from "./database";
 import { prepareHttpServer } from "./http";
@@ -10,8 +9,8 @@ program
   .description("Konsum server")
   .version(version)
   .option("-c, --config <directory>", "use config from directory")
-  .action(async (args, options, logger) => {
-    const configDir = options.config;
+  .action(async (args) => {
+    const configDir = process.env.CONFIGURATION_DIRECTORY || program.config;
 
     console.log(`configDir: ${configDir}`);
 
@@ -34,7 +33,7 @@ program
     // load config and expand expressions ${something} inside
     const config = await expand(
       configDir
-        ? "${include('" + join(configDir, "config.json") + "')}"
+        ? "${include('config.json')}"
         : defaultConfig,
       {
         constants
@@ -46,6 +45,4 @@ program
 
     // prepare the web-server with the config and the database
     const http = await prepareHttpServer(config, db);
-  });
-
-program.parse(process.argv);
+  }).parse(process.argv);
