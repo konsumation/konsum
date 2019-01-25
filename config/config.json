@@ -9,9 +9,7 @@
     }
   },
   "http": {
-    "port": 12345,
-    "_cert": "${document('cert.pem')}",
-    "key": "${document('key.pem')}",
+    "port": 3200,
     "auth": {
       "jwt": {
         "expiresIn": "1h",

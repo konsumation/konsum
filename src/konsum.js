@@ -1,15 +1,15 @@
-import program  from "commander";
-import { resolve,join } from "path";
+import program from "commander";
+import { resolve, join } from "path";
 import { expand } from "config-expander";
 import { prepareDatabase } from "./database";
 import { prepareHttpServer } from "./http";
-import { version } from "../package.json";
+import { version, description } from "../package.json";
 
 program
-  .description("Konsum server")
+  .description(description)
   .version(version)
   .option("-c, --config <directory>", "use config from directory")
-  .action(async (args) => {
+  .action(async args => {
     const configDir = process.env.CONFIGURATION_DIRECTORY || program.config;
 
     // some constants used while loading the configuration
@@ -30,9 +30,7 @@ program
 
     // load config and expand expressions ${something} inside
     const config = await expand(
-      configDir
-        ? "${include('config.json')}"
-        : defaultConfig,
+      configDir ? "${include('config.json')}" : defaultConfig,
       {
         constants
       }
@@ -43,4 +41,5 @@ program
 
     // prepare the web-server with the config and the database
     const http = await prepareHttpServer(config, db);
-  }).parse(process.argv);
+  })
+  .parse(process.argv);
