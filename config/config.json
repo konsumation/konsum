@@ -9,7 +9,7 @@
     }
   },
   "http": {
-    "port": 3200,
+    "port": 12345,
     "auth": {
       "jwt": {
         "expiresIn": "1h",
