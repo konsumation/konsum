@@ -15,7 +15,7 @@ function setPort(config, port) {
 
 const config = {
   database: {
-    file: 'level.db'
+    path: 'level.db'
   },
   users: {
     admin: {

@@ -1,11 +1,13 @@
 import test from 'ava';
+import tmp from 'tmp';
+
 import { prepareDatabase } from '../src/database';
+
 const level = require('level');
-const tmp = require('tmp');
 
 const config = {
   database: {
-    file: tmp.tmpNameSync()
+    path: tmp.tmpNameSync()
   }
 };
 

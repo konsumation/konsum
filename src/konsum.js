@@ -15,7 +15,8 @@ program
     // some constants used while loading the configuration
     const constants = {
       basedir: configDir || process.cwd(), // where is the config file located
-      installdir: resolve(__dirname, "..") // make references to the installdir possible
+      installdir: resolve(__dirname, ".."), // make references to the installdir possible
+      statedir: process.env.STATE_DIRECTORY || process.cwd()
     };
 
     // default config if none is given

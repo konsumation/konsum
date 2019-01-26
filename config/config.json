@@ -1,11 +1,13 @@
 {
   "database": {
-    "file": "konsumdb"
+    "path": "${statedir}/db"
   },
   "users": {
     "admin": {
       "password": "start123",
-      "roles": ["admin"]
+      "roles": [
+        "admin"
+      ]
     }
   },
   "http": {
