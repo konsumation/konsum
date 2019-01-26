@@ -7,8 +7,8 @@ After=network.target network-online.target
 ExecStart={{installdir}}/bin/{{name}} --config=/etc/{{name}}
 TimeoutStartSec=20
 StandardOutput=syslog
-User=nobody
-Group=nobody
+User={{name}}
+Group={{name}}
 PrivateTmp=true
 NoNewPrivileges=true
 RuntimeDirectory={{name}}
