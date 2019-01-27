@@ -22,7 +22,8 @@
     "docs": "documentation readme src/konsum-cli.mjs --section=API",
     "lint": "documentation lint src/konsum-cli.mjs",
     "package": "npm-pkgbuild -t /data/binaries/arch-linux/packages pkgbuild pacman makepkg",
-    "posttest": "npm run prepare && markdown-doctest",
+    "posttest": "markdown-doctest",
+    "pretest": "npm run prepare",
     "prepare": "rollup -c",
     "start": "node bin/konsum --config=config/config.json",
     "test": "ava"
@@ -33,7 +34,8 @@
     "koa": "^2.5.0",
     "koa-better-router": "^2.1.1",
     "koa-jwt": "^3.3.2",
-    "level": "^4.0.0",
+    "leveldown": "^4.0.1",
+    "levelup": "^4.0.0",
     "systemd": "^0.3.1"
   },
   "devDependencies": {

@@ -46,9 +46,12 @@ const external = [
   "vm",
   "zlib",
 
+  "levelup",
   "koa",
-  "koa-better-router"
-];
+  "koa-better-router",
+  "koa-jwt",
+  "leveldown"
+,];
 
 export default
   Object.keys(pkg.bin).map(name => {
