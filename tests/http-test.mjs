@@ -36,27 +36,35 @@ const config = {
   }
 };
 
-test("server can /login", async t => {
+test("server can authenticate", async t => {
   const { app, server } = await prepareHttpServer(setPort(config, 12345));
 
   server.listen();
 
-  const response = await got(
-    "http://localhost:12345/login?user=admin&password=start123"
-  );
+  const response = await got.post("http://localhost:12345/authenticate", {
+    body: {
+      username: "admin",
+      password: "start123"
+    },
+    json: true
+  });
 
   t.is(response.statusCode, 200);
 });
 
-test("fails with invalid credentials /login", async t => {
+test("fails with invalid credentials", async t => {
   const { app, server } = await prepareHttpServer(setPort(config, 12346));
 
   server.listen();
 
   try {
-    const response = await got(
-      "http://localhost:12346/login?user=admin&password=unknown"
-    );
+    const response = await got.post("http://localhost:12345/authenticate", {
+      body: {
+        username: "admin",
+        password: "wrong"
+      },
+      json: true
+    });
   } catch (error) {
     t.is(error.statusCode, 401);
   }

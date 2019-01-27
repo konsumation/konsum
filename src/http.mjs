@@ -4,24 +4,32 @@ import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
-import { parse } from "querystring";
+import bodyParser from "koa-bodyparser";
+
 import {} from "systemd";
 
 export function prepareHttpServer(config, database) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
+
+  app.use(bodyParser());
+
   const server = config.http.cert
     ? httpsCreateServer(config.http, app.callback())
     : httpCreateServer(app.callback());
   server.on("error", err => console.log(err));
   const router = Router();
 
+
   /**
    * login to request api token
    */
-  router.addRoute("GET", "/login", (ctx, next) => {
-    const q = parse(ctx.request.querystring);
-    const user = config.users[q.user];
+  router.addRoute("POST", "/authenticate", (ctx, next) => {
+    console.log(ctx.request.body);
+
+    const q = ctx.request.body;
+
+    const user = config.users[q.username];
 
     if (user !== undefined && user.password === q.password) {
       const claims = {
