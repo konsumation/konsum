@@ -19,7 +19,7 @@ post_upgrade() {
 
 pre_remove() {
 	systemctl stop {{name}}
-	systemctl enable {{name}}.socket
+	systemctl disable {{name}}.socket
 	systemctl disable {{name}}
 }
 
