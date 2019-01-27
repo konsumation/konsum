@@ -48,7 +48,11 @@ openssl rsa -in demo.rsa -pubout > demo.rsa.pub
 
 test with:
 
-<http://localhost:12345/login?user=admin&password=start123>
+```shell
+curl --header "Content-Type: application/json" \
+     -d '{"username":"admin","password":"start123"}' \
+     -X POST http://localhost:12345/authenticate
+```
 
 and exec a request
 
@@ -77,7 +81,7 @@ Overwrite all keys in a1 with the corresponding values from a2
 
 ### Parameters
 
--   `a1` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
--   `a2` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `a1` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+-   `a2` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
 
 Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** merged result
