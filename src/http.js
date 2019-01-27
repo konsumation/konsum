@@ -5,6 +5,7 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import { parse } from "querystring";
+import {} from "systemd";
 
 export function prepareHttpServer(config, database) {
   const app = new Koa();
@@ -27,6 +28,7 @@ export function prepareHttpServer(config, database) {
         permissions: user.roles.join(","),
         iss: "http://myDomain"
       };
+
       const token = jsonwebtoken.sign(
         claims,
         config.http.auth.jwt.private,
@@ -38,6 +40,7 @@ export function prepareHttpServer(config, database) {
           config.http.auth.jwt
         )
       );
+
       ctx.status = 200;
       ctx.body = {
         token,

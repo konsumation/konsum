@@ -22,7 +22,7 @@ program
     // default config if none is given
     const defaultConfig = {
       database: {
-        file: "level.db"
+        path: "level.db"
       },
       http: {
         port: 123456
@@ -36,6 +36,15 @@ program
         constants
       }
     );
+
+    if (process.env.PORT !== undefined) {
+      port = parseInt(process.env.PORT, 10);
+      if (Number.isNaN(port)) {
+        port = process.env.PORT;
+      }
+
+      config.http.port = port;
+    }
 
     // prepare the database with the config
     const db = await prepareDatabase(config);
