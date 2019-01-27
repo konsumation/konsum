@@ -5,6 +5,7 @@ pre_install() {
 post_install() {
 	systemctl daemon-reload
 	systemctl enable {{name}}
+	systemctl enable {{name}}.socket
 }
 
 pre_upgrade() {
@@ -18,6 +19,7 @@ post_upgrade() {
 
 pre_remove() {
 	systemctl stop {{name}}
+	systemctl enable {{name}}.socket
 	systemctl disable {{name}}
 }
 
