@@ -1,7 +1,8 @@
 import test from 'ava';
+import { join } from 'path';
+import {readFileSync} from 'fs';
+
 const got = require('got');
-const fs = require('fs');
-const { join } = require('path');
 
 import { prepareHttpServer } from '../src/http';
 import { prepareDatabase } from '../src/database';
@@ -26,10 +27,10 @@ const config = {
   http: {
     auth: {
       jwt: {
-        public: fs.readFileSync(
+        public: readFileSync(
           join(__dirname, '..', 'config', 'demo.rsa.pub')
         ),
-        private: fs.readFileSync(join(__dirname, '..', 'config', 'demo.rsa'))
+        private: readFileSync(join(__dirname, '..', 'config', 'demo.rsa'))
       }
     }
   }
