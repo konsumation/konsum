@@ -46,8 +46,8 @@ program
       config.http.port = port;
     }
 
-    console.log(JSON.stringify(process.env));
-    console.log(JSON.stringify(config));
+    console.log(JSON.stringify(process.env,undefined,2));
+    console.log(JSON.stringify(config,undefined,2));
 
     // prepare the database with the config
     const db = await prepareDatabase(config);

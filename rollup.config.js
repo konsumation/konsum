@@ -53,7 +53,7 @@ const external = [
 export default
   Object.keys(pkg.bin).map(name => {
     return {
-      input: `src/${name}.js`,
+      input: `src/${name}-cli.mjs`,
       output: {
         file: pkg.bin[name],
         format: "cjs",

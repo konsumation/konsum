@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "module": "src/konsum.js",
+  "module": "src/konsum-cli.mjs",
   "description": "collect resource usage in a home environment",
   "keywords": [],
   "contributors": [
@@ -19,8 +19,8 @@
   },
   "scripts": {
     "cover": "c8 --temp-directory build/coverage ava && c8 report -r lcov --temp-directory build/coverage",
-    "docs": "documentation readme src/konsum.js --section=API",
-    "lint": "documentation lint src/konsum.js",
+    "docs": "documentation readme src/konsum-cli.mjs --section=API",
+    "lint": "documentation lint src/konsum-cli.mjs",
     "package": "npm-pkgbuild -t /data/binaries/arch-linux/packages pkgbuild pacman makepkg",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
