@@ -47,12 +47,11 @@ const external = [
   "zlib",
 
   "koa",
-  "koa-better-router",
-  "jsonwebtoken"
+  "koa-better-router"
 ];
 
-export default [
-  ...Object.keys(pkg.bin).map(name => {
+export default
+  Object.keys(pkg.bin).map(name => {
     return {
       input: `src/${name}.js`,
       output: {
@@ -67,7 +66,6 @@ export default [
         resolve(),
         commonjs(),
         json({
-          include: "package.json",
           preferConst: true,
           compact: true
         }),
@@ -75,5 +73,4 @@ export default [
         executable()
       ]
     };
-  })
-];
+  });
