@@ -52,7 +52,8 @@ export async function prepareHttpServer(config, database) {
       ctx.status = 200;
       ctx.body = {
         token,
-        message: "Successfully logged in!"
+        message: "Successfully logged in!",
+        version: config.version
       };
     } else {
       ctx.status = 401;
