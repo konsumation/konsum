@@ -20,7 +20,7 @@
 # run
 
 ```shell
-konsum --config=myConfig.json
+konsum --config=<<some dir>>
 ```
 
 # install

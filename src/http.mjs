@@ -74,12 +74,11 @@ export function prepareHttpServer(config, database) {
     "GET",
     "/values",
     /*restricted,*/ (ctx, next) =>
-      new Promise((fullfill, reject) =>
+      new Promise((resolve, reject) =>
         database
           .createReadStream()
           .on("data", data => {
             console.log(data.key, "=", data.value);
-            console.log('data.key, "=", data.value');
             ctx.body = Object.assign(ctx.body, data);
           })
           .on("error", err => {
@@ -92,7 +91,7 @@ export function prepareHttpServer(config, database) {
           })
           .on("end", () => {
             console.log("Stream ended");
-            fullfill(next());
+            resolve(next());
           })
       )
   );

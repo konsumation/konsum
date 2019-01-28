@@ -22,7 +22,7 @@ program
     // default config if none is given
     const defaultConfig = {
       database: {
-        path: "level.db"
+        path: "db"
       },
       http: {
         port: 123456

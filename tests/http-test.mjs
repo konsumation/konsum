@@ -37,7 +37,7 @@ const config = {
 };
 
 test("server can authenticate", async t => {
-  const { app, server } = await prepareHttpServer(setPort(config, 12345));
+  const { server } = await prepareHttpServer(setPort(config, 12345));
 
   server.listen();
 
@@ -53,7 +53,7 @@ test("server can authenticate", async t => {
 });
 
 test("fails with invalid credentials", async t => {
-  const { app, server } = await prepareHttpServer(setPort(config, 12346));
+  const { server } = await prepareHttpServer(setPort(config, 12346));
 
   server.listen();
 
