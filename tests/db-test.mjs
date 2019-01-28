@@ -10,7 +10,7 @@ const config = {
 };
 
 test.skip("insert after create", async t => {
-  const db = prepareDatabase(config);
+  const db = await prepareDatabase(config);
   await db.put("foo", "bar");
   const value = await db.get("foo");
   t.is(value, "bar");
@@ -24,22 +24,22 @@ test.cb("test db", t => {
     }
   };
 
-  const db = prepareDatabase(config);
-
-  db.put("k1", "v1");
-  db.put("k2", "v2");
-  db.createReadStream()
-    .on("data", data => {
-      console.log(data.key, "=", data.value);
-    })
-    .on("error", err => {
-      console.log("Oh my!", err);
-    })
-    .on("close", () => {
-      console.log("Stream closed");
-    })
-    .on("end", () => {
-      console.log("Stream ended");
-      t.end();
-    });
+  prepareDatabase(config).then(db => {
+    db.put("k1", "v1");
+    db.put("k2", "v2");
+    db.createReadStream()
+      .on("data", data => {
+        console.log(data.key, "=", data.value);
+      })
+      .on("error", err => {
+        console.log("Oh my!", err);
+      })
+      .on("close", () => {
+        console.log("Stream closed");
+      })
+      .on("end", () => {
+        console.log("Stream ended");
+        t.end();
+      });
+  });
 });

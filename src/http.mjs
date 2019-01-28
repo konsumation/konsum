@@ -8,7 +8,7 @@ import bodyParser from "koa-bodyparser";
 
 import {} from "systemd";
 
-export function prepareHttpServer(config, database) {
+export async function prepareHttpServer(config, database) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
 
@@ -100,12 +100,12 @@ export function prepareHttpServer(config, database) {
     console.log(`Listening on port ${config.http.port}`)
   );
 
-  return Promise.resolve({
+  return {
     app,
     server,
     router,
     restricted
-  });
+  };
 }
 
 /**
