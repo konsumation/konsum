@@ -5,7 +5,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 import { prepareHttpServer } from "../src/http";
-//import { prepareDatabase } from "../src/database";
+import { prepareDatabase } from "../src/database";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -17,8 +17,9 @@ function setPort(config, port) {
 }
 
 const config = {
+  version: "1.2.3",
   database: {
-    path: "level.db"
+    path: "db"
   },
   users: {
     admin: {
@@ -50,6 +51,8 @@ test("server can authenticate", async t => {
   });
 
   t.is(response.statusCode, 200);
+  t.truthy(response.body.token.length > 10);
+  t.is(response.body.version, "1.2.3");
 });
 
 test("fails with invalid credentials", async t => {
@@ -58,7 +61,7 @@ test("fails with invalid credentials", async t => {
   server.listen();
 
   try {
-    const response = await got.post("http://localhost:12345/authenticate", {
+    const response = await got.post("http://localhost:12346/authenticate", {
       body: {
         username: "admin",
         password: "wrong"
@@ -70,25 +73,26 @@ test("fails with invalid credentials", async t => {
   }
 });
 
-/*
-  const database = await prepareDatabase(config);
+test.skip("can get /values", async t => {
+  const { server } = await prepareHttpServer(
+    setPort(config, 12347),
+    await prepareDatabase(config)
+  );
 
-  it('can get /values', () =>
-    prepareHttpServer(setPort(config, 12347), database).then(
-      ({ app, server }) => {
-        const r = request(server.listen());
-        return r.get('/login?user=admin&password=start123').then(res => {
-          const token = res.body.token;
-          //console.log(token);
-          return r
-            .get('/values?jwt=' + token)
-            .set('Authorization', `Bearer ${token}`)
-            .then(res => {
-              console.log(res.body);
-              return expect(res).to.have.status(200);
-            });
-        });
-      }
-    ));
+  server.listen();
+
+  let response = await got.post("http://localhost:12347/authenticate", {
+    body: {
+      username: "admin",
+      password: "start123"
+    },
+    json: true
+  });
+  const token = response.body.token;
+
+  response = await got.get("http://localhost:12347/values", {
+    //headers: { Authorization: `Bearer ${token}` }
+  });
+
+  console.log(response);
 });
-*/

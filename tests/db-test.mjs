@@ -38,7 +38,6 @@ test.cb("test db", t => {
         console.log("Stream closed");
       })
       .on("end", () => {
-        console.log("Stream ended");
         t.end();
       });
   });
