@@ -9,12 +9,13 @@ post_install() {
 }
 
 pre_upgrade() {
+	systemctl stop {{name}}.socket
 	systemctl stop {{name}}
 }
 
 post_upgrade() {
 	systemctl daemon-reload
-	systemctl start {{name}}
+	systemctl start {{name}}.socket
 }
 
 pre_remove() {
