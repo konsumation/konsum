@@ -24,8 +24,6 @@ export async function prepareHttpServer(config, database) {
    * login to request api token
    */
   router.addRoute("POST", "/authenticate", (ctx, next) => {
-    console.log(ctx.request.body);
-
     const q = ctx.request.body;
 
     const user = config.users[q.username];
@@ -75,7 +73,7 @@ export async function prepareHttpServer(config, database) {
     "/values",
     restricted,
     (ctx, next) => {
-      ctx.body = [{ key: "a", value: 1 }];
+      ctx.body = [{ a: 1 }, { b: 2 }];
       return next();
     }
 

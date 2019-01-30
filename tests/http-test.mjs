@@ -73,7 +73,7 @@ test("fails with invalid credentials", async t => {
   }
 });
 
-test.skip("can get /values", async t => {
+test("can get /values", async t => {
   const { server } = await prepareHttpServer(
     setPort(config, 12347),
     await prepareDatabase(config)
@@ -91,8 +91,8 @@ test.skip("can get /values", async t => {
   const token = response.body.token;
 
   response = await got.get("http://localhost:12347/values", {
-    //headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token}` }
   });
 
-  console.log(response);
+  t.deepEqual(JSON.parse(response.body), [{ a: 1 }, { b: 2 }]);
 });
