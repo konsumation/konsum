@@ -9,7 +9,7 @@ program
   .description(description)
   .version(version)
   .option("-c, --config <directory>", "use config from directory")
-  .action(async args => {
+  .action(async () => {
     const configDir = process.env.CONFIGURATION_DIRECTORY || program.config;
 
     // some constants used while loading the configuration
@@ -49,7 +49,7 @@ program
       config.http.port = port;
     }
 
-/*
+    /*
     console.log(JSON.stringify(process.env,undefined,2));
     console.log(JSON.stringify(config,undefined,2));
 */
