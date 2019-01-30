@@ -25,7 +25,7 @@ program
         path: "db"
       },
       http: {
-        port: 123456
+        port: 12345
       }
     };
 

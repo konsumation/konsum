@@ -20,7 +20,6 @@ export async function prepareHttpServer(config, database) {
   server.on("error", err => console.log(err));
   const router = Router();
 
-
   /**
    * login to request api token
    */
@@ -74,7 +73,13 @@ export async function prepareHttpServer(config, database) {
   router.addRoute(
     "GET",
     "/values",
-    /*restricted,*/ (ctx, next) =>
+    restricted,
+    (ctx, next) => {
+      ctx.body = [{ key: "a", value: 1 }];
+      return next();
+    }
+
+    /*
       new Promise((resolve, reject) =>
         database
           .createReadStream()
@@ -95,6 +100,7 @@ export async function prepareHttpServer(config, database) {
             resolve(next());
           })
       )
+      */
   );
 
   app.listen(config.http.port, () =>
