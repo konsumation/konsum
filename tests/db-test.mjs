@@ -1,19 +1,27 @@
 import test from "ava";
 import tmp from "tmp";
 
-import { prepareDatabase } from "../src/database";
+import { prepareDatabase, insertCategory, categories } from "../src/database";
+import { Category } from "../src/category";
 
 const config = {
   database: {
-    path: tmp.tmpNameSync()
+    path: "/tmp/db" // tmp.tmpNameSync()
   }
 };
 
-test.skip("insert after create", async t => {
+test.skip("categories", async t => {
+  //console.log(config.database.path);
   const db = await prepareDatabase(config);
-  await db.put("foo", "bar");
-  const value = await db.get("foo");
-  t.is(value, "bar");
+
+  for(let i = 0; i < 1000; i++) {
+    insertCategory(db, new Category("CDDFXGGH-" + i));
+  }
+
+  for await (const c of categories(db)) {
+    console.log(c);
+  }
+
   db.close();
 });
 
