@@ -2,7 +2,8 @@ const CATEGORY_PREFIX = "categories.";
 
 /**
  * @param {string} name category name
- * @param {Object} options physical unit
+ * @param {Object} options
+ * @param {string} options.unit physical unit
  *
  * @property {string} name category name
  * @property {string} unit physical unit
@@ -27,7 +28,17 @@ export class Category {
   }
 
   /**
-   *
+   * write the category
+   * @param {levelup} db
+   */
+  async write(db) {
+    const key = CATEGORY_PREFIX + this.name;
+    return db.put(key, JSON.stringify({ unit: this.unit }));
+  }
+
+  /**
+   * get all categories
+   * @param {levelup} db
    */
   static async *entries(db) {
     for await (const data of db.createReadStream(/*{ start: "categories/A", end: "categories/Z" }*/)) {
@@ -39,8 +50,4 @@ export class Category {
     }
   }
 
-  async write(db) {
-    const key = CATEGORY_PREFIX + this.name;
-    return db.put(key, JSON.stringify({ unit: this.unit }));
-  }
 }
