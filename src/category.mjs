@@ -2,16 +2,16 @@ const CATEGORY_PREFIX = "categories.";
 
 /**
  * @param {string} name category name
- * @param {string} unit physical unit
+ * @param {object} options physical unit
  *
  * @property {string} name category name
  * @property {string} unit physical unit
  */
 export class Category {
-  constructor(name, unit) {
+  constructor(name, options) {
     Object.defineProperties(this, {
       name: { value: name },
-      unit: { value: unit }
+      unit: { value: options.unit }
     });
   }
 
@@ -35,14 +35,12 @@ export class Category {
       const name = data.key.toString().substring(CATEGORY_PREFIX.length);
       //console.log(name);
 
-      yield new Category(name, data.value.toString());
+      yield new Category(name, JSON.parse(data.value.toString()));
     }
   }
 
   async write(db) {
     const key = CATEGORY_PREFIX + this.name;
-    //console.log("write", key);
-
-    return db.put(key, this.unit);
+    return db.put(key, JSON.stringify({ unit: this.unit }));
   }
 }
