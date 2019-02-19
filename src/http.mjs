@@ -9,6 +9,7 @@ import bodyParser from "koa-bodyparser";
 import {} from "systemd";
 
 import { mergeDefaults } from "./util";
+import { Category } from "./category";
 
 export async function prepareHttpServer(config, database) {
   const app = new Koa();
@@ -69,6 +70,22 @@ export async function prepareHttpServer(config, database) {
   const restricted = KoaJWT({
     secret: config.http.auth.jwt.public
   });
+
+  router.addRoute(
+    "GET",
+    "/categories",
+    restricted,
+    async (ctx, next) => {
+      const cs = [];
+
+      for await (const c of Category.entries(db)) {
+        cs.push(c.toJSON());
+      }
+
+      ctx.body = cs;
+      return next();
+    }
+  );
 
   router.addRoute(
     "GET",

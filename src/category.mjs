@@ -19,6 +19,13 @@ export class Category {
     return `${this.name}: ${this.unit}`;
   }
 
+  toJSON() {
+    return {
+      name: this.name,
+      unit: this.unit
+    };
+  }
+
   /**
    *
    */
