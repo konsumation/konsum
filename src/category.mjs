@@ -2,7 +2,7 @@ const CATEGORY_PREFIX = "categories.";
 
 /**
  * @param {string} name category name
- * @param {object} options physical unit
+ * @param {Object} options physical unit
  *
  * @property {string} name category name
  * @property {string} unit physical unit
