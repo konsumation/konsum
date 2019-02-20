@@ -1,4 +1,5 @@
 const CATEGORY_PREFIX = "categories.";
+const VALUE_PREFIX = "values.";
 
 /**
  * @param {string} name category name
@@ -40,13 +41,24 @@ export class Category {
    * get all categories
    * @param {levelup} db
    */
-  static async *entries(db) {
-    for await (const data of db.createReadStream(/*{ start: "categories/A", end: "categories/Z" }*/)) {
-      //console.log(data.key.toString());
+  static async *entries(db, start='A', end='_' ) {
+    for await (const data of db.createReadStream({ start: CATEGORY_PREFIX + start , end: CATEGORY_PREFIX + end })) {
       const name = data.key.toString().substring(CATEGORY_PREFIX.length);
-      //console.log(name);
-
       yield new Category(name, JSON.parse(data.value.toString()));
+    }
+  }
+
+
+  async insertValue(db, value, time) {
+    const key = VALUE_PREFIX + this.name + '.' + time;
+    return db.put(key, value);
+  }
+
+  async * values(db) {
+    const key = VALUE_PREFIX + this.name;
+    for await (const data of db.createReadStream()) {
+
+      yield { value: data.value };
     }
   }
 
