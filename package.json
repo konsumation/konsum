@@ -47,7 +47,7 @@
     "execa": "^1.0.0",
     "got": "^9.6.0",
     "markdown-doctest": "^0.9.1",
-    "npm-pkgbuild": "^5.0.3",
+    "npm-pkgbuild": "^5.0.4",
     "rollup": "^1.2.2",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-commonjs": "^9.2.0",
@@ -98,7 +98,7 @@
       "/etc/${name}/config.json": "config/config.json"
     },
     "depends": {
-      "systemd": ">=240.0"
+      "systemd": ">=241.0"
     }
   },
   "systemd": {
