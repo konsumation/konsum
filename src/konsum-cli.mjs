@@ -42,7 +42,7 @@ program
     config.description = description;
 
     if (process.env.PORT !== undefined) {
-      port = parseInt(process.env.PORT, 10);
+      let port = parseInt(process.env.PORT, 10);
       if (Number.isNaN(port)) {
         port = process.env.PORT;
       }
