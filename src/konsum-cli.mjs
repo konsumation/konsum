@@ -1,7 +1,7 @@
 import program from "commander";
 import { resolve } from "path";
 import { expand } from "config-expander";
-import { initialize } from "konsum-db";
+import { prepareDatabase } from "./database";
 import { prepareHttpServer } from "./http";
 import { version, description } from "../package.json";
 
