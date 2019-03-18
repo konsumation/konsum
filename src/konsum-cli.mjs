@@ -1,9 +1,10 @@
 import program from "commander";
-import { resolve, join } from "path";
+import { resolve } from "path";
 import { expand } from "config-expander";
-import { prepareDatabase } from "./database";
+import { initialize } from "konsum-db";
 import { prepareHttpServer } from "./http";
 import { version, description } from "../package.json";
+
 
 program
   .description(description)
@@ -52,9 +53,9 @@ program
     /*
     console.log(JSON.stringify(process.env,undefined,2));
     console.log(JSON.stringify(config,undefined,2));
-*/
+    */
     // prepare the database with the config
-    const db = await prepareDatabase(config);
+    const db = await prepareDatabase(config.database.path);
 
     // prepare the web-server with the config and the database
     const http = await prepareHttpServer(config, db);

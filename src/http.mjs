@@ -9,7 +9,7 @@ import bodyParser from "koa-bodyparser";
 import {} from "systemd";
 
 import { mergeDefaults } from "./util";
-import { Category } from "./category";
+import { Category } from "konsum-db";
 
 export async function prepareHttpServer(config, database) {
   const app = new Koa();
