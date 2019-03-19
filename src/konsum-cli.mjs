@@ -55,7 +55,7 @@ program
     console.log(JSON.stringify(config,undefined,2));
     */
     // prepare the database with the config
-    const db = await prepareDatabase(config.database.path);
+    const db = await prepareDatabase(config);
 
     // prepare the web-server with the config and the database
     const http = await prepareHttpServer(config, db);
