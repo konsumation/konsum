@@ -29,15 +29,15 @@
     "test": "ava"
   },
   "dependencies": {
-    "commander": "^2.19.0",
+    "commander": "^2.20.0",
     "config-expander": "^10.0.1",
     "koa": "^2.7.0",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.2.1",
     "koa-jwt": "^3.3.2",
-    "konsum-db": "^1.0.6",
+    "konsum-db": "^1.0.9",
     "leveldown": "^5.0.0",
-    "levelup": "^4.0.0",
+    "levelup": "^4.0.1",
     "systemd": "^0.3.1"
   },
   "devDependencies": {
