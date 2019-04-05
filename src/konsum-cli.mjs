@@ -5,7 +5,6 @@ import { prepareDatabase } from "./database";
 import { prepareHttpServer } from "./http";
 import { version, description } from "../package.json";
 
-
 program
   .description(description)
   .version(version)
@@ -20,26 +19,20 @@ program
       statedir: process.env.STATE_DIRECTORY || process.cwd()
     };
 
-    // default config if none is given
-    const defaultConfig = {
-      database: {
-        path: "db"
-      },
-      http: {
-        port: 12345
-      }
-    };
-
     // load config and expand expressions ${something} inside
-    const config = await expand(
-      configDir ? "${include('config.json')}" : defaultConfig,
-      {
-        constants
+    const config = await expand(configDir ? "${include('config.json')}" : {}, {
+      constants,
+      default: {
+        version,
+        description,
+        database: {
+          path: "db"
+        },
+        http: {
+          port: "${first(env.PORT,12345)}"
+        }
       }
-    );
-
-    config.version = version;
-    config.description = description;
+    });
 
     if (process.env.PORT !== undefined) {
       let port = parseInt(process.env.PORT, 10);
