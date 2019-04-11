@@ -37,8 +37,7 @@
     "koa-jwt": "^3.3.2",
     "konsum-db": "^1.0.9",
     "leveldown": "^5.0.1",
-    "levelup": "^4.0.1",
-    "systemd": "^0.3.1"
+    "levelup": "^4.0.1"
   },
   "devDependencies": {
     "ava": "^1.4.1",
@@ -57,6 +56,9 @@
     "rollup-plugin-node-resolve": "^4.2.3",
     "semantic-release": "^15.13.8",
     "tmp": "0.1.0"
+  },
+  "optionalDependencies": {
+    "sd-daemon": "^1.0.1"
   },
   "engines": {
     "node": ">=10.15.3"

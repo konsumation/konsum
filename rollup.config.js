@@ -50,8 +50,9 @@ const external = [
   "koa",
   "koa-better-router",
   "koa-jwt",
-  "leveldown"
-,];
+  "leveldown",
+  "sd-daemon"
+];
 
 export default
   Object.keys(pkg.bin).map(name => {

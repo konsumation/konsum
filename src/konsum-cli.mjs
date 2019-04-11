@@ -10,6 +10,12 @@ program
   .version(version)
   .option("-c, --config <directory>", "use config from directory")
   .action(async () => {
+    let sd = { notify: (...args) => console.log(...args), listener: () => [] };
+    try {
+      sd = await import("sd-daemon");
+    } catch (e) {}
+    sd.notify("READY=1\nSTATUS=starting");
+
     const configDir = process.env.CONFIGURATION_DIRECTORY || program.config;
 
     // some constants used while loading the configuration
@@ -34,14 +40,8 @@ program
       }
     });
 
-    if (process.env.PORT !== undefined) {
-      let port = parseInt(process.env.PORT, 10);
-      if (Number.isNaN(port)) {
-        port = process.env.PORT;
-      }
-
-      config.http.port = port;
-    }
+    const listeners = sd.listeners();
+    if (listeners.length > 0) config.http.port = listeners[0];
 
     /*
     console.log(JSON.stringify(process.env,undefined,2));

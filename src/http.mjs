@@ -120,9 +120,10 @@ export async function prepareHttpServer(config, database) {
       */
   );
 
-  app.listen(config.http.port, () =>
-    console.log(`Listening on port ${config.http.port}`)
-  );
+  const listener = app.listen(config.http.port, () => {
+    console.log("listen on", listener.address());
+    sd.notify("READY=1\nSTATUS=running");
+  });
 
   return {
     app,
