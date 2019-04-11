@@ -5,9 +5,6 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import bodyParser from "koa-bodyparser";
-
-import {} from "systemd";
-
 import { mergeDefaults } from "./util";
 import { Category } from "konsum-db";
 
