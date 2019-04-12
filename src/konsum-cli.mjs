@@ -10,7 +10,7 @@ program
   .version(version)
   .option("-c, --config <directory>", "use config from directory")
   .action(async () => {
-    let sd = { notify: (...args) => console.log(...args), listener: () => [] };
+    let sd = { notify: (...args) => console.log(...args), listeners: () => [] };
     try {
       sd = await import("sd-daemon");
     } catch (e) {}
