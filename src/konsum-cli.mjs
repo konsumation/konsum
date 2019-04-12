@@ -43,10 +43,7 @@ program
     const listeners = sd.listeners();
     if (listeners.length > 0) config.http.port = listeners[0];
 
-    /*
-    console.log(JSON.stringify(process.env,undefined,2));
-    console.log(JSON.stringify(config,undefined,2));
-    */
+    console.log(config);
     // prepare the database with the config
     const db = await prepareDatabase(config);
 
