@@ -5,7 +5,6 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import bodyParser from "koa-bodyparser";
-import { mergeDefaults } from "./util";
 import { Category } from "konsum-db";
 
 export async function prepareHttpServer(config, database) {
@@ -37,12 +36,7 @@ export async function prepareHttpServer(config, database) {
       const token = jsonwebtoken.sign(
         claims,
         config.http.auth.jwt.private,
-        mergeDefaults(
-          {
-            algorithm: "RS256",
-            expiresIn: "12h"
-          },
-          config.http.auth.jwt
+        config.http.auth.jwt
         )
       );
 
