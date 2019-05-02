@@ -45,9 +45,9 @@ program
 
     console.log(config);
     // prepare the database with the config
-    const db = await prepareDatabase(config);
+    const db = await prepareDatabase(config, sd);
 
     // prepare the web-server with the config and the database
-    const http = await prepareHttpServer(config, db);
+    const http = await prepareHttpServer(config, sd, database);
   })
   .parse(process.argv);

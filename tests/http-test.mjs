@@ -4,8 +4,8 @@ import got from "got";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
-import { prepareHttpServer } from "../src/http";
-import { prepareDatabase } from "../src/database";
+import { prepareHttpServer } from "../src/http.mjs";
+import { prepareDatabase } from "../src/database.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -15,6 +15,8 @@ function setPort(config, port) {
   config.http.port = port;
   return config;
 }
+
+const sd = { notify: (...args) => console.log(...args), listeners: () => [] };
 
 const config = {
   version: "1.2.3",
@@ -38,7 +40,7 @@ const config = {
 };
 
 test("server can authenticate", async t => {
-  const { server } = await prepareHttpServer(setPort(config, 12345));
+  const { server } = await prepareHttpServer(setPort(config, 12345), sd);
 
   server.listen();
 
@@ -56,7 +58,7 @@ test("server can authenticate", async t => {
 });
 
 test("fails with invalid credentials", async t => {
-  const { server } = await prepareHttpServer(setPort(config, 12346));
+  const { server } = await prepareHttpServer(setPort(config, 12346), sd);
 
   server.listen();
 
@@ -76,6 +78,7 @@ test("fails with invalid credentials", async t => {
 test("can get /values", async t => {
   const { server } = await prepareHttpServer(
     setPort(config, 12347),
+    sd,
     await prepareDatabase(config)
   );
 

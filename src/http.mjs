@@ -8,7 +8,7 @@ import bodyParser from "koa-bodyparser";
 import { mergeDefaults } from "./util";
 import { Category } from "konsum-db";
 
-export async function prepareHttpServer(config, database) {
+export async function prepareHttpServer(config, sd, db) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
 
@@ -68,21 +68,16 @@ export async function prepareHttpServer(config, database) {
     secret: config.http.auth.jwt.public
   });
 
-  router.addRoute(
-    "GET",
-    "/categories",
-    restricted,
-    async (ctx, next) => {
-      const cs = [];
+  router.addRoute("GET", "/categories", restricted, async (ctx, next) => {
+    const cs = [];
 
-      for await (const c of Category.entries(db)) {
-        cs.push(c.toJSON());
-      }
-
-      ctx.body = cs;
-      return next();
+    for await (const c of Category.entries(db)) {
+      cs.push(c.toJSON());
     }
-  );
+
+    ctx.body = cs;
+    return next();
+  });
 
   router.addRoute(
     "GET",
@@ -95,7 +90,7 @@ export async function prepareHttpServer(config, database) {
 
     /*
       new Promise((resolve, reject) =>
-        database
+        db
           .createReadStream()
           .on("data", data => {
             console.log(data.key, "=", data.value);
