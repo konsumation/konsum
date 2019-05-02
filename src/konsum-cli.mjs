@@ -35,7 +35,13 @@ program
           path: "db"
         },
         http: {
-          port: "${first(env.PORT,12345)}"
+          port: "${first(env.PORT,12345)}",
+          auth: {
+            jwt: {
+              algorithm: "RS256",
+              expiresIn: "12h"
+            }
+          }
         }
       }
     });
