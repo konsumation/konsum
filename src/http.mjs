@@ -37,7 +37,6 @@ export async function prepareHttpServer(config, database) {
         claims,
         config.http.auth.jwt.private,
         config.http.auth.jwt
-        )
       );
 
       ctx.status = 200;
