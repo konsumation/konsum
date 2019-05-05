@@ -1,6 +1,6 @@
 import program from "commander";
 import { resolve } from "path";
-import { expand } from "config-expander";
+import { expand, removeSensibleValues } from "config-expander";
 import { prepareDatabase } from "./database";
 import { prepareHttpServer } from "./http";
 import { version, description } from "../package.json";
@@ -10,7 +10,7 @@ program
   .version(version)
   .option("-c, --config <directory>", "use config from directory")
   .action(async () => {
-    let sd = { notify: (...args) => console.log(...args), listeners: () => [] };
+    let sd = { notify: () => {}, listeners: () => [] };
     try {
       sd = await import("sd-daemon");
     } catch (e) {}
@@ -49,7 +49,7 @@ program
     const listeners = sd.listeners();
     if (listeners.length > 0) config.http.port = listeners[0];
 
-    console.log(config);
+    console.log(removeSensibleValues(config));
     // prepare the database with the config
     const db = await prepareDatabase(config, sd);
 

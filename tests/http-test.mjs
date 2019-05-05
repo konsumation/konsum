@@ -16,7 +16,7 @@ function setPort(config, port) {
   return config;
 }
 
-const sd = { notify: (...args) => console.log(...args), listeners: () => [] };
+const sd = { notify: () => {}, listeners: () => [] };
 
 const config = {
   version: "1.2.3",
