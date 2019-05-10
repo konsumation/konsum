@@ -1,6 +1,7 @@
 import program from "commander";
 import { resolve } from "path";
-import { expand, removeSensibleValues } from "config-expander";
+import { expand } from "config-expander";
+import { removeSensibleValues } from "remove-sensible-values";
 import { prepareDatabase } from "./database";
 import { prepareHttpServer } from "./http";
 import { version, description } from "../package.json";
