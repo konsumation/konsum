@@ -2,8 +2,8 @@ import program from "commander";
 import { resolve } from "path";
 import { expand } from "config-expander";
 import { removeSensibleValues } from "remove-sensible-values";
-import { prepareDatabase } from "./database";
-import { prepareHttpServer } from "./http";
+import { prepareDatabase, defaultDatabaseConfig } from "./database";
+import { prepareHttpServer, defaultHttpServerConfig } from "./http";
 import { version, description } from "../package.json";
 
 program
@@ -32,18 +32,8 @@ program
       default: {
         version,
         description,
-        database: {
-          path: "db"
-        },
-        http: {
-          port: "${first(env.PORT,12345)}",
-          auth: {
-            jwt: {
-              algorithm: "RS256",
-              expiresIn: "12h"
-            }
-          }
-        }
+        ...defaultDatabaseConfig,
+        ...defaultHttpServerConfig
       }
     });
 

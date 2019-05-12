@@ -7,6 +7,18 @@ import Router from "koa-better-router";
 import bodyParser from "koa-bodyparser";
 import { Category } from "konsum-db";
 
+export const defaultHttpServerConfig = {
+ http: {
+          port: "${first(env.PORT,12345)}",
+          auth: {
+            jwt: {
+              algorithm: "RS256",
+              expiresIn: "12h"
+            }
+          }
+        }
+ };
+        
 export async function prepareHttpServer(config, sd, db) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http

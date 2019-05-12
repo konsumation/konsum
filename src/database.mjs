@@ -2,6 +2,12 @@ import levelup from "levelup";
 import leveldown from "leveldown";
 import { initialize, Category } from "konsum-db";
 
+export const defaultDatabaseConfig = {
+  database: {
+          path: "db"
+        }
+};
+        
 export async function prepareDatabase(config) {
   const db = await levelup(leveldown(config.database.path));
 
