@@ -41,7 +41,7 @@
     "konsum-db": "^1.0.11",
     "leveldown": "^5.0.3",
     "levelup": "^4.0.1",
-    "remove-sensible-values": "^1.0.0"
+    "remove-sensible-values": "^1.0.1"
   },
   "devDependencies": {
     "@semantic-release/exec": "^3.3.3",
