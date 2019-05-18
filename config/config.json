@@ -1,6 +1,6 @@
 {
   "database": {
-    "path": "${statedir}/db"
+    "file": "${statedir}/db"
   },
   "users": {
     "admin": {

@@ -8,17 +8,17 @@ import bodyParser from "koa-bodyparser";
 import { Category } from "konsum-db";
 
 export const defaultHttpServerConfig = {
- http: {
-          port: "${first(env.PORT,12345)}",
-          auth: {
-            jwt: {
-              algorithm: "RS256",
-              expiresIn: "12h"
-            }
-          }
-        }
- };
-        
+  http: {
+    port: "${first(env.PORT,12345)}",
+    auth: {
+      jwt: {
+        algorithm: "RS256",
+        expiresIn: "12h"
+      }
+    }
+  }
+};
+
 export async function prepareHttpServer(config, sd, db) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
@@ -45,10 +45,13 @@ export async function prepareHttpServer(config, sd, db) {
         iss: "http://myDomain"
       };
 
+      const jo = { ...config.http.auth.jwt };
+      delete jo.public;
+
       const token = jsonwebtoken.sign(
         claims,
         config.http.auth.jwt.private,
-        config.http.auth.jwt
+
       );
 
       ctx.status = 200;

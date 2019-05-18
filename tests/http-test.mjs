@@ -1,5 +1,5 @@
 import test from "ava";
-import { readFileSync } from "fs";
+import fs, { readFileSync } from "fs";
 import got from "got";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -18,10 +18,11 @@ function setPort(config, port) {
 
 const sd = { notify: () => {}, listeners: () => [] };
 
+
 const config = {
   version: "1.2.3",
   database: {
-    path: "db"
+    file: join(here, "..", "build", "db")
   },
   users: {
     admin: {
@@ -40,11 +41,12 @@ const config = {
 };
 
 test("server can authenticate", async t => {
-  const { server } = await prepareHttpServer(setPort(config, 12345), sd);
+  const port = 12345;
+  const { server } = await prepareHttpServer(setPort(config, port), sd);
 
   server.listen();
 
-  const response = await got.post("http://localhost:12345/authenticate", {
+  const response = await got.post(`http://localhost:${port}/authenticate`, {
     body: {
       username: "admin",
       password: "start123"
@@ -58,12 +60,13 @@ test("server can authenticate", async t => {
 });
 
 test("fails with invalid credentials", async t => {
-  const { server } = await prepareHttpServer(setPort(config, 12346), sd);
+  const port = 12346;
+  const { server } = await prepareHttpServer(setPort(config, port), sd);
 
   server.listen();
 
   try {
-    const response = await got.post("http://localhost:12346/authenticate", {
+    const response = await got.post(`http://localhost:${port}/authenticate`, {
       body: {
         username: "admin",
         password: "wrong"
@@ -76,24 +79,32 @@ test("fails with invalid credentials", async t => {
 });
 
 test("can get /values", async t => {
+  await fs.promises.mkdir(join(here, "..", "build"),{ recursive: true});
+
+  const port = 12347;
   const { server } = await prepareHttpServer(
-    setPort(config, 12347),
+    setPort(config, port),
     sd,
     await prepareDatabase(config)
   );
 
   server.listen();
 
-  let response = await got.post("http://localhost:12347/authenticate", {
+  let response = await got.post(`http://localhost:${port}/authenticate`, {
     body: {
       username: "admin",
       password: "start123"
     },
     json: true
   });
+
+  t.is(response.statusCode, 200);
+
   const token = response.body.token;
 
-  response = await got.get("http://localhost:12347/values", {
+  console.log("TOKEN", token);
+
+  response = await got.get(`http://localhost:${port}/values`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 

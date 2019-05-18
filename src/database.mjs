@@ -4,12 +4,12 @@ import { initialize, Category } from "konsum-db";
 
 export const defaultDatabaseConfig = {
   database: {
-          path: "db"
-        }
+    file: "${statedir}/db"
+  }
 };
-        
+
 export async function prepareDatabase(config) {
-  const db = await levelup(leveldown(config.database.path));
+  const db = await levelup(leveldown(config.database.file));
 
   const master = await initialize(db);
   console.log("DATABASE", master);
