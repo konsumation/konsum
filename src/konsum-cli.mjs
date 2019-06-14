@@ -42,7 +42,7 @@ program
 
     console.log(removeSensibleValues(config));
     // prepare the database with the config
-    const db = await prepareDatabase(config, sd);
+    const database = await prepareDatabase(config, sd);
 
     // prepare the web-server with the config and the database
     const http = await prepareHttpServer(config, sd, database);
