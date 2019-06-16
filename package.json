@@ -108,6 +108,10 @@
     }
   },
   "pacman": {
+     "arch": [
+      "aarch64",
+      "armv7h"
+    ],
     "groups": "home-automation",
     "backup": "etc/${name}/config.json",
     "install": "pacman/install.sh",
