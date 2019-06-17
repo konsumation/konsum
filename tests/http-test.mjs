@@ -16,7 +16,7 @@ function setPort(config, port) {
   return config;
 }
 
-const sd = { notify: () => {}, listeners: () => [] };
+const sd = { notify: () => { }, listeners: () => [] };
 
 
 const config = {
@@ -34,7 +34,10 @@ const config = {
     auth: {
       jwt: {
         public: readFileSync(join(here, "..", "config", "demo.rsa.pub")),
-        private: readFileSync(join(here, "..", "config", "demo.rsa"))
+        private: readFileSync(join(here, "..", "config", "demo.rsa")),
+        options: {
+          algorithm: "RS256"
+        }
       }
     }
   }
@@ -79,7 +82,7 @@ test("fails with invalid credentials", async t => {
 });
 
 test("can get /values", async t => {
-  await fs.promises.mkdir(join(here, "..", "build"),{ recursive: true});
+  await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
   const port = 12347;
   const { server } = await prepareHttpServer(

@@ -12,8 +12,10 @@ export const defaultHttpServerConfig = {
     port: "${first(env.PORT,12345)}",
     auth: {
       jwt: {
-        algorithm: "RS256",
-        expiresIn: "12h"
+        options: {
+          algorithm: "RS256",
+          expiresIn: "12h"  
+        }
       }
     }
   }
@@ -45,13 +47,11 @@ export async function prepareHttpServer(config, sd, db) {
         iss: "http://myDomain"
       };
 
-      const jo = { ...config.http.auth.jwt };
-      delete jo.public;
-
+      console.log(config.http.auth.jwt.options);
       const token = jsonwebtoken.sign(
         claims,
         config.http.auth.jwt.private,
-
+        config.http.auth.jwt.options
       );
 
       ctx.status = 200;
@@ -73,7 +73,8 @@ export async function prepareHttpServer(config, sd, db) {
 
   // middleware to restrict access to token holding requests
   const restricted = KoaJWT({
-    secret: config.http.auth.jwt.public
+    secret: config.http.auth.jwt.public,
+    debug: true
   });
 
   router.addRoute("GET", "/categories", restricted, async (ctx, next) => {

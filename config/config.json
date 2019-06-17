@@ -14,7 +14,9 @@
     "port": 12345,
     "auth": {
       "jwt": {
-        "expiresIn": "1h",
+        "options": {
+          "expiresIn": "1h"
+        },
         "public": "${document('demo.rsa.pub')}",
         "private": "${document('demo.rsa')}"
       }
