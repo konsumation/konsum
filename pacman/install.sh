@@ -5,7 +5,7 @@ pre_install() {
 post_install() {
 	openssl genrsa -out /etc/{{name}}/{{name}}.rsa 1024
 	openssl rsa -in /etc/{{name}}/{{name}}.rsa -pubout > /etc/{{name}}/{{name}}.rsa.pub
-	chown {{name}} /etc/{{name}}/{{name}}.rsa*
+	chown {{name}}:{{name}} /etc/{{name}}/{{name}}.rsa*
 	
 	systemctl daemon-reload
 	systemctl enable {{name}}
@@ -24,8 +24,8 @@ post_upgrade() {
 
 pre_remove() {
     systemctl stop {{name}}.socket
-	systemctl stop {{name}}
 	systemctl disable {{name}}.socket
+	systemctl stop {{name}}
 	systemctl disable {{name}}
 }
 
