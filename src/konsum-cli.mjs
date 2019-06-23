@@ -15,7 +15,7 @@ program
     try {
       sd = await import("sd-daemon");
     } catch (e) {}
-    sd.notify("READY=1\nSTATUS=starting");
+    sd.notify("STATUS=starting");
 
     const configDir = process.env.CONFIGURATION_DIRECTORY || program.config;
 
