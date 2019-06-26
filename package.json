@@ -41,7 +41,7 @@
     "remove-sensible-values": "^1.0.3"
   },
   "devDependencies": {
-    "@semantic-release/exec": "^3.3.4",
+    "@semantic-release/exec": "^3.3.5",
     "ava": "^2.1.0",
     "builtin-modules": "^3.1.0",
     "c8": "^5.0.2",
