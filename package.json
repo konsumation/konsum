@@ -50,7 +50,7 @@
     "execa": "^2.0.1",
     "got": "^9.6.0",
     "markdown-doctest": "^0.9.1",
-    "npm-pkgbuild":"^6.5.3",
+    "npm-pkgbuild": "^6.5.3",
     "rollup": "^1.16.2",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-commonjs": "^10.0.1",
