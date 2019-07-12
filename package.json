@@ -107,6 +107,9 @@
       "url": "https://github.com/arlac77/npm-package-template.git"
     }
   },
+  "config": {
+    "urlPrefix" : "/services/{{name}}/api"
+  },
   "pacman": {
     "arch": [
       "aarch64",
