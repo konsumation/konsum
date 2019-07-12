@@ -108,7 +108,8 @@
     }
   },
   "config": {
-    "urlPrefix" : "/services/{{name}}/api"
+    "urlPrefix" : "/services/{{name}}/api",
+    "socket": "/run/{{name}}/socket"
   },
   "pacman": {
     "arch": [
