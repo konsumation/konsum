@@ -18,7 +18,7 @@
     "konsum": "bin/konsum"
   },
   "scripts": {
-    "cover": "c8 --temp-directory build/tmp ava && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
+    "cover": "c8 -x tests/** --temp-directory build/tmp ava && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/konsum-cli.mjs --section=API",
     "lint": "documentation lint src/konsum-cli.mjs",
     "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg",
@@ -42,10 +42,10 @@
   },
   "devDependencies": {
     "@semantic-release/exec": "^3.3.5",
-    "ava": "^2.1.0",
+    "ava": "^2.2.0",
     "builtin-modules": "^3.1.0",
     "c8": "^5.0.2",
-    "documentation": "^12.0.0",
+    "documentation": "^12.0.1",
     "esm": "^3.2.25",
     "execa": "^2.0.3",
     "got": "^9.6.0",
@@ -77,6 +77,28 @@
     "url": "https://github.com/k0nsti/konsum/issues"
   },
   "homepage": "https://github.com/k0nsti/konsum#readme",
+  "config": {
+    "urlPrefix": "/services/konsum/api",
+    "socket": "/run/konsum/socket"
+  },
+  "pacman": {
+    "arch": [
+      "aarch64",
+      "armv7h"
+    ],
+    "groups": "home-automation",
+    "backup": "etc/${name}/config.json",
+    "install": "pacman/install.sh",
+    "installdir": "/services/${name}",
+    "content": {
+      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
+      "/etc/${name}/config.json": "config/config.json",
+      "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
+    },
+    "depends": {
+      "systemd": ">=241.0"
+    }
+  },
   "release": {
     "plugins": [
       "@semantic-release/commit-analyzer",
@@ -105,28 +127,6 @@
   "template": {
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template.git"
-    }
-  },
-  "config": {
-    "urlPrefix": "/services/{{name}}/api",
-    "socket": "/run/{{name}}/socket"
-  },
-  "pacman": {
-    "arch": [
-      "aarch64",
-      "armv7h"
-    ],
-    "groups": "home-automation",
-    "backup": "etc/${name}/config.json",
-    "install": "pacman/install.sh",
-    "installdir": "/services/${name}",
-    "content": {
-      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
-      "/etc/${name}/config.json": "config/config.json",
-      "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
-    },
-    "depends": {
-      "systemd": ">=241.0"
     }
   },
   "systemd": {
