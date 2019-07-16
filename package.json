@@ -34,7 +34,7 @@
     "koa": "^2.7.0",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.2.1",
-    "koa-jwt": "^3.5.1",
+    "koa-jwt": "^3.6.0",
     "konsum-db": "^1.0.11",
     "leveldown": "^5.1.1",
     "levelup": "^4.1.0",
