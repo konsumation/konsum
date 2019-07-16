@@ -65,57 +65,7 @@ curl -H 'Authorization: Baerer $token' http://localhost:12345/values
 ### Table of Contents
 
 -   [addRoute](#addroute)
--   [mergeDefaults](#mergedefaults)
-    -   [Parameters](#parameters)
--   [Category](#category)
-    -   [Parameters](#parameters-1)
-    -   [Properties](#properties)
-    -   [write](#write)
-        -   [Parameters](#parameters-2)
-    -   [entries](#entries)
-        -   [Parameters](#parameters-3)
 
 ## addRoute
 
 login to request api token
-
-## mergeDefaults
-
-Merges two objects.
-Overwrite all keys in a1 with the corresponding values from a2
-
-### Parameters
-
--   `a1` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
--   `a2` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** merged result
-
-## Category
-
-### Parameters
-
--   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** category name
--   `options` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-    -   `options.unit` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** physical unit
-
-### Properties
-
--   `name` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** category name
--   `unit` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** physical unit
-
-### write
-
-write the category
-
-#### Parameters
-
--   `db` **levelup** 
-
-### entries
-
-get all categories
-
-#### Parameters
-
--   `db` **levelup** 
