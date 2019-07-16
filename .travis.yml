@@ -15,11 +15,9 @@ script:
   - npm run cover
   - npx codecov
   - cat ./build/coverage/lcov.info | npx coveralls
-after_script:
-  - npm run docs
 jobs:
   include:
-    - stage: docs
+    - stage: doc
       node_js: lts/*
       skip_cleanup: 'true'
       script:
