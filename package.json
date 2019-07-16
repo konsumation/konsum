@@ -24,7 +24,7 @@
     "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg",
     "posttest": "npm run prepare && markdown-doctest",
     "prepare": "rollup -c",
-    "pretest": "npm run prepare",
+    "pretest": "rollup -c",
     "start": "npm run prepare && node bin/konsum --config=config",
     "test": "ava"
   },
