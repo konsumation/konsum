@@ -47,7 +47,6 @@ export async function prepareHttpServer(config, sd, db) {
         iss: "http://myDomain"
       };
 
-      console.log(config.http.auth.jwt.options);
       const token = jsonwebtoken.sign(
         claims,
         config.http.auth.jwt.private,
@@ -90,35 +89,20 @@ export async function prepareHttpServer(config, sd, db) {
 
   router.addRoute(
     "GET",
-    "/values",
+    "/category/:category/values",
     restricted,
-    (ctx, next) => {
-      ctx.body = [{ a: 1 }, { b: 2 }];
+    async (ctx, next) => {
+      const c = await Category.entry(db,ctx.params.category);
+
+      const values = [];
+
+      for await (const { value, time } of c.values(db)) {
+        values.push({ value, time });
+      }
+    
+      ctx.body = values;
       return next();
     }
-
-    /*
-      new Promise((resolve, reject) =>
-        db
-          .createReadStream()
-          .on("data", data => {
-            console.log(data.key, "=", data.value);
-            ctx.body = Object.assign(ctx.body, data);
-          })
-          .on("error", err => {
-            ctx.status = 401;
-            ctx.body = err;
-            reject(err);
-          })
-          .on("close", () => {
-            console.log("Stream closed");
-          })
-          .on("end", () => {
-            console.log("Stream ended");
-            resolve(next());
-          })
-      )
-      */
   );
 
   const listener = app.listen(config.http.port, () => {

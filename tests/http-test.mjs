@@ -3,6 +3,7 @@ import fs, { readFileSync } from "fs";
 import got from "got";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { Category } from "konsum-db";
 
 import { prepareHttpServer } from "../src/http.mjs";
 import { prepareDatabase } from "../src/database.mjs";
@@ -85,11 +86,18 @@ test("can get /values", async t => {
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
   const port = 12347;
+  const db = await prepareDatabase(config);
   const { server } = await prepareHttpServer(
     setPort(config, port),
     sd,
-    await prepareDatabase(config)
+    db
   );
+
+  const c = new Category(`CAT1`, { unit: "kWh" });
+  await c.write(db);
+  const now = Date.now();
+  await c.writeValue(db, 77.34, now);
+
 
   server.listen();
 
@@ -105,11 +113,12 @@ test("can get /values", async t => {
 
   const token = response.body.token;
 
-  console.log("TOKEN", token);
+  //console.log("TOKEN", token);
 
-  response = await got.get(`http://localhost:${port}/values`, {
+  response = await got.get(`http://localhost:${port}/category/CAT1/values`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 
-  t.deepEqual(JSON.parse(response.body), [{ a: 1 }, { b: 2 }]);
+  t.log(response.body);
+  t.is(JSON.parse(response.body)[0].value, 77.34);
 });
