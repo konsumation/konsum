@@ -12,30 +12,48 @@ program
   .version(version)
   .option("-c, --config <directory>", "use config from directory");
 
-program.command("start", { isDefault: true }).action(async () => {
-  const { sd, config } = await prepareConfig();
+program.command("start").action(async () => {
+  const { sd, config, database } = await prepareConfig();
 
   console.log(removeSensibleValues(config));
-
-  // prepare the database with the config
-  const database = await prepareDatabase(config, sd);
 
   // prepare the web-server with the config and the database
   const http = await prepareHttpServer(config, sd, database);
 });
 
-program.command("list").action(async () => {
-  const { sd, config } = await prepareConfig();
+program.command("list").action(async (...args) => {
+  args.pop();
 
-  console.log(removeSensibleValues(config));
+  const { database } = await prepareConfig();
 
-  const db = await prepareDatabase(config, sd);
+  const cName = args[0];
 
-  for await (const c of Category.entries(db)) {
-    for await (const { value, time } of c.values(db)) {
-      console.log(c.name, time, value);
+  console.log(cName);
+  for await (const c of Category.entries(database, cName, cName)) {
+    for await (const { value, time } of c.values(database)) {
+      console.log(c.name, new Date(time * 1000), value);
     }
   }
+});
+
+program.command("insert").action(async (...args) => {
+  args.pop();
+  let [cName, value, time] = args;
+
+  const { database } = await prepareConfig();
+
+  time = time === undefined ? Date.now() : (new Date(time)).valueOf();
+
+  time = time / 1000;
+
+  if(time < 941673600 || time > 2000000000) {
+    console.log("time out of range");
+    return;
+  }
+
+  const c = await Category.entry(database, cName);
+
+  await c.writeValue(database, value, time);
 });
 
 program.parse(process.argv);
@@ -70,5 +88,8 @@ async function prepareConfig() {
   const listeners = sd.listeners();
   if (listeners.length > 0) config.http.port = listeners[0];
 
-  return { sd, config };
+  // prepare the database with the config
+  const database = await prepareDatabase(config, sd);
+
+  return { sd, config, database };
 }
