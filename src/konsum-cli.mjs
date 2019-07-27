@@ -28,7 +28,6 @@ program.command("list").action(async (...args) => {
 
   const cName = args[0];
 
-  console.log(cName);
   for await (const c of Category.entries(database, cName, cName)) {
     for await (const { value, time } of c.values(database)) {
       console.log(c.name, new Date(time * 1000), value);
