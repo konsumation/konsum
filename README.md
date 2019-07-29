@@ -18,7 +18,15 @@
 # run
 
 ```shell
-konsum --config=<<some dir>>
+konsum --config=<<some dir>> start
+```
+
+```shell
+konsum --config=<<some dir>> list [category]
+```
+
+```shell
+konsum --config=<<some dir>> insert category value [time]
 ```
 
 # install
@@ -47,7 +55,7 @@ openssl rsa -in demo.rsa -pubout > demo.rsa.pub
 test with:
 
 ```shell
-curl --header "Content-Type: application/json" \
+curl -H "Content-Type: application/json" \
      -d '{"username":"admin","password":"start123"}' \
      -X POST http://localhost:12345/authenticate
 ```
@@ -55,7 +63,19 @@ curl --header "Content-Type: application/json" \
 and exec a request
 
 ```shell
-curl -H 'Authorization: Baerer $token' http://localhost:12345/values
+TOKEN=...
+CATEGORY=...
+curl -H "Authorization: Bearer $TOKEN" \
+     http://localhost:12345/category/$CATEGORY/values
+```
+
+```shell
+TOKEN=...
+CATEGORY=...
+curl -H "Authorization: Bearer $TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"value":"1234.5","time":"1995-12-17T03:24:00"}' \
+     http://localhost:12345/category/$CATEGORY/insert
 ```
 
 # API

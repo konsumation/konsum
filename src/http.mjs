@@ -105,6 +105,26 @@ export async function prepareHttpServer(config, sd, db) {
     }
   );
 
+  router.addRoute(
+    "POST",
+    "/category/:category/insert",
+    restricted,
+    async (ctx, next) => {
+      const c = await Category.entry(db,ctx.params.category);
+
+      const q = ctx.request.body;
+
+      time = q.time === undefined ? Date.now() : (new Date(q.time)).valueOf();
+
+      time = time / 1000;
+
+      await c.writeValue(database, q.value, time);
+    
+      ctx.body = { message: "inserted"};
+      return next();
+    }
+  );
+
   const listener = app.listen(config.http.port, () => {
     console.log("listen on", listener.address());
     sd.notify("READY=1\nSTATUS=running");
