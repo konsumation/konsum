@@ -19,7 +19,6 @@ function setPort(config, port) {
 
 const sd = { notify: () => { }, listeners: () => [] };
 
-
 const config = {
   version: "1.2.3",
   database: {
@@ -82,7 +81,7 @@ test("fails with invalid credentials", async t => {
   }
 });
 
-test("can get /values", async t => {
+test("can insert + get values", async t => {
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
   const port = 12347;
@@ -98,7 +97,6 @@ test("can get /values", async t => {
   const now = Date.now();
   await c.writeValue(db, 77.34, now);
 
-
   server.listen();
 
   let response = await got.post(`http://localhost:${port}/authenticate`, {
@@ -112,6 +110,14 @@ test("can get /values", async t => {
   t.is(response.statusCode, 200);
 
   const token = response.body.token;
+
+  response = await got.post(`http://localhost:${port}/category/CAT1/insert`, {
+    headers: { Authorization: `Bearer ${token}` },
+    body: {
+      value: 78.00
+    },
+    json: true
+  });
 
   //console.log("TOKEN", token);
 

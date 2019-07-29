@@ -14,7 +14,7 @@ export const defaultHttpServerConfig = {
       jwt: {
         options: {
           algorithm: "RS256",
-          expiresIn: "12h"  
+          expiresIn: "12h"
         }
       }
     }
@@ -92,14 +92,14 @@ export async function prepareHttpServer(config, sd, db) {
     "/category/:category/values",
     restricted,
     async (ctx, next) => {
-      const c = await Category.entry(db,ctx.params.category);
+      const c = await Category.entry(db, ctx.params.category);
 
       const values = [];
 
       for await (const { value, time } of c.values(db)) {
         values.push({ value, time });
       }
-    
+
       ctx.body = values;
       return next();
     }
@@ -110,17 +110,17 @@ export async function prepareHttpServer(config, sd, db) {
     "/category/:category/insert",
     restricted,
     async (ctx, next) => {
-      const c = await Category.entry(db,ctx.params.category);
+      const c = await Category.entry(db, ctx.params.category);
 
-      const q = ctx.request.body;
+      const values = ctx.request.body;
 
-      time = q.time === undefined ? Date.now() : (new Date(q.time)).valueOf();
+      for (const v of Array.isArray(values) ? values : [values]) {
+        const time =
+          v.time === undefined ? Date.now() : new Date(v.time).valueOf();
+        await c.writeValue(db, v.value, time / 1000);
+      }
 
-      time = time / 1000;
-
-      await c.writeValue(database, q.value, time);
-    
-      ctx.body = { message: "inserted"};
+      ctx.body = { message: "inserted" };
       return next();
     }
   );
