@@ -36,6 +36,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-jwt": "^3.6.0",
     "konsum-db": "^1.1.0",
+    "ldapts": "^1.9.0",
     "leveldown": "^5.1.1",
     "levelup": "^4.1.0",
     "remove-sensible-values": "^1.0.3"
@@ -101,7 +102,7 @@
       "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
     },
     "depends": {
-      "systemd": ">=241.0"
+      "systemd": ">=242.0"
     }
   },
   "release": {

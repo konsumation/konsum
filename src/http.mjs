@@ -5,9 +5,15 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import bodyParser from "koa-bodyparser";
+import Client from "ldapts";  // /Client.js";
 import { Category } from "konsum-db";
 
 export const defaultHttpServerConfig = {
+  ldap: {
+    url: "ldap://ldap.mf.de",
+    bindDN: "cn={{user}},ou=accounts,dc=mf,dc=de"
+  },
+
   http: {
     port: "${first(env.PORT,12345)}",
     auth: {
@@ -36,14 +42,42 @@ export async function prepareHttpServer(config, sd, db) {
   /**
    * login to request api token
    */
-  router.addRoute("POST", "/authenticate", (ctx, next) => {
+  router.addRoute("POST", "/authenticate", async (ctx, next) => {
     const q = ctx.request.body;
 
-    const user = config.users[q.username];
+    let isAuthenticated = false;
+    let roles = [];
 
-    if (user !== undefined && user.password === q.password) {
+    if (config.ldap) {
+      const client = new Client({
+        url: config.ldap.url
+      });
+
+      const bindDN = config.ldap.bindDN.replace(/\{\{user\}\}/, q.username);
+
+      try {
+        await client.bind(bindDN, q.password);
+        isAuthenticated = true;
+      } catch (ex) {
+        console.log(ex);
+      } finally {
+        await client.unbind();
+      }
+
+      console.log(bindDN, isAuthenticated);
+    }
+
+    if (config.users) {
+      const user = config.users[q.username];
+      if (user !== undefined && user.password === q.password) {
+        isAuthenticated = true;
+        roles = user.roles;
+      }
+    }
+
+    if (isAuthenticated) {
       const claims = {
-        permissions: user.roles.join(","),
+        permissions: roles.join(","),
         iss: "http://myDomain"
       };
 
