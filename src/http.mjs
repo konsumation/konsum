@@ -5,15 +5,18 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import bodyParser from "koa-bodyparser";
-import Client from "ldapts";  // /Client.js";
+import Client from "ldapts";
 import { Category } from "konsum-db";
 
 export const defaultHttpServerConfig = {
   ldap: {
     url: "ldap://ldap.mf.de",
-    bindDN: "cn={{user}},ou=accounts,dc=mf,dc=de"
+    bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
+    roles: {
+      base: "ou=groups,dc=mf,dc=de",
+      filter: "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+    }
   },
-
   http: {
     port: "${first(env.PORT,12345)}",
     auth: {
@@ -53,11 +56,24 @@ export async function prepareHttpServer(config, sd, db) {
         url: config.ldap.url
       });
 
-      const bindDN = config.ldap.bindDN.replace(/\{\{user\}\}/, q.username);
+      function inject(str)
+      {
+        return str.replace(/\{\{user\}\}/, q.username);
+      }
 
       try {
-        await client.bind(bindDN, q.password);
+        await client.bind(inject(config.ldap.bindDN), q.password);
         isAuthenticated = true;
+
+        const {
+          searchEntries,
+          searchReferences,
+        } = await client.search(inject(config.ldap.roles.base), {
+          scope: 'sub',
+          filter: inject(config.ldap.roles.filter)
+        });
+        console.log(searchEntries);
+        console.log(searchReferences);
       } catch (ex) {
         console.log(ex);
       } finally {
