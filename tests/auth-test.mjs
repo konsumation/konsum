@@ -1,13 +1,26 @@
 import test from "ava";
+import { Socket } from "net";
 
 import { authenticate } from "../src/auth.mjs";
 
-const config = {
+const localConfig = {
+  url: "ldap://localhost:3389",
+  bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
+  entitelments: {
+    base: "ou=groups,dc=example,dc=com",
+    attribute: "cn",
+    filter:
+      "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+  }
+};
+
+const config2 = {
   ldap: {
-    url: "ldap://localhost:3389",
+    url: "ldaps://mfelten.dynv6.net",
     bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-    roles: {
+    entitelments: {
       base: "ou=groups,dc=mf,dc=de",
+      attribute: "cn",
       filter:
         "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
     }
@@ -15,9 +28,27 @@ const config = {
 };
 
 test("ldap auth", async t => {
-  const { entitlements } = await authenticate(config, "herbert", "test");
+  let config = config2;
 
-  t.deepEqual(entitlements, new Set());
+  const socket = new Socket();
+
+  socket.on("error", error => {
+    console.log(error);
+  });
+
+  socket.connect(3389, () => {
+    config = localConfig;
+  });
+
+  const p = new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), 3000);
+  });
+
+  await p;
+
+  const { entitlements } = await authenticate(config, "user1", "test");
+
+  t.deepEqual(entitlements, new Set(["konsum"]));
 });
 
 test("embedded user", async t => {

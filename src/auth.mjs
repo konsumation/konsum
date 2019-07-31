@@ -4,56 +4,56 @@ export const defaultAuthConfig = {
   ldap: {
     url: "ldap://ldap.mf.de",
     bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-    roles: {
+    entitelments: {
       base: "ou=groups,dc=mf,dc=de",
-      filter: "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+      attribute: 'cn',
+      filter:
+        "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
     }
   },
   users: {
-    nobody : { }
+    nobody: {}
   }
 };
 
+export async function authenticate(config, username, password) {
+  const entitlements = new Set();
 
-export async function authenticate(config,username,password)
-{
-    const entitlements = new Set();
+  const ldap = config.ldap;
+  if (ldap !== undefined) {
+    const client = new ldapts.Client({
+      url: ldap.url
+    });
 
-    if (config.ldap !== undefined) {
-      const client = new ldapts.Client({
-        url: config.ldap.url
-      });
-
-      function inject(str)
-      {
-        return str.replace(/\{\{user\}\}/, username);
-      }
-
-      try {
-        await client.bind(inject(config.ldap.bindDN), password);
-
-        const {
-          searchEntries,
-          searchReferences,
-        } = await client.search(inject(config.ldap.roles.base), {
-          scope: 'sub',
-          filter: inject(config.ldap.roles.filter)
-        });
-        console.log(searchEntries);
-        console.log(searchReferences);
-      } catch (ex) {
-        console.log(ex);
-      } finally {
-        await client.unbind();
-      }
+    function inject(str) {
+      return str.replace(/\{\{user\}\}/, username);
     }
 
-    if (config.users !== undefined) {
-      const user = config.users[username];
-      if (user !== undefined && user.password === password) {
-        user.entitlements.forEach(e => entitlements.add(e));
-      }
-    }
+    try {
+      await client.bind(inject(ldap.bindDN), password);
 
-    return { entitlements };
+      const { searchEntries } = await client.search(
+        inject(ldap.entitelments.base),
+        {
+          scope: "sub",
+          filter: inject(ldap.entitelments.filter),
+          attributes: [ldap.entitelments.attribute]
+        }
+      );
+      searchEntries.forEach(e => entitlements.add(e[ldap.entitelments.attribute]));
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      await client.unbind();
+    }
+  }
+
+  if (config.users !== undefined) {
+    const user = config.users[username];
+    if (user !== undefined && user.password === password) {
+      user.entitlements.forEach(e => entitlements.add(e));
+    }
+  }
+
+  return { entitlements };
 }
