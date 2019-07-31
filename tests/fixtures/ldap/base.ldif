@@ -4,6 +4,12 @@ objectClass: organizationalUnit
 ou: Test
 
 
+dn: ou=accounts,dc=example,dc=com
+ou: accounts
+objectClass: top
+objectClass: organizationalUnit
+
+
 dn: uid=user1,ou=accounts,dc=example,dc=com
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
@@ -11,6 +17,7 @@ objectClass: person
 objectClass: top
 cn: user1
 sn: user1
+
 
 dn: uid=user2,ou=accounts,dc=example,dc=com
 objectClass: inetOrgPerson
@@ -21,7 +28,7 @@ cn: user2
 sn: user2
 
 
-dn: ou=groups,dc=mf,dc=de
+dn: ou=groups,dc=example,dc=com
 ou: groups
 objectClass: top
 objectClass: organizationalUnit
