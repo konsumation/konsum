@@ -37,10 +37,12 @@ test("ldap auth", async t => {
   });
 
   socket.connect(3389, () => {
+    console.log("connected to localhost");
     config = localConfig;
   });
 
   const p = new Promise((resolve, reject) => {
+    console.log("wait for connect...");
     setTimeout(() => resolve(), 3000);
   });
 
