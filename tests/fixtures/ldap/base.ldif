@@ -10,6 +10,7 @@ objectClass: organizationalPerson
 objectClass: person
 objectClass: top
 cn: user1
+sn: user1
 
 dn: uid=user2,ou=accounts,dc=example,dc=com
 objectClass: inetOrgPerson
@@ -17,6 +18,7 @@ objectClass: organizationalPerson
 objectClass: person
 objectClass: top
 cn: user2
+sn: user2
 
 
 dn: ou=groups,dc=mf,dc=de
