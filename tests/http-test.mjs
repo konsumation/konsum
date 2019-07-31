@@ -27,7 +27,7 @@ const config = {
   users: {
     admin: {
       password: "start123",
-      roles: ["admin"]
+      entitlements: ["konsum"]
     }
   },
   http: {

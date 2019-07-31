@@ -5,18 +5,10 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import bodyParser from "koa-bodyparser";
-import Client from "ldapts";
 import { Category } from "konsum-db";
+import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
-  ldap: {
-    url: "ldap://ldap.mf.de",
-    bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-    roles: {
-      base: "ou=groups,dc=mf,dc=de",
-      filter: "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
-    }
-  },
   http: {
     port: "${first(env.PORT,12345)}",
     auth: {
@@ -48,52 +40,11 @@ export async function prepareHttpServer(config, sd, db) {
   router.addRoute("POST", "/authenticate", async (ctx, next) => {
     const q = ctx.request.body;
 
-    let isAuthenticated = false;
-    let roles = [];
+    const { entitlements } = await authenticate(config, q.username, q.password);
 
-    if (config.ldap) {
-      const client = new Client({
-        url: config.ldap.url
-      });
-
-      function inject(str)
-      {
-        return str.replace(/\{\{user\}\}/, q.username);
-      }
-
-      try {
-        await client.bind(inject(config.ldap.bindDN), q.password);
-        isAuthenticated = true;
-
-        const {
-          searchEntries,
-          searchReferences,
-        } = await client.search(inject(config.ldap.roles.base), {
-          scope: 'sub',
-          filter: inject(config.ldap.roles.filter)
-        });
-        console.log(searchEntries);
-        console.log(searchReferences);
-      } catch (ex) {
-        console.log(ex);
-      } finally {
-        await client.unbind();
-      }
-
-      console.log(bindDN, isAuthenticated);
-    }
-
-    if (config.users) {
-      const user = config.users[q.username];
-      if (user !== undefined && user.password === q.password) {
-        isAuthenticated = true;
-        roles = user.roles;
-      }
-    }
-
-    if (isAuthenticated) {
+    if (entitlements.has('konsum')) {
       const claims = {
-        permissions: roles.join(","),
+        permissions: [...entitlements].join(','),
         iss: "http://myDomain"
       };
 

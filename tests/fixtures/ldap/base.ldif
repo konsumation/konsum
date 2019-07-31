@@ -4,14 +4,28 @@ objectClass: organizationalUnit
 ou: Test
 
 
-dn: cn=existing,dc=example,dc=com
+dn: uid=user1,ou=accounts,dc=example,dc=com
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
-cn: existing
-sn: testentry
-mail: te@example.com
-givenName: i am
-description: A test entry for PEAR::Net_LDAP2
+cn: user1
 
+dn: uid=user2,ou=accounts,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: user2
+
+
+dn: ou=groups,dc=mf,dc=de
+ou: groups
+objectClass: top
+objectClass: organizationalUnit
+
+
+dn: cn=konsum,ou=groups,dc=example,dc=com
+cn: konsum
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user1,ou=accounts,dc=example,dc=com

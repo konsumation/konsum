@@ -2,10 +2,11 @@ import program from "commander";
 import { resolve } from "path";
 import { expand } from "config-expander";
 import { removeSensibleValues } from "remove-sensible-values";
-import { prepareDatabase, defaultDatabaseConfig } from "./database";
-import { prepareHttpServer, defaultHttpServerConfig } from "./http";
-import { version, description } from "../package.json";
 import { Category } from "konsum-db";
+import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
+import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
+import { defaultAuthConfig } from "./auth.mjs";
+import { version, description } from "../package.json";
 
 program
   .description(description)
@@ -79,6 +80,7 @@ async function prepareConfig() {
     default: {
       version,
       description,
+      ...defaultAuthConfig,
       ...defaultDatabaseConfig,
       ...defaultHttpServerConfig
     }
