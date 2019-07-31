@@ -10,13 +10,13 @@ cache: npm
 addons:
   apt:
     packages:
-    - ldap-utils
-    - slapd
+      - ldap-utils
+      - slapd
 before_script:
   - mkdir /tmp/slapd
-  - slapd -f tests/fixtures/ldap/slapd.conf -h ldap://localhost:3389 &
+  - 'slapd -f tests/fixtures/ldap/slapd.conf -h ldap://localhost:3389 &'
   - sleep 3
-  - ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif
+  - 'ldapadd -h localhost:3389 -D cn=admin,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif'
 script:
   - npm run cover
   - npx codecov
