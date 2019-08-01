@@ -4,14 +4,16 @@ import { Socket } from "net";
 import { authenticate } from "../src/auth.mjs";
 
 const localConfig = {
-  url: "ldap://localhost:3389",
-  bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
-  entitelments: {
-    base: "ou=groups,dc=example,dc=com",
-    attribute: "cn",
-    scope: "sub",
-    filter:
-      "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+  ldap: {
+    url: "ldap://localhost:3389",
+    bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
+    entitelments: {
+      base: "ou=groups,dc=example,dc=com",
+      attribute: "cn",
+      scope: "sub",
+      filter:
+        "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+    }
   }
 };
 
@@ -29,22 +31,22 @@ const config2 = {
   }
 };
 
-test("ldap auth", async t => {
+test.only("ldap auth", async t => {
   let config = config2;
 
   const socket = new Socket();
 
   socket.on("error", error => {
-    console.log(error);
+    t.log(error);
   });
 
   socket.connect(3389, () => {
-    console.log("connected to localhost");
+    t.log("connected to localhost");
     config = localConfig;
   });
 
   const p = new Promise((resolve, reject) => {
-    console.log("wait for connect...");
+    t.log("wait for connect...");
     setTimeout(() => resolve(), 3000);
   });
 
