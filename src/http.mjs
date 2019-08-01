@@ -34,6 +34,12 @@ export async function prepareHttpServer(config, sd, db) {
   server.on("error", err => console.log(err));
   const router = Router();
 
+  router.addRoute("POST", "/admin/stop", async (ctx, next) => {
+    sd.notify("STOPPING=1");
+    ctx.body = "stopping...";
+    setTimeout(() => process.exit(0), 100);
+  });
+
   /**
    * login to request api token
    */
@@ -42,9 +48,9 @@ export async function prepareHttpServer(config, sd, db) {
 
     const { entitlements } = await authenticate(config, q.username, q.password);
 
-    if (entitlements.has('konsum')) {
+    if (entitlements.has("konsum")) {
       const claims = {
-        permissions: [...entitlements].join(','),
+        permissions: [...entitlements].join(","),
         iss: "http://myDomain"
       };
 
