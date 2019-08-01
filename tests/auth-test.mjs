@@ -2,36 +2,37 @@ import test from "ava";
 import { Socket } from "net";
 
 import { authenticate } from "../src/auth.mjs";
+import { defaultAuthConfig } from "../src/auth.mjs";
 
-const localConfig = {
-  ldap: {
-    url: "ldap://localhost:3389",
-    bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
-    entitelments: {
-      base: "ou=groups,dc=example,dc=com",
-      attribute: "cn",
-      scope: "sub",
-      filter:
-        "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+async function authConfig(t) {
+  const localConfig = {
+    ldap: {
+      url: "ldap://localhost:3389",
+      bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
+      entitelments: {
+        base: "ou=groups,dc=example,dc=com",
+        attribute: "cn",
+        scope: "sub",
+        filter:
+          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+      }
     }
-  }
-};
+  };
 
-const config2 = {
-  ldap: {
-    url: "ldaps://mfelten.dynv6.net",
-    bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-    entitelments: {
-      base: "ou=groups,dc=mf,dc=de",
-      attribute: "cn",
-      scope: "sub",
-      filter:
-        "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+  const config2 = {
+    ldap: {
+      url: "ldaps://mfelten.dynv6.net",
+      bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
+      entitelments: {
+        base: "ou=groups,dc=mf,dc=de",
+        attribute: "cn",
+        scope: "sub",
+        filter:
+          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+      }
     }
-  }
-};
+  };
 
-test.only("ldap auth", async t => {
   let config = config2;
 
   const socket = new Socket();
@@ -52,9 +53,18 @@ test.only("ldap auth", async t => {
 
   await p;
 
-  const { entitlements } = await authenticate(config, "user1", "test");
+  return config;
+}
 
-  t.deepEqual(entitlements, new Set(["konsum"]));
+test("ldap auth", async t => {
+  const config = await authConfig(t);
+  let result = await authenticate(config, "user1", "test");
+
+  t.deepEqual(result.entitlements, new Set(["konsum"]));
+
+  result = await authenticate(config, "user77", "test");
+
+  t.deepEqual(result.entitlements, new Set());
 });
 
 test("embedded user", async t => {
