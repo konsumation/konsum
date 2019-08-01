@@ -6,29 +6,33 @@ import { defaultAuthConfig } from "../src/auth.mjs";
 
 async function authConfig(t) {
   const localConfig = {
-    ldap: {
-      url: "ldap://localhost:3389",
-      bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
-      entitelments: {
-        base: "ou=groups,dc=example,dc=com",
-        attribute: "cn",
-        scope: "sub",
-        filter:
-          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+    auth: {
+      ldap: {
+        url: "ldap://localhost:3389",
+        bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
+        entitelments: {
+          base: "ou=groups,dc=example,dc=com",
+          attribute: "cn",
+          scope: "sub",
+          filter:
+            "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+        }
       }
     }
   };
 
   const config2 = {
-    ldap: {
-      url: "ldaps://mfelten.dynv6.net",
-      bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-      entitelments: {
-        base: "ou=groups,dc=mf,dc=de",
-        attribute: "cn",
-        scope: "sub",
-        filter:
-          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+    auth: {
+      ldap: {
+        url: "ldaps://mfelten.dynv6.net",
+        bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
+        entitelments: {
+          base: "ou=groups,dc=mf,dc=de",
+          attribute: "cn",
+          scope: "sub",
+          filter:
+            "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+        }
       }
     }
   };
@@ -70,10 +74,12 @@ test("ldap auth", async t => {
 test("embedded user", async t => {
   const { entitlements } = await authenticate(
     {
-      users: {
-        herbert: {
-          password: "secret",
-          entitlements: ["konsum"]
+      auth: {
+        users: {
+          herbert: {
+            password: "secret",
+            entitlements: ["konsum"]
+          }
         }
       }
     },

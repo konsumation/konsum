@@ -10,15 +10,7 @@ import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
   http: {
-    port: "${first(env.PORT,12345)}",
-    auth: {
-      jwt: {
-        options: {
-          algorithm: "RS256",
-          expiresIn: "12h"
-        }
-      }
-    }
+    port: "${first(env.PORT,12345)}"
   }
 };
 
@@ -51,14 +43,13 @@ export async function prepareHttpServer(config, sd, db) {
 
     if (entitlements.has("konsum")) {
       const claims = {
-        permissions: [...entitlements].join(","),
-        iss: "http://myDomain"
+        entitlements: [...entitlements].join(",")
       };
 
       const token = jsonwebtoken.sign(
         claims,
-        config.http.auth.jwt.private,
-        config.http.auth.jwt.options
+        config.auth.jwt.private,
+        config.auth.jwt.options
       );
 
       ctx.status = 200;
@@ -77,7 +68,7 @@ export async function prepareHttpServer(config, sd, db) {
 
   // middleware to restrict access to token holding requests
   const restricted = KoaJWT({
-    secret: config.http.auth.jwt.public,
+    secret: config.auth.jwt.public,
     debug: true
   });
 

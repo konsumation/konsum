@@ -17,30 +17,29 @@ function setPort(config, port) {
   return config;
 }
 
-const sd = { notify: () => { }, listeners: () => [] };
+const sd = { notify: () => {}, listeners: () => [] };
 
 const config = {
   version: "1.2.3",
   database: {
     file: join(here, "..", "build", "db")
   },
-  users: {
-    admin: {
-      password: "start123",
-      entitlements: ["konsum"]
-    }
-  },
-  http: {
-    auth: {
-      jwt: {
-        public: readFileSync(join(here, "..", "config", "demo.rsa.pub")),
-        private: readFileSync(join(here, "..", "config", "demo.rsa")),
-        options: {
-          algorithm: "RS256"
-        }
+  auth: {
+    jwt: {
+      public: readFileSync(join(here, "..", "config", "demo.rsa.pub")),
+      private: readFileSync(join(here, "..", "config", "demo.rsa")),
+      options: {
+        algorithm: "RS256"
+      }
+    },
+    users: {
+      admin: {
+        password: "start123",
+        entitlements: ["konsum"]
       }
     }
-  }
+  },
+  http: {}
 };
 
 test("server can authenticate", async t => {
@@ -86,11 +85,7 @@ test("can insert + get values", async t => {
 
   const port = 12347;
   const db = await prepareDatabase(config);
-  const { server } = await prepareHttpServer(
-    setPort(config, port),
-    sd,
-    db
-  );
+  const { server } = await prepareHttpServer(setPort(config, port), sd, db);
 
   const c = new Category(`CAT1`, { unit: "kWh" });
   await c.write(db);
@@ -114,7 +109,7 @@ test("can insert + get values", async t => {
   response = await got.post(`http://localhost:${port}/category/CAT1/insert`, {
     headers: { Authorization: `Bearer ${token}` },
     body: {
-      value: 78.00
+      value: 78.0
     },
     json: true
   });

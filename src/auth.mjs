@@ -1,25 +1,34 @@
 import ldapts from "ldapts";
 
 export const defaultAuthConfig = {
-  ldap: {
-    url: "ldap://ldap.mf.de",
-    bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-    entitelments: {
-      base: "ou=groups,dc=mf,dc=de",
-      attribute: "cn",
-      scope: "sub",
-      filter:
-        "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
-    }
-  },
-  users: {
+  auth: {
+    ldap: {
+      url: "ldap://ldap.mf.de",
+      bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
+      entitelments: {
+        base: "ou=groups,dc=mf,dc=de",
+        attribute: "cn",
+        scope: "sub",
+        filter:
+          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+      }
+    },
+    jwt: {
+      options: {
+        algorithm: "RS256",
+        expiresIn: "12h"
+      }
+    },
+    users: {}
   }
 };
 
 export async function authenticate(config, username, password) {
+  const auth = config.auth;
+
   const entitlements = new Set();
 
-  const ldap = config.ldap;
+  const ldap = auth.ldap;
   if (ldap !== undefined) {
     const client = new ldapts.Client({
       url: ldap.url
@@ -51,8 +60,8 @@ export async function authenticate(config, username, password) {
     }
   }
 
-  if (config.users !== undefined) {
-    const user = config.users[username];
+  if (auth.users !== undefined) {
+    const user = auth.users[username];
     if (user !== undefined && user.password === password) {
       user.entitlements.forEach(e => entitlements.add(e));
     }
