@@ -37,7 +37,8 @@ export async function prepareHttpServer(config, sd, db) {
   router.addRoute("POST", "/admin/stop", async (ctx, next) => {
     sd.notify("STOPPING=1");
     ctx.body = "stopping...";
-    setTimeout(() => process.exit(0), 100);
+    process.nextTick(() => process.exit(0));
+    return next();
   });
 
   /**
