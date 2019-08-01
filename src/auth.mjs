@@ -6,13 +6,13 @@ export const defaultAuthConfig = {
     bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
     entitelments: {
       base: "ou=groups,dc=mf,dc=de",
-      attribute: 'cn',
+      attribute: "cn",
+      scope: "sub",
       filter:
         "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
     }
   },
   users: {
-    nobody: {}
   }
 };
 
@@ -30,17 +30,20 @@ export async function authenticate(config, username, password) {
     }
 
     try {
+      console.log("BIND", inject(ldap.bindDN));
       await client.bind(inject(ldap.bindDN), password);
 
       const { searchEntries } = await client.search(
         inject(ldap.entitelments.base),
         {
-          scope: "sub",
+          scope: ldap.entitelments.scope,
           filter: inject(ldap.entitelments.filter),
           attributes: [ldap.entitelments.attribute]
         }
       );
-      searchEntries.forEach(e => entitlements.add(e[ldap.entitelments.attribute]));
+      searchEntries.forEach(e =>
+        entitlements.add(e[ldap.entitelments.attribute])
+      );
     } catch (ex) {
       console.log(ex);
     } finally {

@@ -61,10 +61,7 @@ export async function prepareHttpServer(config, sd, db) {
         version: config.version
       };
     } else {
-      ctx.status = 401;
-      ctx.body = {
-        message: "Authentication failed"
-      };
+      ctx.throw(401, "Authentication failed");
     }
     return next();
   });

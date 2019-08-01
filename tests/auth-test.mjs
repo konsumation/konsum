@@ -9,6 +9,7 @@ const localConfig = {
   entitelments: {
     base: "ou=groups,dc=example,dc=com",
     attribute: "cn",
+    scope: "sub",
     filter:
       "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
   }
@@ -21,6 +22,7 @@ const config2 = {
     entitelments: {
       base: "ou=groups,dc=mf,dc=de",
       attribute: "cn",
+      scope: "sub",
       filter:
         "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
     }
