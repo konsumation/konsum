@@ -26,7 +26,8 @@ export default
         format: "cjs",
         banner:
           '#!/bin/sh\n":" //# comment; exec /usr/bin/env node --experimental-modules "$0" "$@"',
-        interop: false
+        interop: false,
+        externalLiveBindings: false
       },
       external,
       plugins: [
