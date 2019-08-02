@@ -10,7 +10,7 @@ async function authConfig(t) {
       ldap: {
         url: "ldap://localhost:3389",
         bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
-        entitelments: {
+        entitlements: {
           base: "ou=groups,dc=example,dc=com",
           attribute: "cn",
           scope: "sub",
@@ -26,7 +26,7 @@ async function authConfig(t) {
       ldap: {
         url: "ldaps://mfelten.dynv6.net",
         bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-        entitelments: {
+        entitlements: {
           base: "ou=groups,dc=mf,dc=de",
           attribute: "cn",
           scope: "sub",

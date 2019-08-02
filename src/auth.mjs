@@ -5,7 +5,7 @@ export const defaultAuthConfig = {
     ldap: {
       url: "ldap://ldap.mf.de",
       bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
-      entitelments: {
+      entitlements: {
         base: "ou=groups,dc=mf,dc=de",
         attribute: "cn",
         scope: "sub",
@@ -43,15 +43,15 @@ export async function authenticate(config, username, password) {
       await client.bind(inject(ldap.bindDN), password);
 
       const { searchEntries } = await client.search(
-        inject(ldap.entitelments.base),
+        inject(ldap.entitlements.base),
         {
-          scope: ldap.entitelments.scope,
-          filter: inject(ldap.entitelments.filter),
-          attributes: [ldap.entitelments.attribute]
+          scope: ldap.entitlements.scope,
+          filter: inject(ldap.entitlements.filter),
+          attributes: [ldap.entitlements.attribute]
         }
       );
       searchEntries.forEach(e =>
-        entitlements.add(e[ldap.entitelments.attribute])
+        entitlements.add(e[ldap.entitlements.attribute])
       );
     } catch (ex) {
       console.log(ex);
