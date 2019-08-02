@@ -4,7 +4,7 @@ import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
-import bodyParser from "koa-bodyparser";
+import BodyParser from "koa-bodyparser";
 import { Category } from "konsum-db";
 import { authenticate } from "./auth.mjs";
 
@@ -34,7 +34,7 @@ export async function prepareHttpServer(config, sd, db) {
   /**
    * login to request api token
    */
-  router.addRoute("POST", "/authenticate", bodyParser(), async (ctx, next) => {
+  router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
 
     const { entitlements } = await authenticate(config, q.username, q.password);
@@ -103,7 +103,7 @@ export async function prepareHttpServer(config, sd, db) {
     "POST",
     "/category/:category/insert",
     restricted,
-    bodyParser(),
+    BodyParser(),
     async (ctx, next) => {
       const c = await Category.entry(db, ctx.params.category);
 
