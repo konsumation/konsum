@@ -18,8 +18,6 @@ export async function prepareHttpServer(config, sd, db) {
   const app = new Koa();
   // if there is a cert configured use https, otherwise plain http
 
-  app.use(bodyParser());
-
   const server = config.http.cert
     ? httpsCreateServer(config.http, app.callback())
     : httpCreateServer(app.callback());
@@ -36,7 +34,7 @@ export async function prepareHttpServer(config, sd, db) {
   /**
    * login to request api token
    */
-  router.addRoute("POST", "/authenticate", async (ctx, next) => {
+  router.addRoute("POST", "/authenticate", bodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
 
     const { entitlements } = await authenticate(config, q.username, q.password);
@@ -105,6 +103,7 @@ export async function prepareHttpServer(config, sd, db) {
     "POST",
     "/category/:category/insert",
     restricted,
+    bodyParser(),
     async (ctx, next) => {
       const c = await Category.entry(db, ctx.params.category);
 
