@@ -57,7 +57,7 @@ test("server can authenticate", async t => {
   });
 
   t.is(response.statusCode, 200);
-  t.truthy(response.body.token.length > 10);
+  t.truthy(response.body.access_token.length > 10);
   t.is(response.body.version, "1.2.3");
 });
 
@@ -104,7 +104,7 @@ test("can insert + get values", async t => {
 
   t.is(response.statusCode, 200);
 
-  const token = response.body.token;
+  const token = response.body.access_token;
 
   response = await got.post(`http://localhost:${port}/category/CAT1/insert`, {
     headers: { Authorization: `Bearer ${token}` },

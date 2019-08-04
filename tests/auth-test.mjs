@@ -9,13 +9,13 @@ async function authConfig(t) {
     auth: {
       ldap: {
         url: "ldap://localhost:3389",
-        bindDN: "uid={{user}},ou=accounts,dc=example,dc=com",
+        bindDN: "uid={{username}},ou=accounts,dc=example,dc=com",
         entitlements: {
           base: "ou=groups,dc=example,dc=com",
           attribute: "cn",
           scope: "sub",
           filter:
-            "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=example,dc=com))"
+            "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{username}},ou=accounts,dc=example,dc=com))"
         }
       }
     }
@@ -25,13 +25,13 @@ async function authConfig(t) {
     auth: {
       ldap: {
         url: "ldaps://mfelten.dynv6.net",
-        bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
+        bindDN: "uid={{username}},ou=accounts,dc=mf,dc=de",
         entitlements: {
           base: "ou=groups,dc=mf,dc=de",
           attribute: "cn",
           scope: "sub",
           filter:
-            "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+            "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{username}},ou=accounts,dc=mf,dc=de))"
         }
       }
     }

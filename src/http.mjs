@@ -44,7 +44,7 @@ export async function prepareHttpServer(config, sd, db) {
         entitlements: [...entitlements].join(",")
       };
 
-      const token = jsonwebtoken.sign(
+      const access_token = jsonwebtoken.sign(
         claims,
         config.auth.jwt.private,
         config.auth.jwt.options
@@ -52,7 +52,7 @@ export async function prepareHttpServer(config, sd, db) {
 
       ctx.status = 200;
       ctx.body = {
-        token,
+        access_token,
         message: "Successfully logged in!",
         version: config.version
       };

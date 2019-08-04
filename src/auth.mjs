@@ -4,13 +4,13 @@ export const defaultAuthConfig = {
   auth: {
     ldap: {
       url: "ldap://ldap.mf.de",
-      bindDN: "uid={{user}},ou=accounts,dc=mf,dc=de",
+      bindDN: "uid={{username}},ou=accounts,dc=mf,dc=de",
       entitlements: {
         base: "ou=groups,dc=mf,dc=de",
         attribute: "cn",
         scope: "sub",
         filter:
-          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{user}},ou=accounts,dc=mf,dc=de))"
+          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{username}},ou=accounts,dc=mf,dc=de))"
       }
     },
     jwt: {
@@ -35,11 +35,10 @@ export async function authenticate(config, username, password) {
     });
 
     function inject(str) {
-      return str.replace(/\{\{user\}\}/, username);
+      return str.replace(/\{\{username\}\}/, username);
     }
 
     try {
-      console.log("BIND", inject(ldap.bindDN));
       await client.bind(inject(ldap.bindDN), password);
 
       const { searchEntries } = await client.search(
