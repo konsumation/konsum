@@ -12,15 +12,22 @@ export const defaultHttpServerConfig = {
   }
 };
 
+
 export async function prepareHttpServer(config, sd, db) {
   const app = new Koa();
 
   const router = Router();
 
-  router.addRoute("POST", "/admin/stop", async (ctx, next) => {
-    sd.notify("STOPPING=1");
-    ctx.body = "stopping...";
+  function shutdown() {
+    sd.notify("STOPPING=1\nSTATUS=stopping");
     server.unref();
+  }
+
+  process.on("SIGINT", () => shutdown());
+
+  router.addRoute("POST", "/admin/stop", async (ctx, next) => {
+    shutdown();
+    ctx.body = "stopping...";
     return next();
   });
 
@@ -121,7 +128,6 @@ export async function prepareHttpServer(config, sd, db) {
   return {
     app,
     server,
-    router,
-    restricted
+    router
   };
 }
