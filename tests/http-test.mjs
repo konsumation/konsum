@@ -46,8 +46,6 @@ test("server can authenticate", async t => {
   const port = 12345;
   const { server } = await prepareHttpServer(setPort(config, port), sd);
 
-  server.listen();
-
   const response = await got.post(`http://localhost:${port}/authenticate`, {
     body: {
       username: "admin",
@@ -64,8 +62,6 @@ test("server can authenticate", async t => {
 test("fails with invalid credentials", async t => {
   const port = 12346;
   const { server } = await prepareHttpServer(setPort(config, port), sd);
-
-  server.listen();
 
   try {
     const response = await got.post(`http://localhost:${port}/authenticate`, {
@@ -91,8 +87,6 @@ test("can insert + get values", async t => {
   await c.write(db);
   const now = Date.now();
   await c.writeValue(db, 77.34, now);
-
-  server.listen();
 
   let response = await got.post(`http://localhost:${port}/authenticate`, {
     body: {
