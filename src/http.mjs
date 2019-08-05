@@ -1,5 +1,3 @@
-import { createServer as httpCreateServer } from "http";
-import { createServer as httpsCreateServer } from "https";
 import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
@@ -16,18 +14,13 @@ export const defaultHttpServerConfig = {
 
 export async function prepareHttpServer(config, sd, db) {
   const app = new Koa();
-  // if there is a cert configured use https, otherwise plain http
 
-  const server = config.http.cert
-    ? httpsCreateServer(config.http, app.callback())
-    : httpCreateServer(app.callback());
-  server.on("error", err => console.log(err));
   const router = Router();
 
   router.addRoute("POST", "/admin/stop", async (ctx, next) => {
     sd.notify("STOPPING=1");
     ctx.body = "stopping...";
-    process.nextTick(() => process.exit(0));
+    server.unref();
     return next();
   });
 
@@ -120,8 +113,8 @@ export async function prepareHttpServer(config, sd, db) {
     }
   );
 
-  const listener = app.listen(config.http.port, () => {
-    console.log("listen on", listener.address());
+  const server = app.listen(config.http.port, () => {
+    console.log("listen on", server.address());
     sd.notify("READY=1\nSTATUS=running");
   });
 
