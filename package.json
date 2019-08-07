@@ -65,7 +65,7 @@
     "sd-daemon": "^1.0.1"
   },
   "engines": {
-    "node": ">=10.16.1"
+    "node": ">=10.16.2"
   },
   "repository": {
     "type": "git",
