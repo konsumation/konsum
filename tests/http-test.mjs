@@ -76,7 +76,7 @@ test("fails with invalid credentials", async t => {
   }
 });
 
-test.only("can insert + get values", async t => {
+test("can insert + get values", async t => {
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
   const port = 12347;
