@@ -76,7 +76,7 @@ test("fails with invalid credentials", async t => {
   }
 });
 
-test("can insert + get values", async t => {
+test.only("can insert + get values", async t => {
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
   const port = 12347;
@@ -108,10 +108,22 @@ test("can insert + get values", async t => {
     json: true
   });
 
-  //console.log("TOKEN", token);
-
   response = await got.get(`http://localhost:${port}/category/CAT1/values`, {
-    headers: { Authorization: `Bearer ${token}` }
+    headers: {
+    //  "content-type": "text/plain",
+      Authorization: `Bearer ${token}`
+    }
+  });
+  t.log(response.body);
+  t.regex(response.body, /\d+ 77.34/);
+  t.regex(response.body, /\d+ 78/);
+
+  
+  response = await got.get(`http://localhost:${port}/category/CAT1/values`, {
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
   });
 
   t.log(response.body);

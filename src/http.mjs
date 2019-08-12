@@ -1,3 +1,4 @@
+import Writeable from "stream";
 import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
@@ -11,7 +12,6 @@ export const defaultHttpServerConfig = {
     port: "${first(env.PORT,12345)}"
   }
 };
-
 
 export async function prepareHttpServer(config, sd, db) {
   const app = new Koa();
@@ -86,15 +86,31 @@ export async function prepareHttpServer(config, sd, db) {
     "/category/:category/values",
     restricted,
     async (ctx, next) => {
+      const reverse = ctx.query.reverse ? true : false;
+      const options = { reverse };
+
       const c = await Category.entry(db, ctx.params.category);
 
-      const values = [];
+      switch (ctx.request.type) {
+        case "application/json":
+          const it = c.values(db, options);
 
-      for await (const { value, time } of c.values(db)) {
-        values.push({ value, time });
+          const values = [];
+
+          for await (const { value, time } of it) {
+            values.push({ value, time });
+          }
+
+          ctx.body = values;
+          break;
+
+        default:
+          //case "text/plain":
+          ctx.response.set("content-type", "text");
+          ctx.body = c.readStream(db, options);
+          break;
       }
 
-      ctx.body = values;
       return next();
     }
   );
