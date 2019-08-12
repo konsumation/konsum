@@ -1,8 +1,9 @@
 import program from "commander";
 import { resolve } from "path";
+import { createWriteStream } from "fs";
 import { expand } from "config-expander";
 import { removeSensibleValues } from "remove-sensible-values";
-import { Category } from "konsum-db";
+import { Category, backup } from "konsum-db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
@@ -36,17 +37,28 @@ program.command("list").action(async (...args) => {
   }
 });
 
+program.command("backup").action(async (...args) => {
+  args.pop();
+
+  const { database, meta } = await prepareConfig();
+  await backup(
+    database,
+    meta,
+    createWriteStream(args[0], { encoding: "utf8" })
+  );
+});
+
 program.command("insert").action(async (...args) => {
   args.pop();
   let [cName, value, time] = args;
 
   const { database } = await prepareConfig();
 
-  time = time === undefined ? Date.now() : (new Date(time)).valueOf();
+  time = time === undefined ? Date.now() : new Date(time).valueOf();
 
   time = time / 1000;
 
-  if(time < 941673600 || time > 2000000000) {
+  if (time < 941673600 || time > 2000000000) {
     console.log("time out of range");
     return;
   }
@@ -90,7 +102,6 @@ async function prepareConfig() {
   if (listeners.length > 0) config.http.port = listeners[0];
 
   // prepare the database with the config
-  const database = await prepareDatabase(config, sd);
 
-  return { sd, config, database };
+  return { sd, config, ...(await prepareDatabase(config, sd)) };
 }

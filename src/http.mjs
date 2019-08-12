@@ -13,7 +13,7 @@ export const defaultHttpServerConfig = {
   }
 };
 
-export async function prepareHttpServer(config, sd, db) {
+export async function prepareHttpServer(config, sd, database) {
   const app = new Koa();
 
   const router = Router();
@@ -73,7 +73,7 @@ export async function prepareHttpServer(config, sd, db) {
   router.addRoute("GET", "/categories", restricted, async (ctx, next) => {
     const cs = [];
 
-    for await (const c of Category.entries(db)) {
+    for await (const c of Category.entries(database)) {
       cs.push(c.toJSON());
     }
 
@@ -89,11 +89,11 @@ export async function prepareHttpServer(config, sd, db) {
       const reverse = ctx.query.reverse ? true : false;
       const options = { reverse };
 
-      const c = await Category.entry(db, ctx.params.category);
+      const c = await Category.entry(database, ctx.params.category);
 
       switch (ctx.request.type) {
         case "application/json":
-          const it = c.values(db, options);
+          const it = c.values(database, options);
 
           const values = [];
 
@@ -107,7 +107,7 @@ export async function prepareHttpServer(config, sd, db) {
         default:
           //case "text/plain":
           ctx.response.set("content-type", "text");
-          ctx.body = c.readStream(db, options);
+          ctx.body = c.readStream(database, options);
           break;
       }
 
@@ -121,14 +121,14 @@ export async function prepareHttpServer(config, sd, db) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
-      const c = await Category.entry(db, ctx.params.category);
+      const c = await Category.entry(database, ctx.params.category);
 
       const values = ctx.request.body;
 
       for (const v of Array.isArray(values) ? values : [values]) {
         const time =
           v.time === undefined ? Date.now() : new Date(v.time).valueOf();
-        await c.writeValue(db, v.value, time / 1000);
+        await c.writeValue(database, v.value, time / 1000);
       }
 
       ctx.body = { message: "inserted" };

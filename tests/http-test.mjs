@@ -80,13 +80,13 @@ test.only("can insert + get values", async t => {
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
   const port = 12347;
-  const db = await prepareDatabase(config);
-  const { server } = await prepareHttpServer(setPort(config, port), sd, db);
+  const { database } = await prepareDatabase(config);
+  const { server } = await prepareHttpServer(setPort(config, port), sd, database);
 
   const c = new Category(`CAT1`, { unit: "kWh" });
-  await c.write(db);
+  await c.write(database);
   const now = Date.now();
-  await c.writeValue(db, 77.34, now);
+  await c.writeValue(database, 77.34, now);
 
   let response = await got.post(`http://localhost:${port}/authenticate`, {
     body: {
@@ -110,7 +110,7 @@ test.only("can insert + get values", async t => {
 
   response = await got.get(`http://localhost:${port}/category/CAT1/values`, {
     headers: {
-    //  "content-type": "text/plain",
+      //  "content-type": "text/plain",
       Authorization: `Bearer ${token}`
     }
   });
@@ -118,7 +118,6 @@ test.only("can insert + get values", async t => {
   t.regex(response.body, /\d+ 77.34/);
   t.regex(response.body, /\d+ 78/);
 
-  
   response = await got.get(`http://localhost:${port}/category/CAT1/values`, {
     headers: {
       "content-type": "application/json",

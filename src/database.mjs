@@ -9,9 +9,8 @@ export const defaultDatabaseConfig = {
 };
 
 export async function prepareDatabase(config) {
-  const db = await levelup(leveldown(config.database.file));
+  const database = await levelup(leveldown(config.database.file));
+  const meta = await initialize(database);
 
-  const master = await initialize(db);
-
-  return db;
+  return { database, meta };
 }
