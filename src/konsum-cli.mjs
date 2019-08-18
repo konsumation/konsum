@@ -15,12 +15,12 @@ program
   .option("-c, --config <directory>", "use config from directory");
 
 program.command("start").action(async () => {
-  const { sd, config, database } = await prepareConfig();
+  const { sd, config, database, meta } = await prepareConfig();
 
   console.log(removeSensibleValues(config));
 
   // prepare the web-server with the config and the database
-  const http = await prepareHttpServer(config, sd, database);
+  const http = await prepareHttpServer(config, sd, database, meta);
 });
 
 program.command("list").action(async (...args) => {

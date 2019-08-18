@@ -1,10 +1,10 @@
-import Writeable from "stream";
+import { createWriteStream } from "fs";
 import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
-import { Category } from "konsum-db";
+import { Category, backup } from "konsum-db";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
@@ -13,7 +13,7 @@ export const defaultHttpServerConfig = {
   }
 };
 
-export async function prepareHttpServer(config, sd, database) {
+export async function prepareHttpServer(config, sd, database, meta) {
   const app = new Koa();
 
   const router = Router();
@@ -28,6 +28,16 @@ export async function prepareHttpServer(config, sd, database) {
   router.addRoute("POST", "/admin/stop", async (ctx, next) => {
     shutdown();
     ctx.body = "stopping...";
+    return next();
+  });
+
+  router.addRoute("POST", "/admin/backup", BodyParser(), async (ctx, next) => {
+    const q = ctx.request.body;
+    const name = q.filename || "/tmp/konsum.txt";
+
+    ctx.body = `backup to ${name}...`;
+
+    backup(database, meta, createWriteStream(name, { encoding: "utf8" }));
     return next();
   });
 
