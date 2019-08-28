@@ -52,7 +52,7 @@
     "got": "^9.6.0",
     "markdown-doctest": "^0.9.1",
     "npm-pkgbuild": "^6.9.0",
-    "rollup": "^1.20.2",
+    "rollup": "^1.20.3",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-executable": "^1.5.0",
@@ -82,6 +82,29 @@
     "urlPrefix": "/services/konsum/api",
     "socket": "/run/konsum/socket"
   },
+  "systemd": {
+    "units": {
+      "${name}": "systemd/${name}*"
+    }
+  },
+  "pacman": {
+    "arch": [
+      "aarch64",
+      "armv7h"
+    ],
+    "groups": "home-automation",
+    "backup": "etc/${name}/config.json",
+    "hooks": "pacman/install.sh",
+    "installdir": "/services/${name}",
+    "content": {
+      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
+      "/etc/${name}/config.json": "config/config.json",
+      "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
+    },
+    "depends": {
+      "systemd": ">=242.0"
+    }
+  },
   "release": {
     "plugins": [
       "@semantic-release/commit-analyzer",
@@ -110,29 +133,6 @@
   "template": {
     "repository": {
       "url": "https://github.com/arlac77/npm-package-template.git"
-    }
-  },
-  "systemd": {
-    "units": {
-      "${name}": "systemd/${name}*"
-    }
-  },
-  "pacman": {
-    "arch": [
-      "aarch64",
-      "armv7h"
-    ],
-    "groups": "home-automation",
-    "backup": "etc/${name}/config.json",
-    "hooks": "pacman/install.sh",
-    "installdir": "/services/${name}",
-    "content": {
-      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
-      "/etc/${name}/config.json": "config/config.json",
-      "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
-    },
-    "depends": {
-      "systemd": ">=242.0"
     }
   }
 }
