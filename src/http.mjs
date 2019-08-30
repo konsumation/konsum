@@ -97,7 +97,8 @@ export async function prepareHttpServer(config, sd, database, meta) {
     restricted,
     async (ctx, next) => {
       const reverse = ctx.query.reverse ? true : false;
-      const options = { reverse };
+      const limit = ctx.query.limit === undefined ? -1 : ctx.query.limit;
+      const options = { reverse, limit };
 
       const c = await Category.entry(database, ctx.params.category);
 
