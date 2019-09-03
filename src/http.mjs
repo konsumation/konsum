@@ -18,6 +18,11 @@ export async function prepareHttpServer(config, sd, database, meta) {
 
   const router = Router();
 
+  // middleware to restrict access to token holding requests
+  const restricted = KoaJWT({
+    secret: config.auth.jwt.public
+  });
+
   function shutdown() {
     sd.notify("STOPPING=1\nSTATUS=stopping");
     server.unref();
@@ -31,7 +36,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
     return next();
   });
 
-  router.addRoute("POST", "/admin/backup", BodyParser(), async (ctx, next) => {
+  router.addRoute("POST", "/admin/backup", restricted, BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
     const name = q.filename || "/tmp/konsum.txt";
 
@@ -73,12 +78,6 @@ export async function prepareHttpServer(config, sd, database, meta) {
   });
 
   app.use(router.middleware());
-
-  // middleware to restrict access to token holding requests
-  const restricted = KoaJWT({
-    secret: config.auth.jwt.public,
-    debug: true
-  });
 
   router.addRoute("GET", "/categories", restricted, async (ctx, next) => {
     const cs = [];
