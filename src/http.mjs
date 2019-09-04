@@ -13,6 +13,12 @@ export const defaultHttpServerConfig = {
   }
 };
 
+function setNoCacheHeaders(ctx) {
+  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  ctx.set('Pragma', 'no-cache');
+  ctx.set('Expires', 0);
+}
+
 export async function prepareHttpServer(config, sd, database, meta) {
   const app = new Koa();
 
@@ -80,6 +86,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
   app.use(router.middleware());
 
   router.addRoute("GET", "/categories", restricted, async (ctx, next) => {
+    setNoCacheHeaders(ctx);
     const cs = [];
 
     for await (const c of Category.entries(database)) {
@@ -95,6 +102,8 @@ export async function prepareHttpServer(config, sd, database, meta) {
     "/category/:category/values",
     restricted,
     async (ctx, next) => {
+      setNoCacheHeaders(ctx);
+
       const reverse = ctx.query.reverse ? true : false;
       const limit = ctx.query.limit === undefined ? -1 : ctx.query.limit;
       const options = { reverse, limit };
