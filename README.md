@@ -29,6 +29,10 @@ konsum --config=<<some dir>> list [category]
 konsum --config=<<some dir>> insert category value [time]
 ```
 
+```shell
+konsum --config=<<some dir>> backup [file]
+```
+
 # install
 
 ```shell
