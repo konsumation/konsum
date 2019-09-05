@@ -37,14 +37,12 @@ program.command("list").action(async (...args) => {
   }
 });
 
-program.command("backup").action(async (...args) => {
-  args.pop();
-
+program.command("backup").action(async (output,command) => {
   const { database, meta } = await prepareConfig();
   await backup(
     database,
     meta,
-    createWriteStream(args[0], { encoding: "utf8" })
+    command === undefined ? process.stdout : createWriteStream(output, { encoding: "utf8" })
   );
 });
 
