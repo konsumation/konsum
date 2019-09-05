@@ -97,6 +97,10 @@ export async function prepareHttpServer(config, sd, database, meta) {
     return next();
   });
 
+  function isTrue(v) {
+    return v && v != 'false' && v != '0';
+  }
+
   router.addRoute(
     "GET",
     "/category/:category/values",
@@ -104,10 +108,9 @@ export async function prepareHttpServer(config, sd, database, meta) {
     async (ctx, next) => {
       setNoCacheHeaders(ctx);
 
-      const reverse = ctx.query.reverse ? true : false;
-      const limit = ctx.query.limit === undefined ? -1 : ctx.query.limit;
+      const reverse = isTrue(ctx.query.reverse);
+      const limit = ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
       const options = { reverse, limit };
-
       const c = await Category.entry(database, ctx.params.category);
 
       switch (ctx.request.type) {
@@ -124,8 +127,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
           break;
 
         default:
-          //case "text/plain":
-          ctx.response.set("content-type", "text");
+          ctx.response.set("content-type", "text/plain");
           ctx.body = c.readStream(database, options);
           break;
       }
