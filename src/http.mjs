@@ -19,6 +19,10 @@ function setNoCacheHeaders(ctx) {
   ctx.set('Expires', 0);
 }
 
+function isTrue(v) {
+  return v && v != 'false' && v != '0';
+}
+
 export async function prepareHttpServer(config, sd, database, meta) {
   const app = new Koa();
 
@@ -97,9 +101,16 @@ export async function prepareHttpServer(config, sd, database, meta) {
     return next();
   });
 
-  function isTrue(v) {
-    return v && v != 'false' && v != '0';
-  }
+  router.addRoute(
+    "PUT",
+    "/category/:category",
+    restricted, BodyParser(),
+    async (ctx, next) => {
+    const category = new Category(ctx.params.category, ctx.request.body);
+    await category.write(database);
+    
+    return next();
+  });
 
   router.addRoute(
     "GET",
