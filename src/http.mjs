@@ -56,6 +56,18 @@ export async function prepareHttpServer(config, sd, database, meta) {
     return next();
   });
 
+  router.addRoute("GET", "/state", async (ctx, next) => {
+    setNoCacheHeaders(ctx);
+
+    ctx.body = {
+      version: config.version,
+      uptime: process.uptime(),
+      memory: process.memoryUsage()
+    };
+
+    return next();
+  });
+
   /**
    * login to request api token
    */
@@ -77,9 +89,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
 
       ctx.status = 200;
       ctx.body = {
-        access_token,
-        message: "Successfully logged in!",
-        version: config.version
+        access_token
       };
     } else {
       ctx.throw(401, "Authentication failed");
