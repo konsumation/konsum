@@ -56,7 +56,6 @@ test("server can authenticate", async t => {
 
   t.is(response.statusCode, 200);
   t.truthy(response.body.access_token.length > 10);
-  t.is(response.body.version, "1.2.3");
 });
 
 test("fails with invalid credentials", async t => {
