@@ -14,13 +14,13 @@ export const defaultHttpServerConfig = {
 };
 
 function setNoCacheHeaders(ctx) {
-  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-  ctx.set('Pragma', 'no-cache');
-  ctx.set('Expires', 0);
+  ctx.set("Cache-Control", "no-store, no-cache, must-revalidate");
+  ctx.set("Pragma", "no-cache");
+  ctx.set("Expires", 0);
 }
 
 function isTrue(v) {
-  return v && v != 'false' && v != '0';
+  return v && v != "false" && v != "0";
 }
 
 export async function prepareHttpServer(config, sd, database, meta) {
@@ -46,15 +46,21 @@ export async function prepareHttpServer(config, sd, database, meta) {
     return next();
   });
 
-  router.addRoute("POST", "/admin/backup", restricted, BodyParser(), async (ctx, next) => {
-    const q = ctx.request.body;
-    const name = q.filename || "/tmp/konsum.txt";
+  router.addRoute(
+    "POST",
+    "/admin/backup",
+    restricted,
+    BodyParser(),
+    async (ctx, next) => {
+      const q = ctx.request.body;
+      const name = q.filename || "/tmp/konsum.txt";
 
-    ctx.body = `backup to ${name}...`;
+      ctx.body = `backup to ${name}...`;
 
-    backup(database, meta, createWriteStream(name, { encoding: "utf8" }));
-    return next();
-  });
+      backup(database, meta, createWriteStream(name, { encoding: "utf8" }));
+      return next();
+    }
+  );
 
   router.addRoute("GET", "/state", async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -114,13 +120,15 @@ export async function prepareHttpServer(config, sd, database, meta) {
   router.addRoute(
     "PUT",
     "/category/:category",
-    restricted, BodyParser(),
+    restricted,
+    BodyParser(),
     async (ctx, next) => {
-    const category = new Category(ctx.params.category, ctx.request.body);
-    await category.write(database);
-    
-    return next();
-  });
+      const category = new Category(ctx.params.category, ctx.request.body);
+      await category.write(database);
+
+      return next();
+    }
+  );
 
   router.addRoute(
     "GET",
@@ -130,12 +138,13 @@ export async function prepareHttpServer(config, sd, database, meta) {
       setNoCacheHeaders(ctx);
 
       const reverse = isTrue(ctx.query.reverse);
-      const limit = ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
+      const limit =
+        ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
       const options = { reverse, limit };
       const c = await Category.entry(database, ctx.params.category);
 
-      switch (ctx.request.type) {
-        case "application/json":
+      switch (ctx.accepts("json", "text")) {
+        case "json":
           const it = c.values(database, options);
 
           const values = [];
@@ -147,10 +156,13 @@ export async function prepareHttpServer(config, sd, database, meta) {
           ctx.body = values;
           break;
 
-        default:
+        case "text":
           ctx.response.set("content-type", "text/plain");
           ctx.body = c.readStream(database, options);
           break;
+
+        default:
+          ctx.throw(406, "json, or text only");
       }
 
       return next();

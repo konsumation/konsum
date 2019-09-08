@@ -80,7 +80,11 @@ test("can insert + get values", async t => {
 
   const port = 12347;
   const { database } = await prepareDatabase(config);
-  const { server } = await prepareHttpServer(setPort(config, port), sd, database);
+  const { server } = await prepareHttpServer(
+    setPort(config, port),
+    sd,
+    database
+  );
 
   const c = new Category(`CAT1`, { unit: "kWh" });
   await c.write(database);
@@ -109,7 +113,7 @@ test("can insert + get values", async t => {
 
   response = await got.get(`http://localhost:${port}/category/CAT1/values`, {
     headers: {
-      //  "content-type": "text/plain",
+      Accept: "text/plain",
       Authorization: `Bearer ${token}`
     }
   });
@@ -119,7 +123,7 @@ test("can insert + get values", async t => {
 
   response = await got.get(`http://localhost:${port}/category/CAT1/values`, {
     headers: {
-      "content-type": "application/json",
+      Accept: "application/json",
       Authorization: `Bearer ${token}`
     }
   });
