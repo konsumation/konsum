@@ -62,6 +62,19 @@ export async function prepareHttpServer(config, sd, database, meta) {
     }
   );
 
+  router.addRoute(
+    "GET",
+    "/admin/backup",
+    restricted,
+    async (ctx, next) => {
+      //console.log(ctx.res);
+      ctx.response.set("content-type", "text/plain");
+      ctx.status = 200;
+      await backup(database, meta, ctx.res);
+      return next();
+    }
+  );
+
   router.addRoute("GET", "/state", async (ctx, next) => {
     setNoCacheHeaders(ctx);
 

@@ -75,6 +75,44 @@ test("fails with invalid credentials", async t => {
   }
 });
 
+async function login(port) {
+  const { database, meta } = await prepareDatabase(config);
+  const { server } = await prepareHttpServer(
+    setPort(config, port),
+    sd,
+    database,
+    meta
+  );
+
+  let response = await got.post(`http://localhost:${port}/authenticate`, {
+    body: {
+      username: "admin",
+      password: "start123"
+    },
+    json: true
+  });
+
+  const token = response.body.access_token;
+
+  return { database, server, token };
+}
+
+test("get backup", async t => {
+  const port = 12348;
+
+  const { token } = await login(port);
+
+  const response = await got.get(`http://localhost:${port}/admin/backup`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  //console.log(response);
+  t.log(response.body);
+
+  t.is(response.statusCode, 200);
+  //t.regex(response.body, /\d+ 77.34/);
+});
+
 test("can insert + get values", async t => {
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
@@ -128,6 +166,6 @@ test("can insert + get values", async t => {
     }
   });
 
-  t.log(response.body);
+  //t.log(response.body);
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
