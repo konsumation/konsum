@@ -17,7 +17,14 @@ function setPort(config, port) {
   return config;
 }
 
+let _port = 3149;
+
+function nextPort() {
+  return _port++;
+}
+
 const sd = { notify: () => {}, listeners: () => [] };
+
 
 const config = {
   version: "1.2.3",
@@ -43,7 +50,7 @@ const config = {
 };
 
 test("server can authenticate", async t => {
-  const port = 12345;
+  const port = nextPort();
   const { server } = await prepareHttpServer(setPort(config, port), sd);
 
   const response = await got.post(`http://localhost:${port}/authenticate`, {
@@ -56,10 +63,12 @@ test("server can authenticate", async t => {
 
   t.is(response.statusCode, 200);
   t.truthy(response.body.access_token.length > 10);
+
+  server.unref();
 });
 
 test("fails with invalid credentials", async t => {
-  const port = 12346;
+  const port = nextPort();
   const { server } = await prepareHttpServer(setPort(config, port), sd);
 
   try {
@@ -73,9 +82,11 @@ test("fails with invalid credentials", async t => {
   } catch (error) {
     t.is(error.statusCode, 401);
   }
+
+  server.unref();
 });
 
-async function login(port) {
+async function login(t,port) {
   const { database, meta } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(
     setPort(config, port),
@@ -97,10 +108,12 @@ async function login(port) {
   return { database, server, token };
 }
 
-test("get backup", async t => {
-  const port = 12348;
+test.serial("get backup", async t => {
+  t.timeout(10000);
 
-  const { token } = await login(port);
+  const port = nextPort();
+
+  const { token, server, database } = await login(t,port);
 
   const response = await got.get(`http://localhost:${port}/admin/backup`, {
     headers: { Authorization: `Bearer ${token}` }
@@ -111,12 +124,17 @@ test("get backup", async t => {
 
   t.is(response.statusCode, 200);
   //t.regex(response.body, /\d+ 77.34/);
+
+  server.unref();
+  database.close();
 });
 
-test("update category", async t => {
-  const port = 12349;
+test.serial("update category", async t => {
+  t.timeout(10000);
 
-  const { token } = await login(port);
+  const port = nextPort();
+
+  const { token, server, database } = await login(t,port);
 
   const response = await got.put(`http://localhost:${port}/category/CAT7`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -128,12 +146,17 @@ test("update category", async t => {
   });
 
   t.is(response.statusCode, 200);
+
+  server.unref();
+  database.close();
 });
 
-test("can insert + get values", async t => {
+test.serial("can insert + get values", async t => {
+  t.timeout(10000);
+
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
-  const port = 12347;
+  const port = nextPort();
   const { database } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(
     setPort(config, port),
@@ -184,4 +207,7 @@ test("can insert + get values", async t => {
   });
 
   t.is(JSON.parse(response.body)[0].value, 77.34);
+
+  server.unref();
+  database.close();
 });
