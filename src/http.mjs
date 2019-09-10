@@ -67,7 +67,6 @@ export async function prepareHttpServer(config, sd, database, meta) {
     "/admin/backup",
     restricted,
     async (ctx, next) => {
-      //console.log(ctx.res);
       ctx.response.set("content-type", "text/plain");
       ctx.status = 200;
       await backup(database, meta, ctx.res);
@@ -138,7 +137,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
     async (ctx, next) => {
       const category = new Category(ctx.params.category, ctx.request.body);
       await category.write(database);
-
+      ctx.body = {};
       return next();
     }
   );

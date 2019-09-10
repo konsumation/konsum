@@ -113,6 +113,23 @@ test("get backup", async t => {
   //t.regex(response.body, /\d+ 77.34/);
 });
 
+test("update category", async t => {
+  const port = 12349;
+
+  const { token } = await login(port);
+
+  const response = await got.put(`http://localhost:${port}/category/CAT7`, {
+    headers: { Authorization: `Bearer ${token}` },
+    body: {
+      description: 'a new Unit',
+      unit: 'm3'
+    },
+    json: true
+  });
+
+  t.is(response.statusCode, 200);
+});
+
 test("can insert + get values", async t => {
   await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
 
@@ -166,6 +183,5 @@ test("can insert + get values", async t => {
     }
   });
 
-  //t.log(response.body);
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
