@@ -6,6 +6,7 @@ import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
 import { Category, backup } from "konsum-db";
 import { authenticate } from "./auth.mjs";
+import { createContext } from "vm";
 
 export const defaultHttpServerConfig = {
   http: {
@@ -69,7 +70,9 @@ export async function prepareHttpServer(config, sd, database, meta) {
       'attachment; filename*="konsum_backup.txt"'
     );
     ctx.status = 200;
+    ctx.respond = false;
     await backup(database, meta, ctx.res);
+    ctx.res.end();
     return next();
   });
 

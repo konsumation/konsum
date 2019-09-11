@@ -119,14 +119,13 @@ test.serial("get backup", async t => {
     headers: { Authorization: `Bearer ${token}` }
   });
 
-  //console.log(response);
   t.log(response.body);
 
   t.is(response.statusCode, 200);
   //t.regex(response.body, /\d+ 77.34/);
 
   server.unref();
-  database.close();
+  await database.close();
 });
 
 test.serial("update category", async t => {
@@ -148,7 +147,7 @@ test.serial("update category", async t => {
   t.is(response.statusCode, 200);
 
   server.unref();
-  database.close();
+  await database.close();
 });
 
 test.serial("can insert + get values", async t => {
@@ -209,5 +208,5 @@ test.serial("can insert + get values", async t => {
   t.is(JSON.parse(response.body)[0].value, 77.34);
 
   server.unref();
-  database.close();
+  await database.close();
 });
