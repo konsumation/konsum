@@ -1,27 +1,30 @@
 language: node_js
-node_js:
-  - 12.10.0
+
 branches:
   only:
     - master
     - /^greenkeeper/.*$/
-cache: npm
+    - /^mkpr/.*$/
+    - /^npm-template-sync/.*$/
 addons:
   apt:
     packages:
       - ldap-utils
       - slapd
-before_script:
-  - mkdir /tmp/slapd
-  - 'slapd -f tests/fixtures/ldap/slapd.conf -h ldap://localhost:3389 &'
-  - sleep 3
-  - 'ldapadd -h localhost:3389 -D cn=Manager,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif'
-script:
-  - npm run cover
-  - npx codecov
-  - cat ./build/coverage/lcov.info | npx coveralls
 jobs:
   include:
+    - stage: test
+      node_js:
+        - 12.10.0
+      before_script:
+        - mkdir /tmp/slapd
+        - 'slapd -f tests/fixtures/ldap/slapd.conf -h ldap://localhost:3389 &'
+        - sleep 3
+        - 'ldapadd -h localhost:3389 -D cn=Manager,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif'
+      script:
+        - npm run cover
+        - npx codecov
+        - cat ./build/coverage/lcov.info | npx coveralls
     - stage: doc
       node_js: lts/*
       skip_cleanup: 'true'
