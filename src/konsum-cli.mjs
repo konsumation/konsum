@@ -1,9 +1,9 @@
 import program from "commander";
 import { resolve } from "path";
-import { createWriteStream } from "fs";
+import { createWriteStream, createReadStream } from "fs";
 import { expand } from "config-expander";
 import { removeSensibleValues } from "remove-sensible-values";
-import { Category, backup } from "konsum-db";
+import { Category, backup, resore } from "konsum-db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
@@ -43,6 +43,17 @@ program.command("backup").action(async (output, command) => {
       : createWriteStream(output, { encoding: "utf8" })
   );
 });
+
+program.command("restore").action(async (input, command) => {
+  const { database } = await prepareConfig();
+  await restore(
+    database,
+    command === undefined
+      ? process.stdin
+      : createReadStream(input, { encoding: "utf8" })
+  );
+});
+
 
 program.command("insert").action(async (cName, value, time, command) => {
   const { database } = await prepareConfig();
