@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { createWriteStream, createReadStream } from "fs";
 import { expand } from "config-expander";
 import { removeSensibleValues } from "remove-sensible-values";
-import { Category, backup, resore } from "konsum-db";
+import { Category, backup, restore } from "konsum-db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
