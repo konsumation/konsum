@@ -47,6 +47,12 @@ export async function prepareHttpServer(config, sd, database, meta) {
     return next();
   });
 
+  router.addRoute("POST", "/admin/reload", async (ctx, next) => {
+    sd.notify("STATUS=reloading");
+    // TODO
+    return next();
+  });
+
   router.addRoute(
     "POST",
     "/admin/backup",
