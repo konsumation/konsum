@@ -6,7 +6,6 @@ import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
 import { Category, backup } from "konsum-db";
 import { authenticate } from "./auth.mjs";
-import { createContext } from "vm";
 
 export const defaultHttpServerConfig = {
   http: {
