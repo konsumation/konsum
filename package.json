@@ -79,7 +79,7 @@
   },
   "homepage": "https://github.com/k0nsti/konsum#readme",
   "config": {
-    "urlPrefix": "/services/konsum/api",
+    "base": "/services/konsum/api",
     "socket": "/run/konsum/socket"
   },
   "systemd": {
