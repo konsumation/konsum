@@ -59,6 +59,7 @@ export async function authenticate(config, username, password) {
         default:
           console.log(ex);
       }
+      throw ex;
     } finally {
       await client.unbind();
     }
