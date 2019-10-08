@@ -53,7 +53,12 @@ export async function authenticate(config, username, password) {
         entitlements.add(e[ldap.entitlements.attribute])
       );
     } catch (ex) {
-      console.log(ex);
+      switch (ex.code) {
+        case 49: // invalid credentials
+          break;
+        default:
+          console.log(ex);
+      }
     } finally {
       await client.unbind();
     }
