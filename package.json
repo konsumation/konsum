@@ -90,7 +90,8 @@
   "pacman": {
     "arch": [
       "aarch64",
-      "armv7h"
+      "armv7h",
+      "x86_64"
     ],
     "groups": "home-automation",
     "backup": "etc/${name}/config.json",
@@ -102,7 +103,7 @@
       "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
     },
     "depends": {
-      "systemd": ">=243.0"
+      "systemd": ">=243.51"
     }
   },
   "release": {
