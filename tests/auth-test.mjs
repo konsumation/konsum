@@ -65,10 +65,16 @@ test("ldap auth", async t => {
   let result = await authenticate(config, "user1", "test");
 
   t.deepEqual(result.entitlements, new Set(["konsum"]));
+});
 
-  result = await authenticate(config, "user77", "test");
+test("ldap auth unknown user", async t => {
+  const config = await authConfig(t);
 
-  t.deepEqual(result.entitlements, new Set());
+  await t.throws(() => {
+    await authenticate(config, "user77", "test");
+  },"Invalid credentials during a bind operation. Code: 0x31");
+
+ // t.deepEqual(result.entitlements, new Set());
 });
 
 test("embedded user", async t => {
