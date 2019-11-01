@@ -23,7 +23,7 @@ program.command("start").action(async () => {
   const http = await prepareHttpServer(config, sd, database, meta);
 });
 
-program.command("list").action(async (cName, command) => {
+program.command("list <category>").action(async (cName) => {
   const { database } = await prepareConfig();
 
   for await (const c of Category.entries(database, cName, cName)) {
@@ -33,29 +33,29 @@ program.command("list").action(async (cName, command) => {
   }
 });
 
-program.command("backup").action(async (output, command) => {
+program.command("backup [file]").action(async (output) => {
   const { database, meta } = await prepareConfig();
   await backup(
     database,
     meta,
-    command === undefined
+    output === undefined
       ? process.stdout
       : createWriteStream(output, { encoding: "utf8" })
   );
 });
 
-program.command("restore").action(async (input, command) => {
+program.command("restore [file]").action(async (input) => {
   const { database } = await prepareConfig();
   await restore(
     database,
-    command === undefined
+    input === undefined
       ? process.stdin
       : createReadStream(input, { encoding: "utf8" })
   );
 });
 
 
-program.command("insert").action(async (cName, value, time, command) => {
+program.command("insert <category> <value> [time]").action(async (cName, value, time) => {
   const { database } = await prepareConfig();
 
   time = time === undefined ? Date.now() : new Date(time).valueOf();
