@@ -2,6 +2,7 @@
 ListenStream={{socket}}
 MaxConnections=4
 NoDelay=true
+FileDescriptorName=api
 
 [Install]
 RequiredBy={{name}}.service
