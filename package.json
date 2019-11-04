@@ -95,7 +95,7 @@
     ],
     "groups": "home-automation",
     "backup": "etc/${name}/config.json",
-    "hooks": "pacman/install.sh",
+    "hooks": "pacman/hooks.sh",
     "installdir": "/services/${name}",
     "content": {
       "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
