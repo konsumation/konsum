@@ -4,6 +4,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "bin"
+  ],
   "module": "src/konsum-cli.mjs",
   "description": "collect resource usage in a home environment",
   "keywords": [],
@@ -71,9 +74,6 @@
     "type": "git",
     "url": "https://github.com/k0nsti/konsum.git"
   },
-  "files": [
-    "bin"
-  ],
   "bugs": {
     "url": "https://github.com/k0nsti/konsum/issues"
   },
