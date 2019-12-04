@@ -103,7 +103,7 @@
       "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
     },
     "depends": {
-      "systemd": ">=243.51"
+      "systemd": ">=244"
     }
   },
   "release": {
