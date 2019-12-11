@@ -47,14 +47,13 @@ test.before(async t => {
   const { server } = await prepareHttpServer(config, sd, database, meta);
 
   let response = await got.post(`http://localhost:${port}/authenticate`, {
-    body: {
+    json: {
       username: "admin",
       password: "start123"
-    },
-    json: true
+    }
   });
 
-  t.context.token = response.body.access_token;
+  t.context.token = JSON.parse(response.body).access_token;
   t.context.database = database;
   t.context.server = server;
   t.context.port = port;
@@ -85,11 +84,10 @@ test("update category", async t => {
     `http://localhost:${t.context.port}/category/CAT7`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
-      body: {
+      json: {
         description: "a new Unit",
         unit: "m3"
-      },
-      json: true
+      }
     }
   );
 
@@ -106,10 +104,9 @@ test("can insert + get values", async t => {
     `http://localhost:${t.context.port}/category/CAT1/insert`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
-      body: {
+      json: {
         value: 78.0
-      },
-      json: true
+      }
     }
   );
 

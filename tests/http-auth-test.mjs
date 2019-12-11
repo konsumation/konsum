@@ -56,16 +56,15 @@ test("server can authenticate", async t => {
   const response = await got.post(
     `http://localhost:${t.context.port}/authenticate`,
     {
-      body: {
+      json: {
         username: "admin",
         password: "start123"
-      },
-      json: true
+      }
     }
   );
 
   t.is(response.statusCode, 200);
-  t.truthy(response.body.access_token.length > 10);
+  t.truthy(JSON.parse(response.body).access_token.length > 10);
 });
 
 test("fails with invalid credentials", async t => {
@@ -73,14 +72,13 @@ test("fails with invalid credentials", async t => {
     const response = await got.post(
       `http://localhost:${t.context.port}/authenticate`,
       {
-        body: {
+        json: {
           username: "admin",
           password: "wrong"
-        },
-        json: true
+        }
       }
     );
   } catch (error) {
-    t.is(error.statusCode, 401);
+    t.is(error.response.statusCode, 401);
   }
 });
