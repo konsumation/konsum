@@ -54,7 +54,7 @@
     "execa": "^3.3.0",
     "got": "^10.0.0",
     "markdown-doctest": "^1.0.0",
-    "npm-pkgbuild": "^6.10.14",
+    "npm-pkgbuild": "^6.11.0",
     "rollup": "^1.27.10",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-commonjs": "^10.1.0",
