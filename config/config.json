@@ -1,6 +1,6 @@
 {
   "database": {
-    "file": "${statedir}/db"
+    "file": "db"
   },
   "auth": {
     "users": {

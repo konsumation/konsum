@@ -17,6 +17,10 @@ NoNewPrivileges=true
 RuntimeDirectory={{name}}
 StateDirectory={{name}}
 ConfigurationDirectory={{name}}
+MemoryAccounting=true
+MemoryHigh=100M
+MemoryMax=150M
+OOMPolicy=stop
 
 [Install]
 WantedBy=multi-user.target
