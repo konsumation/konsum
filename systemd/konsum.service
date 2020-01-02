@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=notify
-ExecStart={{installdir}}/bin/{{name}} start
+ExecStart=/usr/bin/node --title {{name}} {{installdir}}/bin/{{name}} start
 ExecStop=/usr/bin/curl -s -XPOST --unix-socket {{socket}} http://localhost/admin/stop
 ExecReload=/usr/bin/curl -s -XPOST --unix-socket {{socket}} http://localhost/admin/reload
 TimeoutStartSec=20
