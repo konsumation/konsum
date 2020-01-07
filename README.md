@@ -1,7 +1,4 @@
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Build Status](https://secure.travis-ci.org/k0nsti/konsum.png)](http://travis-ci.org/k0nsti/konsum)
-[![codecov.io](http://codecov.io/github/k0nsti/konsum/coverage.svg?branch=master)](http://codecov.io/github/k0nsti/konsum?branch=master)
-[![Coverage Status](https://coveralls.io/repos/k0nsti/konsum/badge.svg)](https://coveralls.io/r/k0nsti/konsum)
 [![Known Vulnerabilities](https://snyk.io/test/github/k0nsti/konsum/badge.svg)](https://snyk.io/test/github/k0nsti/konsum)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![npm](https://img.shields.io/npm/v/konsum.svg)](https://www.npmjs.com/package/konsum)
@@ -11,6 +8,9 @@
 [![minified size](https://badgen.net/bundlephobia/min/konsum)](https://bundlephobia.com/result?p=konsum)
 [![downloads](http://img.shields.io/npm/dm/konsum.svg?style=flat-square)](https://npmjs.org/package/konsum)
 [![GitHub Issues](https://img.shields.io/github/issues/k0nsti/konsum.svg?style=flat-square)](https://github.com/k0nsti/konsum/issues)
+[![Build Status](https://secure.travis-ci.org/k0nsti/konsum.png)](http://travis-ci.org/k0nsti/konsum)
+[![codecov.io](http://codecov.io/github/k0nsti/konsum/coverage.svg?branch=master)](http://codecov.io/github/k0nsti/konsum?branch=master)
+[![Coverage Status](https://coveralls.io/repos/k0nsti/konsum/badge.svg)](https://coveralls.io/r/k0nsti/konsum)
 
 # konsum
 
