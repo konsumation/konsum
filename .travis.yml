@@ -10,6 +10,7 @@ addons:
     packages:
       - ldap-utils
       - slapd
+  chrome: stable
 jobs:
   include:
     - stage: test
@@ -24,6 +25,7 @@ jobs:
         - npm run cover
         - npx codecov
         - cat ./build/coverage/lcov.info | npx coveralls
+        - npm run test
     - stage: doc
       node_js: lts/*
       skip_cleanup: 'true'
@@ -38,3 +40,5 @@ jobs:
         skip_cleanup: 'true'
         script:
           - npx semantic-release
+env:
+  - BROWSER=chrome
