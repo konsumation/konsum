@@ -31,7 +31,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "commander": "^4.1.0",
+    "commander": "^4.1.1",
     "config-expander": "^11.0.9",
     "koa": "^2.11.0",
     "koa-better-router": "^2.1.1",
