@@ -46,6 +46,7 @@
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-typescript": "^3.0.0",
     "@semantic-release/exec": "^5.0.0",
     "ava": "^3.3.0",
     "builtin-modules": "^3.1.0",
@@ -55,8 +56,11 @@
     "got": "^10.5.5",
     "npm-pkgbuild": "^6.11.5",
     "rollup": "^1.31.0",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-cleanup": "^3.1.1",
+    "rollup-plugin-consts": "^1.0.1",
     "rollup-plugin-executable": "^1.5.2",
+    "rollup-plugin-native": "^1.2.8",
     "semantic-release": "^17.0.2",
     "tmp": "0.1.0"
   },
@@ -64,7 +68,7 @@
     "sd-daemon": "^1.0.2"
   },
   "engines": {
-    "node": ">=12.15.0"
+    "node": ">=12.16.0"
   },
   "repository": {
     "type": "git",
