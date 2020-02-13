@@ -13,8 +13,6 @@ addons:
 jobs:
   include:
     - stage: test
-      node_js:
-        - 13.8.0
       before_script:
         - mkdir /tmp/slapd
         - 'slapd -f tests/fixtures/ldap/slapd.conf -h ldap://localhost:3389 &'
