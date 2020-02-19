@@ -20,14 +20,14 @@
     "konsum": "bin/konsum"
   },
   "scripts": {
+    "prepare": "rollup -c",
+    "start": "npm run prepare && node bin/konsum --config=config start",
+    "test": "ava --timeout 2m",
+    "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg",
+    "pretest": "rollup -c",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/konsum-cli.mjs --section=API",
-    "lint": "documentation lint src/konsum-cli.mjs",
-    "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg",
-    "prepare": "rollup -c",
-    "pretest": "rollup -c",
-    "start": "npm run prepare && node bin/konsum --config=config start",
-    "test": "ava --timeout 2m"
+    "lint": "documentation lint src/konsum-cli.mjs"
   },
   "dependencies": {
     "commander": "^4.1.1",
@@ -64,7 +64,7 @@
     "sd-daemon": "^1.0.2"
   },
   "engines": {
-    "node": ">=12.16.0"
+    "node": ">=12.16.1"
   },
   "repository": {
     "type": "git",
