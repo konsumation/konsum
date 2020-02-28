@@ -20,13 +20,13 @@
     "konsum": "bin/konsum"
   },
   "scripts": {
+    "pretest": "rollup -c",
     "prepare": "rollup -c",
     "start": "npm run prepare && node bin/konsum --config=config start",
     "test": "ava --node-arguments '--experimental-modules' --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --node-arguments '--experimental-modules' --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/konsum-cli.mjs --section=API",
     "lint": "documentation lint src/konsum-cli.mjs",
-    "pretest": "rollup -c",
     "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg"
   },
   "dependencies": {
