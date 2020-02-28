@@ -40,7 +40,7 @@
     "ldapts": "^2.1.0",
     "leveldown": "^5.5.1",
     "levelup": "^4.3.2",
-    "remove-sensible-values": "^1.0.4"
+    "remove-sensible-values": "^1.0.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
