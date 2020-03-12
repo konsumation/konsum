@@ -11,3 +11,4 @@ config
 systemd
 pacman
 rollup.config.js
+.github
