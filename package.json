@@ -54,7 +54,7 @@
     "execa": "^4.0.0",
     "got": "^10.7.0",
     "npm-pkgbuild": "^6.11.6",
-    "rollup": "^2.3.1",
+    "rollup": "^2.3.2",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-executable": "^1.5.3",
     "semantic-release": "^17.0.4",
