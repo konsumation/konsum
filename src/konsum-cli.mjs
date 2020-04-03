@@ -7,7 +7,8 @@ import { Category, backup, restore } from "konsum-db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
-import { version, description } from "../package.json";
+import version from "consts:version";
+import description from "consts:description";
 
 program
   .description(description)
