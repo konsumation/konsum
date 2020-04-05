@@ -23,7 +23,7 @@
     "prepare": "rollup -c",
     "start": "npm run prepare && node bin/konsum --config=config start",
     "pretest": "rollup -c",
-    "test": "ava --timeout 2m",
+    "test": "ava --timeout 2m && overwrite ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/konsum-cli.mjs --section=API",
     "lint": "documentation lint src/konsum-cli.mjs",
@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@semantic-release/exec": "^5.0.0",
     "ava": "^3.6.0",
