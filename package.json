@@ -100,7 +100,7 @@
       "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
     },
     "depends": {
-      "systemd": ">=244"
+      "systemd": ">=245"
     }
   },
   "release": {
