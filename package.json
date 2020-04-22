@@ -54,7 +54,7 @@
     "c8": "^7.1.0",
     "documentation": "^12.3.0",
     "execa": "^4.0.0",
-    "got": "^11.0.1",
+    "got": "^11.0.2",
     "npm-pkgbuild": "^6.11.16",
     "rollup": "^2.7.1",
     "rollup-plugin-cleanup": "^3.1.1",
