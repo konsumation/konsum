@@ -61,7 +61,7 @@
     "rollup-plugin-consts": "^1.0.1",
     "rollup-plugin-executable": "^1.5.3",
     "semantic-release": "^17.0.7",
-    "tmp": "0.1.0"
+    "tmp": "0.2.0"
   },
   "optionalDependencies": {
     "sd-daemon": "^1.0.2"
