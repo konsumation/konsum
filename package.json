@@ -7,7 +7,7 @@
   "files": [
     "bin"
   ],
-  "main": "src/konsum-cli.mjs",
+  "main": "./src/konsum-cli.mjs",
   "description": "collect resource usage in a home environment",
   "contributors": [
     {
