@@ -7,7 +7,6 @@ post_install() {
 	openssl rsa -in /etc/{{name}}/{{name}}.rsa -pubout > /etc/{{name}}/{{name}}.rsa.pub
 	chown {{name}}:{{name}} /etc/{{name}}/{{name}}.rsa*
 	
-	systemctl daemon-reload
 	systemctl enable {{name}}
 	systemctl enable {{name}}.socket
 	systemctl -q try-reload-or-restart nginx
@@ -19,13 +18,12 @@ pre_upgrade() {
 }
 
 post_upgrade() {
-	systemctl daemon-reload
 	systemctl start {{name}}.socket
 	systemctl -q try-reload-or-restart nginx
 }
 
 pre_remove() {
-    systemctl stop {{name}}.socket
+	systemctl stop {{name}}.socket
 	systemctl disable {{name}}.socket
 	systemctl stop {{name}}
 	systemctl disable {{name}}
@@ -33,7 +31,6 @@ pre_remove() {
 
 post_remove() {
 	systemctl -q try-reload-or-restart nginx
-	systemctl daemon-reload
 	userdel {{name}}
 	groupdel {{name}}
 }
