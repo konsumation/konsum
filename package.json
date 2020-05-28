@@ -120,7 +120,7 @@
   },
   "template": {
     "inheritFrom": [
-      "arlac77/template-cli-app",
+      "arlac77/template-node-app",
       "arlac77/template-github",
       "arlac77/template-nginx",
       "arlac77/template-pacman",
