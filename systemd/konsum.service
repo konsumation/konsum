@@ -9,7 +9,9 @@ ExecStart=/usr/bin/node --title {{name}} {{installdir}}/bin/{{name}} start
 ExecStop=/usr/bin/curl -s -XPOST --unix-socket {{socket}} http://localhost/admin/stop
 ExecReload=/usr/bin/curl -s -XPOST --unix-socket {{socket}} http://localhost/admin/reload
 TimeoutStartSec=20
-StandardOutput=syslog
+StandardError=journal
+StandardOutput=journal
+SystemCallErrorNumber=EPERM
 User={{name}}
 Group={{name}}
 PrivateTmp=true
@@ -17,9 +19,11 @@ NoNewPrivileges=true
 RuntimeDirectory={{name}}
 StateDirectory={{name}}
 ConfigurationDirectory={{name}}
+CPUWeight=30
+IOWeight=30
 MemoryAccounting=true
-MemoryHigh=100M
-MemoryMax=150M
+MemoryHigh=80M
+MemoryMax=120M
 OOMPolicy=stop
 
 [Install]
