@@ -32,7 +32,7 @@
   "dependencies": {
     "commander": "^5.1.0",
     "config-expander": "^11.0.13",
-    "koa": "^2.12.0",
+    "koa": "^2.12.1",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.0",
@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
-    "@rollup/plugin-json": "^4.0.3",
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/exec": "^5.0.0",
@@ -56,7 +55,7 @@
     "execa": "^4.0.2",
     "got": "^11.2.0",
     "npm-pkgbuild": "^6.12.0",
-    "rollup": "^2.12.1",
+    "rollup": "^2.16.1",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-consts": "^1.0.2",
     "rollup-plugin-executable": "^1.6.0",
@@ -67,7 +66,7 @@
     "sd-daemon": "^1.0.2"
   },
   "engines": {
-    "node": ">=12.16.3"
+    "node": ">=12.18.0"
   },
   "repository": {
     "type": "git",
@@ -103,7 +102,7 @@
     },
     "depends": {
       "systemd": ">=245",
-      "nginx-mainline": ">=1.17.10"
+      "nginx-mainline": ">=1.19.0"
     }
   },
   "release": {
