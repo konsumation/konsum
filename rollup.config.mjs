@@ -1,4 +1,3 @@
-import json from "@rollup/plugin-json";
 import { readFileSync } from "fs";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
@@ -27,7 +26,7 @@ const external = [
 const extensions = ["js", "mjs", "jsx", "tag"];
 const plugins = [
   commonjs(),
-  resolve(),
+  resolve.nodeResolve(),
   consts({
     name,
     version,
