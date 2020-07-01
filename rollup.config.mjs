@@ -26,7 +26,7 @@ const external = [
 const extensions = ["js", "mjs", "jsx", "tag"];
 const plugins = [
   commonjs(),
-  resolve.nodeResolve(),
+  resolve(),
   consts({
     name,
     version,
