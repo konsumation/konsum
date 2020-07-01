@@ -17,13 +17,15 @@ Group={{name}}
 PrivateTmp=true
 NoNewPrivileges=true
 RuntimeDirectory={{name}}
+RuntimeDirectoryMode=775
+RuntimeDirectoryPreserve=yes
 StateDirectory={{name}}
 ConfigurationDirectory={{name}}
 CPUWeight=30
 IOWeight=30
 MemoryAccounting=true
-MemoryHigh=80M
-MemoryMax=120M
+MemoryHigh=60M
+MemoryMax=100M
 OOMPolicy=stop
 
 [Install]
