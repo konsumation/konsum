@@ -8,7 +8,7 @@ jobs:
   include:
     - stage: test
       node_js:
-        - 14.4.0
+        - 14.5.0
       before_script:
         - mkdir /tmp/slapd
         - 'slapd -f tests/fixtures/ldap/slapd.conf -h ldap://localhost:3389 &'
