@@ -14,18 +14,16 @@ post_install() {
 }
 
 pre_upgrade() {
-	systemctl stop {{name}}.socket
 	systemctl stop {{name}}
 }
 
 post_upgrade() {
 	systemctl daemon-reload
-	systemctl start {{name}}.socket
 	systemctl -q try-reload-or-restart nginx
 }
 
 pre_remove() {
-    systemctl stop {{name}}.socket
+	systemctl stop {{name}}.socket
 	systemctl disable {{name}}.socket
 	systemctl stop {{name}}
 	systemctl disable {{name}}
