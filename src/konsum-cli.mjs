@@ -64,13 +64,18 @@ program.command("insert <category> <value> [time]").action(async (cName, value, 
   time = time / 1000;
 
   if (time < 941673600 || time > 2000000000) {
-    console.log("time out of range");
+    console.log("Time out of range");
     return;
   }
 
   const c = await Category.entry(database, cName);
 
-  await c.writeValue(database, value, time);
+  if(c) { 
+    await c.writeValue(database, value, time);
+  }
+  else {
+    console.log("No such category",cName);
+  }
 });
 
 program.parse(process.argv);
