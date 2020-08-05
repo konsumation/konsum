@@ -20,7 +20,7 @@ function setNoCacheHeaders(ctx) {
 }
 
 function isTrue(v) {
-  return v && v != "false" && v != "0";
+  return v && v !== "false" && v != "0";
 }
 
 export async function prepareHttpServer(config, sd, database, meta) {
