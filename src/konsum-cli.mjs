@@ -18,8 +18,6 @@ program
 program.command("start").action(async () => {
   const { sd, config, database, meta } = await prepareConfig();
 
-  console.log(removeSensibleValues(config));
-
   // prepare the web-server with the config and the database
   const http = await prepareHttpServer(config, sd, database, meta);
 });
