@@ -9,6 +9,8 @@ ExecStart=/usr/bin/node --unhandled-rejections=strict --trace-uncaught --trace-w
 ExecStop=/usr/bin/curl -s -XPOST --unix-socket {{socket}} http://localhost/admin/stop
 ExecReload=/usr/bin/curl -s -XPOST --unix-socket {{socket}} http://localhost/admin/reload
 TimeoutStartSec=20
+Restart=on-failure
+RestartSec=30s
 StopWhenUnneeded=true
 SystemCallErrorNumber=EPERM
 User={{name}}
