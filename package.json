@@ -42,8 +42,8 @@
     "levelup": "^4.4.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^14.0.0",
-    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/exec": "^5.0.0",
     "@semantic-release/release-notes-generator": "^9.0.1",
@@ -53,8 +53,8 @@
     "documentation": "^13.0.2",
     "execa": "^4.0.3",
     "got": "^11.5.0",
-    "npm-pkgbuild": "^6.12.1",
-    "rollup": "^2.23.1",
+    "npm-pkgbuild": "^6.12.5",
+    "rollup": "^2.25.0",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-consts": "^1.0.2",
     "rollup-plugin-executable": "^1.6.0",
