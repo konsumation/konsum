@@ -2,6 +2,7 @@
 Description={{description}}
 After=network-online.target
 Wants=network-online.target
+StopWhenUnneeded=true
 
 [Service]
 Type=notify
@@ -11,7 +12,6 @@ ExecReload=/usr/bin/curl -s -XPOST --unix-socket {{socket}} http://localhost/adm
 TimeoutStartSec=20
 Restart=on-failure
 RestartSec=30s
-StopWhenUnneeded=true
 SystemCallErrorNumber=EPERM
 User={{name}}
 Group={{name}}
