@@ -54,7 +54,7 @@
     "execa": "^4.0.3",
     "got": "^11.5.2",
     "npm-pkgbuild": "^6.12.6",
-    "rollup": "^2.26.5",
+    "rollup": "^2.26.6",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-consts": "^1.0.2",
     "rollup-plugin-executable": "^1.6.0",
@@ -100,8 +100,8 @@
       "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
     },
     "depends": {
-      "systemd": ">=245",
-      "nginx-mainline": ">=1.19.0"
+      "systemd": ">=246.2",
+      "nginx-mainline": ">=1.19.1"
     }
   },
   "release": {
