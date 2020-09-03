@@ -20,14 +20,14 @@
     "konsum": "bin/konsum"
   },
   "scripts": {
+    "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg",
     "prepare": "rollup -c",
     "start": "npm run prepare && node bin/konsum --config=config start",
     "pretest": "rollup -c",
     "test": "ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme ./src/konsum-cli.mjs --section=API",
-    "lint": "documentation lint ./src/konsum-cli.mjs",
-    "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg"
+    "lint": "documentation lint ./src/konsum-cli.mjs"
   },
   "dependencies": {
     "commander": "^6.0.0",
