@@ -30,14 +30,14 @@
     "lint": "documentation lint ./src/konsum-cli.mjs"
   },
   "dependencies": {
-    "commander": "^6.0.0",
+    "commander": "^6.1.0",
     "config-expander": "^11.0.13",
     "koa": "^2.13.0",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.0",
-    "konsum-db": "^1.6.3",
-    "ldapts": "^2.6.1",
+    "konsum-db": "^1.6.4",
+    "ldapts": "^2.7.0",
     "leveldown": "^5.6.0",
     "levelup": "^4.4.0"
   },
