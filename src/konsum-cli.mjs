@@ -1,13 +1,19 @@
+#!/usr/bin/env node
 import program from "commander";
 import { resolve } from "path";
-import { createWriteStream, createReadStream } from "fs";
+import { readFileSync, createWriteStream, createReadStream } from "fs";
 import { expand } from "config-expander";
 import { Category, backup, restore } from "konsum-db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
-import version from "consts:version";
-import description from "consts:description";
+
+const { version, description } = JSON.parse(
+  readFileSync(
+    new URL("../package.json", import.meta.url).pathname,
+    { endoding: "utf8" } 
+  )
+);
 
 program
   .description(description)
