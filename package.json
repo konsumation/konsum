@@ -4,9 +4,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": [
-    "bin"
-  ],
   "main": "./src/konsum-cli.mjs",
   "description": "collect resource usage in a home environment",
   "contributors": [
@@ -30,17 +27,16 @@
   },
   "dependencies": {
     "commander": "^6.1.0",
-    "config-expander": "^11.0.13",
+    "config-expander": "^11.0.15",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.0",
-    "konsum-db": "^1.8.1",
+    "konsum-db": "^1.9.0",
     "ldapts": "^2.7.0",
     "leveldown": "^5.6.0",
-    "levelup": "^4.4.0",
-    "mime-db": "^1.45.0"
+    "levelup": "^4.4.0"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",
@@ -52,7 +48,7 @@
     "documentation": "^13.0.2",
     "execa": "^4.0.3",
     "got": "^11.5.2",
-    "npm-pkgbuild": "^6.12.9",
+    "npm-pkgbuild": "^6.12.10",
     "semantic-release": "^17.1.2",
     "tmp": "^0.2.1"
   },
