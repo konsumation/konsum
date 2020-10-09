@@ -209,35 +209,27 @@ export async function prepareHttpServer(config, sd, database, meta) {
     }
   );
 
-  router.addRoute("GET", "/category/:category/meters", restricted, async (ctx, next) => {
-    setNoCacheHeaders(ctx);
-    
-    const category = await Category.entry(database, ctx.params.category);
+  for (const type of ["meters", "notes"]) {
+    router.addRoute(
+      "GET",
+      `/category/:category/${type}`,
+      restricted,
+      async (ctx, next) => {
+        setNoCacheHeaders(ctx);
 
-    const ms = [];
+        const category = await Category.entry(database, ctx.params.category);
 
-    for await (const m of category.meters(database)) {
-      ms.push(m.toJSON());
-    }
+        const details = [];
 
-    ctx.body = ms;
-    return next();
-  });
+        for await (const detail of category[type](database)) {
+          details.push(detail.toJSON());
+        }
 
-  router.addRoute("GET", "/category/:category/notes", restricted, async (ctx, next) => {
-    setNoCacheHeaders(ctx);
-    
-    const category = await Category.entry(database, ctx.params.category);
-
-    const ms = [];
-
-    for await (const m of category.notes(database)) {
-      ms.push(m.toJSON());
-    }
-
-    ctx.body = ms;
-    return next();
-  });
+        ctx.body = details;
+        return next();
+      }
+    );
+  }
 
   const server = app.listen(config.http.port, () => {
     console.log("listen on", server.address());
