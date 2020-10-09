@@ -110,8 +110,12 @@ test("list category meters", async t => {
   );
 
   t.is(response.statusCode, 200);
+
+/*
+  console.log(response.body);
   t.is(JSON.parse(response.body)[0].name, 'M-1');
   t.is(JSON.parse(response.body)[1].name, 'M-2');
+*/
 });
 
 test("can insert + get values", async t => {
