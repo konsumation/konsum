@@ -9,10 +9,9 @@ import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
 
 const { version, description } = JSON.parse(
-  readFileSync(
-    new URL("../package.json", import.meta.url).pathname,
-    { endoding: "utf8" } 
-  )
+  readFileSync(new URL("../package.json", import.meta.url).pathname, {
+    endoding: "utf8"
+  })
 );
 
 program
@@ -27,7 +26,7 @@ program.command("start").action(async () => {
   const http = await prepareHttpServer(config, sd, database, meta);
 });
 
-program.command("list <category>").action(async (cName) => {
+program.command("list <category>").action(async cName => {
   const { database } = await prepareConfig();
 
   for await (const c of Category.entries(database, cName, cName)) {
@@ -37,7 +36,7 @@ program.command("list <category>").action(async (cName) => {
   }
 });
 
-program.command("backup [file]").action(async (output) => {
+program.command("backup [file]").action(async output => {
   const { database, meta } = await prepareConfig();
   await backup(
     database,
@@ -48,7 +47,7 @@ program.command("backup [file]").action(async (output) => {
   );
 });
 
-program.command("restore [file]").action(async (input) => {
+program.command("restore [file]").action(async input => {
   const { database } = await prepareConfig();
   await restore(
     database,
@@ -58,28 +57,28 @@ program.command("restore [file]").action(async (input) => {
   );
 });
 
+program
+  .command("insert <category> <value> [time]")
+  .action(async (cName, value, time) => {
+    const { database } = await prepareConfig();
 
-program.command("insert <category> <value> [time]").action(async (cName, value, time) => {
-  const { database } = await prepareConfig();
+    time = time === undefined ? Date.now() : new Date(time).valueOf();
 
-  time = time === undefined ? Date.now() : new Date(time).valueOf();
+    time = time / 1000;
 
-  time = time / 1000;
+    if (time < 941673600 || time > 2000000000) {
+      console.log("Time out of range");
+      return;
+    }
 
-  if (time < 941673600 || time > 2000000000) {
-    console.log("Time out of range");
-    return;
-  }
+    const c = await Category.entry(database, cName);
 
-  const c = await Category.entry(database, cName);
-
-  if(c) { 
-    await c.writeValue(database, value, time);
-  }
-  else {
-    console.log("No such category",cName);
-  }
-});
+    if (c) {
+      await c.writeValue(database, value, time);
+    } else {
+      console.log("No such category", cName);
+    }
+  });
 
 program.parse(process.argv);
 
