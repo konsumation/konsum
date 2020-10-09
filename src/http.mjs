@@ -194,14 +194,14 @@ export async function prepareHttpServer(config, sd, database, meta) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
-      const c = await Category.entry(database, ctx.params.category);
+      const category = await Category.entry(database, ctx.params.category);
 
       const values = ctx.request.body;
 
       for (const v of Array.isArray(values) ? values : [values]) {
         const time =
           v.time === undefined ? Date.now() : new Date(v.time).valueOf();
-        await c.writeValue(database, v.value, time / 1000);
+        await category.writeValue(database, v.value, time / 1000);
       }
 
       ctx.body = { message: "inserted" };
@@ -212,11 +212,26 @@ export async function prepareHttpServer(config, sd, database, meta) {
   router.addRoute("GET", "/category/:category/meters", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
     
-    const c = await Category.entry(database, ctx.params.category);
+    const category = await Category.entry(database, ctx.params.category);
 
     const ms = [];
 
-    for await (const m of c.meters(database)) {
+    for await (const m of category.meters(database)) {
+      ms.push(m.toJSON());
+    }
+
+    ctx.body = ms;
+    return next();
+  });
+
+  router.addRoute("GET", "/category/:category/notes", restricted, async (ctx, next) => {
+    setNoCacheHeaders(ctx);
+    
+    const category = await Category.entry(database, ctx.params.category);
+
+    const ms = [];
+
+    for await (const m of category.notes(database)) {
       ms.push(m.toJSON());
     }
 
