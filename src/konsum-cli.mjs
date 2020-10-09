@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import program from "commander";
-import { resolve } from "path";
 import { readFileSync, createWriteStream, createReadStream } from "fs";
 import { expand } from "config-expander";
 import { Category, backup, restore } from "konsum-db";
@@ -94,7 +93,7 @@ async function prepareConfig() {
   // some constants used while loading the configuration
   const constants = {
     basedir: configDir || process.cwd(), // where is the config file located
-    installdir: resolve(__dirname, ".."), // make references to the installdir possible
+    installdir: new URL(".", import.meta.url).pathname, // make references to the installdir possible
     statedir: process.env.STATE_DIRECTORY || process.cwd()
   };
 
