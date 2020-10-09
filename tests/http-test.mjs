@@ -3,7 +3,7 @@ import fs, { readFileSync } from "fs";
 import got from "got";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { Category } from "konsum-db";
+import { Category, Meter } from "konsum-db";
 
 import { prepareHttpServer } from "../src/http.mjs";
 import { prepareDatabase } from "../src/database.mjs";
@@ -92,6 +92,26 @@ test("update category", async t => {
   );
 
   t.is(response.statusCode, 200);
+});
+
+test("list category meters", async t => {
+  const c = new Category(`CAT1`, { unit: "kWh" });
+  await c.write(t.context.database);
+  const m1 = new Meter('M-1',c, { serial: '12345' });
+  await m1.write(t.context.database);
+  const m2 = new Meter('M-2',c, { serial: '12345' });
+  await m2.write(t.context.database);
+
+  const response = await got.get(
+    `http://localhost:${t.context.port}/category/CAT7/meters`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` },
+    }
+  );
+
+  t.is(response.statusCode, 200);
+  t.is(JSON.parse(response.body)[0].name, 'M-1');
+  t.is(JSON.parse(response.body)[1].name, 'M-2');
 });
 
 test("can insert + get values", async t => {

@@ -209,6 +209,21 @@ export async function prepareHttpServer(config, sd, database, meta) {
     }
   );
 
+  router.addRoute("GET", "/category/:category/meters", restricted, async (ctx, next) => {
+    setNoCacheHeaders(ctx);
+    
+    const c = await Category.entry(database, ctx.params.category);
+
+    const ms = [];
+
+    for await (const m of c.meters(database)) {
+      ms.push(m.toJSON());
+    }
+
+    ctx.body = ms;
+    return next();
+  });
+
   const server = app.listen(config.http.port, () => {
     console.log("listen on", server.address());
     sd.notify("READY=1\nSTATUS=running");
