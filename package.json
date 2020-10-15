@@ -44,11 +44,11 @@
     "@semantic-release/release-notes-generator": "^9.0.1",
     "ava": "^3.13.0",
     "builtin-modules": "^3.1.0",
-    "c8": "^7.3.3",
+    "c8": "^7.3.4",
     "documentation": "^13.0.2",
     "execa": "^4.0.3",
     "got": "^11.5.2",
-    "npm-pkgbuild": "^6.12.10",
+    "npm-pkgbuild": "^6.12.11",
     "semantic-release": "^17.2.1",
     "tmp": "^0.2.1"
   },
