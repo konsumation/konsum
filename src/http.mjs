@@ -72,7 +72,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
     ctx.response.set("content-type", "text/plain");
     ctx.response.set(
       "Content-Disposition",
-      'attachment; filename*="konsum_backup.txt"'
+      'attachment; filename="konsum_backup.txt"'
     );
     ctx.status = 200;
     ctx.respond = false;
