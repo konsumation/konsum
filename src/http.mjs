@@ -229,6 +229,55 @@ export async function prepareHttpServer(config, sd, database, meta) {
         return next();
       }
     );
+
+    router.addRoute(
+      "PUT",
+      `/category/:category/${type}`,
+      restricted,
+      async (ctx, next) => {
+        setNoCacheHeaders(ctx);
+
+        const category = await Category.entry(database, ctx.params.category);
+
+        // TODO add type
+        //category[type](database);
+
+        ctx.body = {};
+        return next();
+      }
+    );
+    router.addRoute(
+      "POST",
+      `/category/:category/${type}`,
+      restricted,
+      async (ctx, next) => {
+        setNoCacheHeaders(ctx);
+
+        const category = await Category.entry(database, ctx.params.category);
+
+        // TODO update type
+        //category[type](database);
+
+        ctx.body = {};
+        return next();
+      }
+    );
+    router.addRoute(
+      "DELETE",
+      `/category/:category/${type}`,
+      restricted,
+      async (ctx, next) => {
+        setNoCacheHeaders(ctx);
+
+        const category = await Category.entry(database, ctx.params.category);
+
+        // TODO delete type
+        //category[type](database);
+
+        ctx.body = {};
+        return next();
+      }
+    );
   }
 
   const server = app.listen(config.http.port, () => {
