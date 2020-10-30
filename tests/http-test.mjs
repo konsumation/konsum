@@ -1,6 +1,6 @@
 import test from "ava";
 import { readFileSync } from "fs";
-import { mkdir } from "fs/promises";
+import { mkdir, rmdir } from "fs/promises";
 import got from "got";
 import { Category, Meter, Note } from "konsum-db";
 
@@ -18,10 +18,11 @@ test.before(async t => {
 
   port++;
 
+  const file = new URL(`../build/db-${port}`, import.meta.url).pathname;
   const config = {
     version: "1.2.3",
     database: {
-      file: new URL(`../build/db-${port}`, import.meta.url).pathname
+      file
     },
     auth: {
       jwt: {
@@ -59,6 +60,7 @@ test.before(async t => {
 
   t.context.token = JSON.parse(response.body).access_token;
   t.context.database = database;
+  t.context.file = file;
   t.context.server = server;
   t.context.port = port;
 });
@@ -67,6 +69,7 @@ test.after.always(async t => {
   t.context.server.close();
   t.context.server.unref();
   await t.context.database.close();
+  await rmdir(t.context.file, { recursive: true });
 });
 
 test("get backup", async t => {
