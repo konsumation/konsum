@@ -2,7 +2,6 @@ import test from "ava";
 import { Socket } from "net";
 
 import { authenticate } from "../src/auth.mjs";
-import { defaultAuthConfig } from "../src/auth.mjs";
 
 async function authConfig(t) {
   const localConfig = {

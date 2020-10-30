@@ -12,7 +12,9 @@ const sd = { notify: () => {}, listeners: () => [] };
 let port = 3149;
 
 test.before(async t => {
-  await mkdir(new URL("../build", import.meta.url).pathname, { recursive: true });
+  await mkdir(new URL("../build", import.meta.url).pathname, {
+    recursive: true
+  });
 
   port++;
 
@@ -23,8 +25,12 @@ test.before(async t => {
     },
     auth: {
       jwt: {
-        public: readFileSync(new URL("../config/demo.rsa.pub", import.meta.url).pathname),
-        private: readFileSync(new URL("../config/demo.rsa", import.meta.url).pathname),
+        public: readFileSync(
+          new URL("../config/demo.rsa.pub", import.meta.url).pathname
+        ),
+        private: readFileSync(
+          new URL("../config/demo.rsa", import.meta.url).pathname
+        ),
         options: {
           algorithm: "RS256"
         }
@@ -136,7 +142,10 @@ test("list category notes", async t => {
 
   t.is(response.statusCode, 200);
 
-  function d(time) { const s = "0000000" + time; return s.substring(s.length-9); }
+  function d(time) {
+    const s = "0000000" + time;
+    return s.substring(s.length - 9);
+  }
 
   /*
   t.deepEqual(JSON.parse(response.body), [

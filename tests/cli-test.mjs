@@ -1,12 +1,12 @@
-import test from 'ava';
+import test from "ava";
 import execa from "execa";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
 
-const here = dirname(fileURLToPath(import.meta.url));
-
-test('cli version', async t => {
-  const p = await execa(join(here, '..', 'src', 'konsum-cli.mjs'), ['--config', join(here, '..', 'config'), '--version'], { cwd: join(here, '..', 'build') });
+test("cli version", async t => {
+  const p = await execa(
+    new URL("../src/konsum-cli.mjs", import.meta.url).pathname,
+    ["--config", new URL("../config", import.meta.url).pathname, "--version"],
+    { cwd: new URL("../build", import.meta.url).pathname }
+  );
 
   t.regex(p.stdout, /\d+/);
 });
