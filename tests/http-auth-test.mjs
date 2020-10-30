@@ -1,30 +1,28 @@
 import test from "ava";
-import fs, { readFileSync } from "fs";
+import { readFileSync } from "fs";
+import { mkdir } from "fs/promises";
 import got from "got";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
 
 import { prepareHttpServer } from "../src/http.mjs";
 
-const here = dirname(fileURLToPath(import.meta.url));
 const sd = { notify: () => {}, listeners: () => [] };
 
 let port = 3169;
 
 test.before(async t => {
-  await fs.promises.mkdir(join(here, "..", "build"), { recursive: true });
+  await mkdir(new URL("../build", import.meta.url).pathname, { recursive: true });
 
   port++;
 
   const config = {
     version: "1.2.3",
     database: {
-      file: join(here, "..", "build", `db-${port}`)
+      file: new URL(`../build/db-${port}`, import.meta.url).pathname
     },
     auth: {
       jwt: {
-        public: readFileSync(join(here, "..", "config", "demo.rsa.pub")),
-        private: readFileSync(join(here, "..", "config", "demo.rsa")),
+        public: readFileSync(new URL("../config/demo.rsa.pub", import.meta.url).pathname),
+        private: readFileSync(new URL("../config/demo.rsa", import.meta.url).pathname),
         options: {
           algorithm: "RS256"
         }
@@ -43,6 +41,14 @@ test.before(async t => {
 
   const { server } = await prepareHttpServer(config, sd);
 
+  let response = await got.post(`http://localhost:${port}/authenticate`, {
+    json: {
+      username: "admin",
+      password: "start123"
+    }
+  });
+
+  t.context.token = JSON.parse(response.body).access_token;
   t.context.server = server;
   t.context.port = port;
 });
