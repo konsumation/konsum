@@ -107,7 +107,7 @@ test("list category meters", async t => {
   await c.write(t.context.database);
   const m1 = new Meter("M-1", c, { serial: "12345" });
   await m1.write(t.context.database);
-  const m2 = new Meter("M-2", c, { serial: "12345" });
+  const m2 = new Meter("M-2", c, { serial: "123456" });
   await m2.write(t.context.database);
 
   const response = await got.get(
@@ -121,7 +121,7 @@ test("list category meters", async t => {
 
   t.deepEqual(JSON.parse(response.body), [
     { name: "M-1", fractionalDigits: 2, serial: "12345", unit: "kWh" },
-    { name: "M-2", fractionalDigits: 2, serial: "12345", unit: "kWh" }
+    { name: "M-2", fractionalDigits: 2, serial: "123456", unit: "kWh" }
   ]);
 });
 
@@ -133,7 +133,7 @@ test("list category notes", async t => {
   const time = Date.now();
   const n1 = new Note(time - 1, c, { description: "a text" });
   await n1.write(t.context.database);
-  const n2 = new Meter(time, c, { description: "a text" });
+  const n2 = new Note(time, c, { description: "a text" });
   await n2.write(t.context.database);
 
   const response = await got.get(
