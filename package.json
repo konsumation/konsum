@@ -21,7 +21,10 @@
     "start": "npm run prepare && node bin/konsum --config=config start",
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 2m tests/*.mjs",
-    "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m tests/*.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp"
+    "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m tests/*.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
+    "docs": "documentation readme ./src/konsum-cli.mjs --section=API",
+    "lint": "npm run lint:docs",
+    "lint:docs": "documentation lint ./src/konsum-cli.mjs"
   },
   "dependencies": {
     "commander": "^6.2.0",
@@ -43,7 +46,7 @@
     "ava": "^3.13.0",
     "builtin-modules": "^3.1.0",
     "c8": "^7.3.5",
-    "documentation": "^13.0.2",
+    "documentation": "github:arlac77/documentation",
     "execa": "^4.1.0",
     "got": "^11.5.2",
     "npm-pkgbuild": "^6.12.13",
@@ -107,9 +110,10 @@
   },
   "template": {
     "inheritFrom": [
-      "arlac77/template-node-app",
+      "arlac77/template-documentation",
       "arlac77/template-github",
       "arlac77/template-nginx",
+      "arlac77/template-node-app",
       "arlac77/template-pacman",
       "arlac77/template-systemd"
     ]
