@@ -2,7 +2,7 @@
 import program from "commander";
 import { readFileSync, createWriteStream, createReadStream } from "fs";
 import { expand } from "config-expander";
-import { Category, backup, restore } from "konsum-db";
+import { Category } from "konsum-db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
@@ -37,9 +37,8 @@ program.command("list <category>").action(async cName => {
 
 program.command("backup [file]").action(async output => {
   const { database, meta } = await prepareConfig();
-  await backup(
+  await meta.backup(
     database,
-    meta,
     output === undefined
       ? process.stdout
       : createWriteStream(output, { encoding: "utf8" })
@@ -47,8 +46,8 @@ program.command("backup [file]").action(async output => {
 });
 
 program.command("restore [file]").action(async input => {
-  const { database } = await prepareConfig();
-  await restore(
+  const { database, meta } = await prepareConfig();
+  await meta.restore(
     database,
     input === undefined
       ? process.stdin

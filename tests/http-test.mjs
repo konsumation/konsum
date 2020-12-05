@@ -2,7 +2,7 @@ import test from "ava";
 import { readFileSync } from "fs";
 import { mkdir, rmdir } from "fs/promises";
 import got from "got";
-import { Category, Meter, Note } from "konsum-db";
+import { Database, Category, Meter, Note } from "konsum-db";
 
 import { prepareHttpServer } from "../src/http.mjs";
 import { prepareDatabase } from "../src/database.mjs";
@@ -102,8 +102,11 @@ test("update category", async t => {
 });
 
 test("list category meters", async t => {
+  const master = new Database("unknown");
+
   const catName = "CAT1";
-  const c = new Category(catName, { unit: "kWh" });
+
+  const c = new Category(catName, master, { unit: "kWh" });
   await c.write(t.context.database);
   const m1 = new Meter("M-1", c, { serial: "12345" });
   await m1.write(t.context.database);
@@ -120,14 +123,16 @@ test("list category meters", async t => {
   t.is(response.statusCode, 200);
 
   t.deepEqual(JSON.parse(response.body), [
-    { name: "M-1", fractionalDigits: 2, serial: "12345", unit: "kWh" },
+    { name: "M-1", fractionalDigits: 2, serial: "12345" , unit: "kWh" },
     { name: "M-2", fractionalDigits: 2, serial: "123456", unit: "kWh" }
   ]);
 });
 
 test("list category notes", async t => {
   const catName = "CAT1";
-  const c = new Category(catName, { unit: "kWh" });
+  const master = new Database("unknown");
+
+  const c = new Category(catName, master, { unit: "kWh" });
   await c.write(t.context.database);
 
   const time = Date.now();

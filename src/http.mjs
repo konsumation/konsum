@@ -4,7 +4,7 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
-import { Category, backup } from "konsum-db";
+import { Category } from "konsum-db";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
@@ -63,7 +63,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
 
       ctx.body = `backup to ${name}...`;
 
-      backup(database, meta, createWriteStream(name, { encoding: "utf8" }));
+      meta.backup(database, createWriteStream(name, { encoding: "utf8" }));
       return next();
     }
   );
@@ -76,7 +76,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
     );
     ctx.status = 200;
     ctx.respond = false;
-    await backup(database, meta, ctx.res);
+    await meta.backup(database, ctx.res);
     ctx.res.end();
     return next();
   });
@@ -142,7 +142,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
-      const category = new Category(ctx.params.category, ctx.request.body);
+      const category = new Category(ctx.params.category, meta, ctx.request.body);
       await category.write(database);
       ctx.body = {};
       return next();
