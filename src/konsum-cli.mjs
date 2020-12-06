@@ -19,26 +19,25 @@ program
   .option("-c, --config <directory>", "use config from directory");
 
 program.command("start").action(async () => {
-  const { sd, config, database, meta } = await prepareConfig();
+  const { sd, config, master } = await prepareConfig();
 
   // prepare the web-server with the config and the database
-  const http = await prepareHttpServer(config, sd, database, meta);
+  const http = await prepareHttpServer(config, sd, master);
 });
 
 program.command("list <category>").action(async cName => {
-  const { database } = await prepareConfig();
+  const { master } = await prepareConfig();
 
-  for await (const c of Category.entries(database, cName, cName)) {
-    for await (const { value, time } of c.values(database)) {
+  for await (const c of Category.entries(master.db, cName, cName)) {
+    for await (const { value, time } of c.values(master.db)) {
       console.log(c.name, new Date(time * 1000), value);
     }
   }
 });
 
 program.command("backup [file]").action(async output => {
-  const { database, meta } = await prepareConfig();
-  await meta.backup(
-    database,
+  const { master } = await prepareConfig();
+  await master.backup(
     output === undefined
       ? process.stdout
       : createWriteStream(output, { encoding: "utf8" })
@@ -46,9 +45,8 @@ program.command("backup [file]").action(async output => {
 });
 
 program.command("restore [file]").action(async input => {
-  const { database, meta } = await prepareConfig();
-  await meta.restore(
-    database,
+  const { master } = await prepareConfig();
+  await master.restore(
     input === undefined
       ? process.stdin
       : createReadStream(input, { encoding: "utf8" })
@@ -58,7 +56,7 @@ program.command("restore [file]").action(async input => {
 program
   .command("insert <category> <value> [time]")
   .action(async (cName, value, time) => {
-    const { database } = await prepareConfig();
+    const { master } = await prepareConfig();
 
     time = time === undefined ? Date.now() : new Date(time).valueOf();
 
@@ -69,10 +67,10 @@ program
       return;
     }
 
-    const c = await Category.entry(database, cName);
+    const c = await Category.entry(master.db, cName);
 
     if (c) {
-      await c.writeValue(database, value, time);
+      await c.writeValue(master.db, value, time);
     } else {
       console.log("No such category", cName);
     }

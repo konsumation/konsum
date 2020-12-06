@@ -1,6 +1,6 @@
 import levelup from "levelup";
 import leveldown from "leveldown";
-import { Database } from "konsum-db";
+import { Master } from "konsum-db";
 
 export const defaultDatabaseConfig = {
   database: {
@@ -9,8 +9,6 @@ export const defaultDatabaseConfig = {
 };
 
 export async function prepareDatabase(config) {
-  const database = await levelup(leveldown(config.database.file));
-  const meta = await Database.initialize(database);
-
-  return { database, meta };
+  const master = await Master.initialize(await levelup(leveldown(config.database.file)));
+  return { master };
 }

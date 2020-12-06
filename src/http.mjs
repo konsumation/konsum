@@ -23,7 +23,7 @@ function isTrue(v) {
   return v && v !== "false" && v != "0";
 }
 
-export async function prepareHttpServer(config, sd, database, meta) {
+export async function prepareHttpServer(config, sd, master) {
   const app = new Koa();
 
   const router = Router();
@@ -63,7 +63,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
 
       ctx.body = `backup to ${name}...`;
 
-      meta.backup(database, createWriteStream(name, { encoding: "utf8" }));
+      master.backup(createWriteStream(name, { encoding: "utf8" }));
       return next();
     }
   );
@@ -76,7 +76,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
     );
     ctx.status = 200;
     ctx.respond = false;
-    await meta.backup(database, ctx.res);
+    await master.backup(ctx.res);
     ctx.res.end();
     return next();
   });
@@ -128,7 +128,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
     setNoCacheHeaders(ctx);
     const cs = [];
 
-    for await (const c of Category.entries(database)) {
+    for await (const c of Category.entries(master.db)) {
       cs.push(c.toJSON());
     }
 
@@ -142,8 +142,8 @@ export async function prepareHttpServer(config, sd, database, meta) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
-      const category = new Category(ctx.params.category, meta, ctx.request.body);
-      await category.write(database);
+      const category = new Category(ctx.params.category, master, ctx.request.body);
+      await category.write(master.db);
       ctx.body = {};
       return next();
     }
@@ -160,11 +160,11 @@ export async function prepareHttpServer(config, sd, database, meta) {
       const limit =
         ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
       const options = { reverse, limit };
-      const c = await Category.entry(database, ctx.params.category);
+      const c = await Category.entry(master.db, ctx.params.category);
 
       switch (ctx.accepts("json", "text")) {
         case "json":
-          const it = c.values(database, options);
+          const it = c.values(master.db, options);
 
           const values = [];
 
@@ -177,7 +177,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
 
         case "text":
           ctx.response.set("content-type", "text/plain");
-          ctx.body = c.readStream(database, options);
+          ctx.body = c.readStream(master.db, options);
           break;
 
         default:
@@ -194,14 +194,14 @@ export async function prepareHttpServer(config, sd, database, meta) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
-      const category = await Category.entry(database, ctx.params.category);
+      const category = await Category.entry(master.db, ctx.params.category);
 
       const values = ctx.request.body;
 
       for (const v of Array.isArray(values) ? values : [values]) {
         const time =
           v.time === undefined ? Date.now() : new Date(v.time).valueOf();
-        await category.writeValue(database, v.value, time / 1000);
+        await category.writeValue(master.db, v.value, time / 1000);
       }
 
       ctx.body = { message: "inserted" };
@@ -217,11 +217,11 @@ export async function prepareHttpServer(config, sd, database, meta) {
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(database, ctx.params.category);
+        const category = await Category.entry(master.db, ctx.params.category);
 
         const details = [];
 
-        for await (const detail of category[type](database)) {
+        for await (const detail of category[type](master.db)) {
           details.push(detail.toJSON());
         }
 
@@ -237,7 +237,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(database, ctx.params.category);
+        const category = await Category.entry(master.db, ctx.params.category);
 
         // TODO add type
         //category[type](database);
@@ -253,7 +253,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(database, ctx.params.category);
+        const category = await Category.entry(master.db, ctx.params.category);
 
         // TODO update type
         //category[type](database);
@@ -269,7 +269,7 @@ export async function prepareHttpServer(config, sd, database, meta) {
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(database, ctx.params.category);
+        const category = await Category.entry(master.db, ctx.params.category);
 
         // TODO delete type
         //category[type](database);
