@@ -50,7 +50,7 @@
     "documentation": "github:arlac77/documentation",
     "execa": "^5.0.0",
     "got": "^11.8.0",
-    "npm-pkgbuild": "^6.12.13",
+    "npm-pkgbuild": "^6.12.16",
     "semantic-release": "^17.3.0",
     "tmp": "^0.2.1"
   },
