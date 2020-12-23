@@ -50,7 +50,7 @@
     "documentation": "github:arlac77/documentation",
     "execa": "^5.0.0",
     "got": "^11.8.1",
-    "npm-pkgbuild": "^6.12.16",
+    "npm-pkgbuild": "^6.12.18",
     "semantic-release": "^17.3.0",
     "tmp": "^0.2.1"
   },
@@ -58,7 +58,7 @@
     "sd-daemon": "^1.0.2"
   },
   "engines": {
-    "node": ">=14.15.1"
+    "node": ">=14.15.3"
   },
   "repository": {
     "type": "git",
@@ -93,7 +93,7 @@
       "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
     },
     "depends": {
-      "systemd": ">=247.1",
+      "systemd": ">=247.2",
       "nginx-mainline": ">=1.19.3"
     }
   },
