@@ -116,6 +116,7 @@
       "arlac77/template-node-app",
       "arlac77/template-pacman",
       "arlac77/template-systemd",
+      "arlac77/template-vscode",
       "konsumation/template"
     ]
   }
