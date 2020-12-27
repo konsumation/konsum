@@ -62,12 +62,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/k0nsti/konsum.git"
+    "url": "https://github.com/konsumation/konsum.git"
   },
   "bugs": {
-    "url": "https://github.com/k0nsti/konsum/issues"
+    "url": "https://github.com/konsumation/konsum/issues"
   },
-  "homepage": "https://github.com/k0nsti/konsum#readme",
+  "homepage": "https://github.com/konsumation/konsum#readme",
   "config": {
     "base": "/services/${name}/api",
     "socket": "/run/${name}/http/socket"
