@@ -2,17 +2,6 @@ import ldapts from "ldapts";
 
 export const defaultAuthConfig = {
   auth: {
-    ldap: {
-      url: "ldap://ldap.mf.de",
-      bindDN: "uid={{username}},ou=accounts,dc=mf,dc=de",
-      entitlements: {
-        base: "ou=groups,dc=mf,dc=de",
-        attribute: "cn",
-        scope: "sub",
-        filter:
-          "(&(objectclass=groupOfUniqueNames)(uniqueMember=uid={{username}},ou=accounts,dc=mf,dc=de))"
-      }
-    },
     jwt: {
       options: {
         algorithm: "RS256",
