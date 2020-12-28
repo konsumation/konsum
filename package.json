@@ -10,6 +10,9 @@
     {
       "name": "Markus Felten",
       "email": "markus.felten@gmx.de"
+    },
+    {
+      "name": "Konstantin Karman"
     }
   ],
   "license": "BSD-2-Clause",
@@ -18,7 +21,7 @@
   },
   "scripts": {
     "package": "npm-pkgbuild --npm-dist --npm-modules pkgbuild pacman makepkg",
-    "start": "node bin/konsum --config=config start",
+    "start": "node src/konsum-cli.mjs --config=config start",
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 2m tests/*.mjs",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m tests/*.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
