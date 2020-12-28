@@ -38,3 +38,13 @@ dn: cn=konsum,ou=groups,dc=example,dc=com
 cn: konsum
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user1,ou=accounts,dc=example,dc=com
+
+dn: cn=service1,ou=groups,dc=example,dc=com
+cn: service1
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user1,ou=accounts,dc=example,dc=com
+
+dn: cn=service2,ou=groups,dc=example,dc=com
+cn: service2
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user1,ou=accounts,dc=example,dc=com
