@@ -3,11 +3,13 @@ import { Socket } from "net";
 
 import { authenticate } from "../src/auth.mjs";
 
+const ldapPort = 389;
+
 async function authConfig(t) {
   const localConfig = {
     auth: {
       ldap: {
-        url: "ldap://localhost:3389",
+        url: `ldap://localhost:${ldapPort}`,
         bindDN: "uid={{username}},ou=accounts,dc=example,dc=com",
         entitlements: {
           base: "ou=groups,dc=example,dc=com",
@@ -44,7 +46,7 @@ async function authConfig(t) {
     t.log(error);
   });
 
-  socket.connect(3389, () => {
+  socket.connect(ldapPort, () => {
     t.log("connected to localhost");
     config = localConfig;
   });
