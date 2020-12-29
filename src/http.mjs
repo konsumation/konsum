@@ -150,6 +150,16 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   router.addRoute(
+    "DELETE",
+    "/category/:category",
+    restricted,
+    async (ctx, next) => {
+      // TODO
+      return next();
+    }
+  );
+
+  router.addRoute(
     "GET",
     "/category/:category/values",
     restricted,
