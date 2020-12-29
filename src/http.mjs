@@ -142,7 +142,11 @@ export async function prepareHttpServer(config, sd, master) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
-      const category = new Category(ctx.params.category, master, ctx.request.body);
+      const category = new Category(
+        ctx.params.category,
+        master,
+        ctx.request.body
+      );
       await category.write(master.db);
       ctx.body = {};
       return next();
@@ -154,7 +158,12 @@ export async function prepareHttpServer(config, sd, master) {
     "/category/:category",
     restricted,
     async (ctx, next) => {
-      // TODO
+      const c = await Category.entry(master.db, ctx.params.category);
+      if (c) {
+        await c.delete(master.db);
+      } else {
+        ctx.throw(404, "No such category");
+      }
       return next();
     }
   );

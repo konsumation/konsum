@@ -101,6 +101,20 @@ test("update category", async t => {
   t.is(response.statusCode, 200);
 });
 
+test("delete category unknown", async t => {
+  try {
+    const response = await got.delete(
+      `http://localhost:${t.context.port}/category/CAT7777`,
+      {
+        headers: { Authorization: `Bearer ${t.context.token}` }
+      }
+    );
+    t.is(response.statusCode, 404);
+  } catch (e) {
+    t.is(e.message, "Response code 404 (Not Found)");
+  }
+});
+
 test("list category meters", async t => {
   const master = t.context.master;
   const catName = "CAT1";
@@ -122,7 +136,7 @@ test("list category meters", async t => {
   t.is(response.statusCode, 200);
 
   t.deepEqual(JSON.parse(response.body), [
-    { name: "M-1", fractionalDigits: 2, serial: "12345" , unit: "kWh" },
+    { name: "M-1", fractionalDigits: 2, serial: "12345", unit: "kWh" },
     { name: "M-2", fractionalDigits: 2, serial: "123456", unit: "kWh" }
   ]);
 });
@@ -189,7 +203,7 @@ test("can insert + get values", async t => {
       }
     }
   );
-  t.log(response.body);
+  //t.log(response.body);
   t.regex(response.body, /\d+ 77.34/);
   t.regex(response.body, /\d+ 78/);
 
