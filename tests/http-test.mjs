@@ -115,6 +115,27 @@ test("delete category unknown", async t => {
   }
 });
 
+test("delete category", async t => {
+  let response = await got.put(
+    `http://localhost:${t.context.port}/category/CAT7`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` },
+      json: {
+        description: "a new Unit",
+        unit: "m3"
+      }
+    }
+  );
+
+  response = await got.delete(
+    `http://localhost:${t.context.port}/category/CAT7`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` }
+    }
+  );
+  t.is(response.statusCode, 200);
+});
+
 test("list category meters", async t => {
   const master = t.context.master;
   const catName = "CAT1";

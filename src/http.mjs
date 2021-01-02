@@ -148,7 +148,7 @@ export async function prepareHttpServer(config, sd, master) {
         ctx.request.body
       );
       await category.write(master.db);
-      ctx.body = {};
+      ctx.body = { message: "updated" };
       return next();
     }
   );
@@ -161,6 +161,7 @@ export async function prepareHttpServer(config, sd, master) {
       const c = await Category.entry(master.db, ctx.params.category);
       if (c) {
         await c.delete(master.db);
+        ctx.body = { message: "deleted" };
       } else {
         ctx.throw(404, "No such category");
       }
