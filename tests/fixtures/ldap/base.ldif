@@ -26,6 +26,7 @@ objectClass: person
 objectClass: top
 cn: user2
 sn: user2
+userPassword:    {SSHA}AIzygLSXlArhAMzddUriXQxf7UlkqopP
 
 
 dn: ou=groups,dc=example,dc=com
@@ -38,3 +39,14 @@ dn: cn=konsum,ou=groups,dc=example,dc=com
 cn: konsum
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user1,ou=accounts,dc=example,dc=com
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.delete,ou=groups,dc=example,dc=com
+cn: konsum.delete
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.admin,ou=groups,dc=example,dc=com
+cn: konsum.admin
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
