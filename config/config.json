@@ -4,9 +4,13 @@
   },
   "auth": {
     "users": {
-      "admin": {
+      "user1": {
         "password": "start123",
         "entitlements": ["konsum"]
+      },
+      "admin": {
+        "password": "start123",
+        "entitlements": ["konsum","konsum.delete","konsum.admin"]
       }
     },
     "jwt": {
