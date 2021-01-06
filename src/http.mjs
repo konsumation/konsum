@@ -25,12 +25,13 @@ function isTrue(v) {
 
 export async function prepareHttpServer(config, sd, master) {
   const app = new Koa();
-
   const router = Router();
 
   // middleware to restrict access to token holding requests
   const restricted = KoaJWT({
-    secret: config.auth.jwt.public
+    secret: config.auth.jwt.public,
+    audience: config.auth.jwt.audience,
+    debug: true
   });
 
   function shutdown() {
@@ -105,6 +106,9 @@ export async function prepareHttpServer(config, sd, master) {
       const claims = {
         entitlements: [...entitlements].join(",")
       };
+      if(config.auth.jwt.audience) {
+        claims.audience = config.auth.jwt.audience;
+      }
 
       const access_token = jsonwebtoken.sign(
         claims,

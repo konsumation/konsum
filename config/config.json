@@ -10,12 +10,13 @@
       },
       "admin": {
         "password": "start123",
-        "entitlements": ["konsum","konsum.delete","konsum.admin"]
+        "entitlements": ["konsum", "konsum.delete", "konsum.admin"]
       }
     },
     "jwt": {
       "options": {
-        "expiresIn": "1h"
+        "expiresIn": "1h",
+        "audience": "konsum"
       },
       "public": "${document('demo.rsa.pub')}",
       "private": "${document('demo.rsa')}"
