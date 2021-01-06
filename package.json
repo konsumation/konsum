@@ -13,6 +13,9 @@
     },
     {
       "name": "Konstantin Karman"
+    },
+    {
+      "name": "Konstantin Karpman"
     }
   ],
   "license": "BSD-2-Clause",
@@ -62,7 +65,7 @@
     "sd-daemon": "^1.0.2"
   },
   "engines": {
-    "node": ">=14.15.3"
+    "node": ">=14.15.4"
   },
   "repository": {
     "type": "git",
