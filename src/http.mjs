@@ -19,6 +19,18 @@ function setNoCacheHeaders(ctx) {
   ctx.set("Expires", 0);
 }
 
+function enshureEntitlement(ctx, entitlement) {
+  const user = ctx.state.user;
+
+  if (user) {
+    if (user.entitlements.indexOf(entitlement) >= 0) {
+      return true;
+    }
+  }
+
+  ctx.throw(403, `missing ${entitlement}`);
+}
+
 function isTrue(v) {
   return v && v !== "false" && v != "0";
 }
@@ -30,8 +42,7 @@ export async function prepareHttpServer(config, sd, master) {
   // middleware to restrict access to token holding requests
   const restricted = KoaJWT({
     secret: config.auth.jwt.public,
-    audience: config.auth.jwt.audience,
-    debug: true
+    audience: config.auth.jwt.audience
   });
 
   function shutdown() {
@@ -70,6 +81,8 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   router.addRoute("GET", "/admin/backup", restricted, async (ctx, next) => {
+    enshureEntitlement(ctx, "konsum.admin.backup");
+
     ctx.response.set("content-type", "text/plain");
     ctx.response.set(
       "Content-Disposition",
@@ -146,6 +159,8 @@ export async function prepareHttpServer(config, sd, master) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
+      enshureEntitlement(ctx, "konsum.category.add");
+
       const category = new Category(
         ctx.params.category,
         master,
@@ -162,6 +177,8 @@ export async function prepareHttpServer(config, sd, master) {
     "/category/:category",
     restricted,
     async (ctx, next) => {
+      enshureEntitlement(ctx, "konsum.category.delete");
+
       const c = await Category.entry(master.db, ctx.params.category);
       if (c) {
         await c.delete(master.db);
@@ -263,6 +280,7 @@ export async function prepareHttpServer(config, sd, master) {
       restricted,
       BodyParser(),
       async (ctx, next) => {
+        enshureEntitlement(ctx, `konsum.${type.name}.add`);
         setNoCacheHeaders(ctx);
 
         const category = await Category.entry(master.db, ctx.params.category);
@@ -282,6 +300,7 @@ export async function prepareHttpServer(config, sd, master) {
       restricted,
       BodyParser(),
       async (ctx, next) => {
+        enshureEntitlement(ctx, `konsum.${type.name}.modify`);
         setNoCacheHeaders(ctx);
 
         const category = await Category.entry(master.db, ctx.params.category);
@@ -298,6 +317,7 @@ export async function prepareHttpServer(config, sd, master) {
       `/category/:category/${type.name}`,
       restricted,
       async (ctx, next) => {
+        enshureEntitlement(ctx, `konsum.${type.name}.delete`);
         setNoCacheHeaders(ctx);
 
         const category = await Category.entry(master.db, ctx.params.category);

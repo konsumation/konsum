@@ -6,11 +6,22 @@
     "users": {
       "user1": {
         "password": "start123",
-        "entitlements": ["konsum"]
+        "entitlements": [
+          "konsum",
+          "konsum.category.add",
+          "konsum.category.update",
+          "konsum.category.delete",
+          "konsum.meter.add",
+          "konsum.meter.update",
+          "konsum.meter.delete",
+          "konsum.note.add",
+          "konsum.note.update",
+          "konsum.note.delete"
+        ]
       },
       "admin": {
         "password": "start123",
-        "entitlements": ["konsum", "konsum.delete", "konsum.admin"]
+        "entitlements": ["konsum", "konsum.admin.backup"]
       }
     },
     "jwt": {

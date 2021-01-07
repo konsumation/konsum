@@ -39,7 +39,19 @@ test.before(async t => {
       users: {
         admin: {
           password: "start123",
-          entitlements: ["konsum"]
+          entitlements: [
+            "konsum",
+            "konsum.admin.backup",
+            "konsum.category.add",
+            "konsum.category.update",
+            "konsum.category.delete",
+            "konsum.meter.add",
+            "konsum.meter.update",
+            "konsum.meter.delete",
+            "konsum.note.add",
+            "konsum.note.update",
+            "konsum.note.delete"
+          ]
         }
       }
     },

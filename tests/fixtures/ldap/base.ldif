@@ -41,12 +41,52 @@ objectclass: groupOfUniqueNames
 uniqueMember: uid=user1,ou=accounts,dc=example,dc=com
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
-dn: cn=konsum.delete,ou=groups,dc=example,dc=com
-cn: konsum.delete
+dn: cn=konsum.category.add,ou=groups,dc=example,dc=com
+cn: konsum.category.add
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
-dn: cn=konsum.admin,ou=groups,dc=example,dc=com
-cn: konsum.admin
+dn: cn=konsum.category.update,ou=groups,dc=example,dc=com
+cn: konsum.category.update
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.category.delete,ou=groups,dc=example,dc=com
+cn: konsum.category.delete
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.meter.add,ou=groups,dc=example,dc=com
+cn: konsum.meter.add
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.meter.update,ou=groups,dc=example,dc=com
+cn: konsum.meter.update
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.meter.delete,ou=groups,dc=example,dc=com
+cn: konsum.meter.delete
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.note.add,ou=groups,dc=example,dc=com
+cn: konsum.note.add
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.note.update,ou=groups,dc=example,dc=com
+cn: konsum.note.update
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.note.delete,ou=groups,dc=example,dc=com
+cn: konsum.note.delete
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.admin.backup,ou=groups,dc=example,dc=com
+cn: konsum.admin.backup
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
