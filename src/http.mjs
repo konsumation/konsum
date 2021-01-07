@@ -117,6 +117,7 @@ export async function prepareHttpServer(config, sd, master) {
 
     if (entitlements.has("konsum")) {
       const claims = {
+        name: q.username,
         entitlements: [...entitlements].join(",")
       };
       if (config.auth.jwt.audience) {
