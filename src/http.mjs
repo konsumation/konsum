@@ -106,7 +106,7 @@ export async function prepareHttpServer(config, sd, master) {
       const claims = {
         entitlements: [...entitlements].join(",")
       };
-      if(config.auth.jwt.audience) {
+      if (config.auth.jwt.audience) {
         claims.audience = config.auth.jwt.audience;
       }
 
@@ -234,8 +234,9 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   for (const type of [
-    {name: "meter", accessor: "meters", factory: Meter},
-    {name: "note", accessor: "notes", factory: Note}]) {
+    { name: "meter", accessor: "meters", factory: Meter },
+    { name: "note", accessor: "notes", factory: Note }
+  ]) {
     router.addRoute(
       "GET",
       `/category/:category/${type.name}`,
@@ -260,6 +261,7 @@ export async function prepareHttpServer(config, sd, master) {
       "PUT",
       `/category/:category/${type.name}`,
       restricted,
+      BodyParser(),
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
@@ -267,7 +269,7 @@ export async function prepareHttpServer(config, sd, master) {
         const body = ctx.request.body;
         const name = body.name;
         delete body.name;
-        const t = new type.factory(name, c, body);
+        const t = new type.factory(name, category, body);
         await t.write(master.db);
 
         ctx.body = { message: "inserted" };
@@ -278,6 +280,7 @@ export async function prepareHttpServer(config, sd, master) {
       "POST",
       `/category/:category/${type.name}`,
       restricted,
+      BodyParser(),
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
 

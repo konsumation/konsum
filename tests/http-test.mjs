@@ -162,6 +162,42 @@ test("list category meters", async t => {
   ]);
 });
 
+test("insert category meters", async t => {
+  const master = t.context.master;
+  const catName = "CAT2";
+
+  const c = new Category(catName, master, { unit: "kWh" });
+  await c.write(master.db);
+
+  let response = await got.put(
+    `http://localhost:${t.context.port}/category/${catName}/meter`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` },
+      json: {
+        name: "M-3",
+        fractionalDigits: 2,
+        serial: "123456",
+        unit: "kWh"
+      }
+    }
+  );
+
+  t.is(response.statusCode, 200);
+
+  response = await got.get(
+    `http://localhost:${t.context.port}/category/${catName}/meter`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` }
+    }
+  );
+
+  t.is(response.statusCode, 200);
+
+  t.deepEqual(JSON.parse(response.body), [
+    { name: "M-3", fractionalDigits: 2, serial: "123456", unit: "kWh" }
+  ]);
+});
+
 test("list category notes", async t => {
   const catName = "CAT1";
   const master = t.context.master;
