@@ -4,7 +4,7 @@ import jsonwebtoken from "jsonwebtoken";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
-import { Category } from "konsum-db";
+import { Category, Meter, Note } from "konsum-db";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
@@ -233,10 +233,12 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
-  for (const type of ["meters", "notes"]) {
+  for (const type of [
+    {name: "meter", accessor: "meters", factory: Meter},
+    {name: "note", accessor: "notes", factory: Note}]) {
     router.addRoute(
       "GET",
-      `/category/:category/${type}`,
+      `/category/:category/${type.name}`,
       restricted,
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
@@ -245,7 +247,7 @@ export async function prepareHttpServer(config, sd, master) {
 
         const details = [];
 
-        for await (const detail of category[type](master.db)) {
+        for await (const detail of category[type.accessor](master.db)) {
           details.push(detail.toJSON());
         }
 
@@ -256,23 +258,25 @@ export async function prepareHttpServer(config, sd, master) {
 
     router.addRoute(
       "PUT",
-      `/category/:category/${type}`,
+      `/category/:category/${type.name}`,
       restricted,
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
         const category = await Category.entry(master.db, ctx.params.category);
+        const body = ctx.request.body;
+        const name = body.name;
+        delete body.name;
+        const t = new type.factory(name, c, body);
+        await t.write(master.db);
 
-        // TODO add type
-        //category[type](database);
-
-        ctx.body = {};
+        ctx.body = { message: "inserted" };
         return next();
       }
     );
     router.addRoute(
       "POST",
-      `/category/:category/${type}`,
+      `/category/:category/${type.name}`,
       restricted,
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
@@ -288,7 +292,7 @@ export async function prepareHttpServer(config, sd, master) {
     );
     router.addRoute(
       "DELETE",
-      `/category/:category/${type}`,
+      `/category/:category/${type.name}`,
       restricted,
       async (ctx, next) => {
         setNoCacheHeaders(ctx);

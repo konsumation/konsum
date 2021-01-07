@@ -148,7 +148,7 @@ test("list category meters", async t => {
   await m2.write(master.db);
 
   const response = await got.get(
-    `http://localhost:${t.context.port}/category/${catName}/meters`,
+    `http://localhost:${t.context.port}/category/${catName}/meter`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
@@ -176,7 +176,7 @@ test("list category notes", async t => {
   await n2.write(master.db);
 
   const response = await got.get(
-    `http://localhost:${t.context.port}/category/${catName}/notes`,
+    `http://localhost:${t.context.port}/category/${catName}/note`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
