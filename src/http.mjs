@@ -251,6 +251,20 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  router.addRoute(
+    "DELETE",
+    "/category/:category/delete",
+    restricted,
+    BodyParser(),
+    async (ctx, next) => {
+      const category = await Category.entry(master.db, ctx.params.category);
+      const body = ctx.request.body;
+      await category.deleteValue(master.db, body.key);
+      ctx.body = { message: "deleted" };
+      return next();
+    }
+  );
+
   for (const type of [
     { name: "meter", accessor: "meters", factory: Meter },
     { name: "note", accessor: "notes", factory: Note }

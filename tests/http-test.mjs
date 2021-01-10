@@ -288,3 +288,45 @@ test("can insert + get values", async t => {
 
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
+
+test("can insert + can delete", async (t) => {
+  const master = t.context.master;
+
+  const c = new Category(`CAT2`, { unit: "kWh" });
+  await c.write(master.db);
+  const now = Date.now();
+  await c.writeValue(master.db, 77.34, now);
+
+  let response = await got.get(
+    `http://localhost:${t.context.port}/category/CAT2/values`,
+    {
+      headers: {
+        Accept: "text/plain",
+        Authorization: `Bearer ${t.context.token}`
+      }
+    }
+  );
+  //t.log(response.body);
+  t.regex(response.body, /\d+ 77.34/);
+  response = await got.get(
+    `http://localhost:${t.context.port}/category/CAT2/values`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${t.context.token}`
+      }
+    }
+  );
+
+  t.is(JSON.parse(response.body)[0].value, 77.34);
+  response = await got.delete(
+    `http://localhost:${t.context.port}/category/CAT2/delete`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` },
+      json: {
+        key: now
+      }
+    }
+  );
+  t.is(await c.getValue(master.db, now), undefined);
+});
