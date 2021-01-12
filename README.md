@@ -68,7 +68,7 @@ and exec a request
 TOKEN=...
 CATEGORY=...
 curl -H "Authorization: Bearer $TOKEN" \
-     http://localhost:12345/category/$CATEGORY/values
+     http://localhost:12345/category/$CATEGORY/value
 ```
 
 ```shell
@@ -77,7 +77,7 @@ CATEGORY=...
 curl -H "Authorization: Bearer $TOKEN" \
      -H "Content-Type: application/json" \
      -d '{"value":"1234.5","time":"1995-12-17T03:24:00"}' \
-     http://localhost:12345/category/$CATEGORY/insert
+     http://localhost:12345/category/$CATEGORY/value
 ```
 
 Or directly calling the executable

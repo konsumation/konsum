@@ -45,6 +45,8 @@ test.before(async t => {
             "konsum.category.add",
             "konsum.category.update",
             "konsum.category.delete",
+            "konsum.value.add",
+            "konsum.value.delete",
             "konsum.meter.add",
             "konsum.meter.update",
             "konsum.meter.delete",
@@ -254,7 +256,7 @@ test("can insert + get values", async t => {
   await c.writeValue(master.db, 77.34, now);
 
   let response = await got.post(
-    `http://localhost:${t.context.port}/category/CAT1/insert`,
+    `http://localhost:${t.context.port}/category/CAT1/value`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
       json: {
@@ -264,7 +266,7 @@ test("can insert + get values", async t => {
   );
 
   response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT1/values`,
+    `http://localhost:${t.context.port}/category/CAT1/value`,
     {
       headers: {
         Accept: "text/plain",
@@ -277,7 +279,7 @@ test("can insert + get values", async t => {
   t.regex(response.body, /\d+ 78/);
 
   response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT1/values`,
+    `http://localhost:${t.context.port}/category/CAT1/value`,
     {
       headers: {
         Accept: "application/json",
@@ -298,7 +300,7 @@ test("can insert + can delete", async (t) => {
   await c.writeValue(master.db, 77.34, now);
 
   let response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT2/values`,
+    `http://localhost:${t.context.port}/category/CAT2/value`,
     {
       headers: {
         Accept: "text/plain",
@@ -309,7 +311,7 @@ test("can insert + can delete", async (t) => {
   //t.log(response.body);
   t.regex(response.body, /\d+ 77.34/);
   response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT2/values`,
+    `http://localhost:${t.context.port}/category/CAT2/value`,
     {
       headers: {
         Accept: "application/json",
@@ -320,7 +322,7 @@ test("can insert + can delete", async (t) => {
 
   t.is(JSON.parse(response.body)[0].value, 77.34);
   response = await got.delete(
-    `http://localhost:${t.context.port}/category/CAT2/delete`,
+    `http://localhost:${t.context.port}/category/CAT2/value`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
       json: {

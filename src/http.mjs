@@ -193,7 +193,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   router.addRoute(
     "GET",
-    "/category/:category/values",
+    "/category/:category/value",
     restricted,
     async (ctx, next) => {
       setNoCacheHeaders(ctx);
@@ -232,10 +232,12 @@ export async function prepareHttpServer(config, sd, master) {
 
   router.addRoute(
     "POST",
-    "/category/:category/insert",
+    "/category/:category/value",
     restricted,
     BodyParser(),
     async (ctx, next) => {
+      enshureEntitlement(ctx, "konsum.value.add");
+
       const category = await Category.entry(master.db, ctx.params.category);
 
       const values = ctx.request.body;
@@ -253,10 +255,12 @@ export async function prepareHttpServer(config, sd, master) {
 
   router.addRoute(
     "DELETE",
-    "/category/:category/delete",
+    "/category/:category/value",
     restricted,
     BodyParser(),
     async (ctx, next) => {
+      //enshureEntitlement(ctx, "konsum.value.delete");
+
       const category = await Category.entry(master.db, ctx.params.category);
       const body = ctx.request.body;
       await category.deleteValue(master.db, body.key);
