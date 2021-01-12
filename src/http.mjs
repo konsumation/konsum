@@ -108,7 +108,20 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
-   * login to request api token
+   * @swagger
+   *
+   * /authenticate:
+   *   post:
+   *     description: Login to request api token.
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: username
+   *         required: true
+   *         type: string
+   *       - name: password
+   *         required: true
+   *         type: string
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
@@ -142,6 +155,14 @@ export async function prepareHttpServer(config, sd, master) {
 
   app.use(router.middleware());
 
+  /**
+   * @swagger
+   *
+   * /categories:
+   *   get:
+   *     produces:
+   *       - application/json
+   */
   router.addRoute("GET", "/categories", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
     const cs = [];
