@@ -56,6 +56,16 @@ cn: konsum.category.delete
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
+dn: cn=konsum.value.add,ou=groups,dc=example,dc=com
+cn: konsum.value.add
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.value.delete,ou=groups,dc=example,dc=com
+cn: konsum.value.delete
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
 dn: cn=konsum.meter.add,ou=groups,dc=example,dc=com
 cn: konsum.meter.add
 objectclass: groupOfUniqueNames

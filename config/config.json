@@ -11,6 +11,8 @@
           "konsum.category.add",
           "konsum.category.update",
           "konsum.category.delete",
+          "konsum.value.add",
+          "konsum.value.delete",
           "konsum.meter.add",
           "konsum.meter.update",
           "konsum.meter.delete",
