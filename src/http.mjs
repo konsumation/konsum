@@ -162,6 +162,15 @@ export async function prepareHttpServer(config, sd, master) {
    *   get:
    *     produces:
    *       - application/json
+   *     responses:
+   *     '200':
+   *       description: A list of categories.
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: array
+   *             items:
+   *               $ref: '#/components/schemas/category'
    */
   router.addRoute("GET", "/categories", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
