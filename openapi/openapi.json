@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "collect resource usage in a home environment",
+    "version": "0.0.0-semantic-release"
+  },
+  "paths": {
+    "/authenticate": {
+      "post": {
+        "description": "Login to request api token.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/categories": {
+      "get": {
+        "200": {
+          "description": "A list of categories.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/category"
+                }
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": null
+      }
+    },
+    "/category": {
+      "put": {
+        "produces": [
+          "application/json"
+        ]
+      },
+      "delete": {
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/category/:category/value": {
+      "get": {
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}
