@@ -258,24 +258,26 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - name: category
    *     in: path
-   *     description: ID of category that needs to be updated
+   *     description: ID of category that needs to be retrieved
    *     required: true
    *     schema:
    *       type: string
-   *   - name: value
-   *     in: body
-   *     description: time of the value
-   *     required: true
+   *   - name: limit
+   *     in: query
+   *     description: limits the number of entries delivered
+   *     required: false
+   *     default: 10
    *     schema:
-   *       type: string
-   *   - name: time
-   *     in: body
-   *     description: time of the value
-   *     required: true
+   *       type: integer
+   *   - name: reverse
+   *     in: query
+   *     description: reverses the order in which the entries are delivered
+   *     required: false
+   *     default: false
    *     schema:
-   *       type: string
+   *       type: boolean
    *   get:
-   *     description: Insert a value into a category
+   *     description: List values of a category
    *     produces:
    *       - application/json
    */
@@ -318,6 +320,34 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  /**
+   * @swagger
+   *
+   * /category/:category/value:
+   *   parameters:
+   *   - name: category
+   *     in: path
+   *     description: ID of category that needs to be retrieved
+   *     required: true
+   *     schema:
+   *       type: string
+   *   - name: value
+   *     in: body
+   *     description: time of the value
+   *     required: true
+   *     schema:
+   *       type: string
+   *   - name: time
+   *     in: body
+   *     description: time of the value
+   *     required: true
+   *     schema:
+   *       type: string
+   *   post:
+   *     description: Insert a value into a category
+   *     produces:
+   *       - application/json
+   */
   router.addRoute(
     "POST",
     "/category/:category/value",
