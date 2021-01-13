@@ -74,7 +74,7 @@
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category that needs to be updated",
+          "description": "ID of category that needs to be retrieved",
           "required": true,
           "schema": {
             "type": "string"
@@ -100,6 +100,12 @@
         }
       ],
       "get": {
+        "description": "List values of a category",
+        "produces": [
+          "application/json"
+        ]
+      },
+      "post": {
         "description": "Insert a value into a category",
         "produces": [
           "application/json"
