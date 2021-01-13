@@ -32,10 +32,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: konsumation/konsumation.github.io
-      - name: ENV
-        run: export
       - name: set env
         run: export GITHUB_REPOSITORY="konsumation/konsumation.github.io"
+      - name: ENV
+        run: export
       - uses: actions/download-artifact@v2
         with:
           name: openapi
@@ -47,7 +47,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repository: konsumation/konsumation.github.io
           path: openapi/*
           title: update openapi documentation
           branch: openapi
