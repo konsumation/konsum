@@ -25,6 +25,8 @@ jobs:
           path: ${{ github.workspace }}/build/**/*
           retention-days: 2
   publish_doc:
+    needs:
+      - update_openapi
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
