@@ -34,6 +34,8 @@ jobs:
           repository: konsumation/konsumation.github.io
       - name: ENV
         run: export
+      - name: set env
+        run: export GITHUB_REPOSITORY="konsumation/konsumation.github.io"
       - uses: actions/download-artifact@v2
         with:
           name: openapi
