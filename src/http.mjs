@@ -175,6 +175,14 @@ export async function prepareHttpServer(config, sd, master) {
     return next();
   });
 
+  /**
+   * @swagger
+   *
+   * /category:
+   *   put:
+   *     produces:
+   *       - application/json
+   */
   router.addRoute(
     "PUT",
     "/category/:category",
@@ -194,6 +202,14 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  /**
+   * @swagger
+   *
+   * /category:
+   *   delete:
+   *     produces:
+   *       - application/json
+   */
   router.addRoute(
     "DELETE",
     "/category/:category",
@@ -212,6 +228,14 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  /**
+   * @swagger
+   *
+   * /category/:category/value:
+   *   get:
+   *     produces:
+   *       - application/json
+   */
   router.addRoute(
     "GET",
     "/category/:category/value",
