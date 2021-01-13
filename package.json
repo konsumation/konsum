@@ -54,7 +54,7 @@
     "execa": "^5.0.0",
     "got": "^11.8.1",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^6.12.18",
+    "npm-pkgbuild": "^6.12.19",
     "semantic-release": "^17.3.1",
     "swagger-jsdoc": "^6.0.1",
     "tmp": "^0.2.1"
@@ -99,7 +99,7 @@
     },
     "depends": {
       "systemd": ">=247.2",
-      "nginx-mainline": ">=1.19.3"
+      "nginx-mainline": ">=1.19.6"
     }
   },
   "release": {
@@ -119,6 +119,7 @@
       "arlac77/template-documentation",
       "arlac77/template-nginx",
       "arlac77/template-node-app",
+      "arlac77/template-openapi",
       "arlac77/template-pacman",
       "arlac77/template-systemd",
       "konsumation/template"
