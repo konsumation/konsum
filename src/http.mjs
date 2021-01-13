@@ -143,9 +143,16 @@ export async function prepareHttpServer(config, sd, master) {
         config.auth.jwt.options
       );
 
+      const refresh_token = jsonwebtoken.sign(
+        {},
+        config.auth.jwt.private,
+        config.auth.jwt.options
+      );
+
       ctx.status = 200;
       ctx.body = {
-        access_token
+        access_token,
+        refresh_token
       };
     } else {
       ctx.throw(401, "Authentication failed");
@@ -370,6 +377,28 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  /**
+   * @swagger
+   *
+   * /category/:category/value:
+   *   parameters:
+   *   - name: category
+   *     in: path
+   *     description: ID of category from where the value bill deleted
+   *     required: true
+   *     schema:
+   *       type: string
+   *   - name: time
+   *     in: body
+   *     description: time of the value
+   *     required: true
+   *     schema:
+   *       type: string
+   *   delete:
+   *     description: Delete a value from a category
+   *     produces:
+   *       - application/json
+   */
   router.addRoute(
     "DELETE",
     "/category/:category/value",
@@ -430,6 +459,7 @@ export async function prepareHttpServer(config, sd, master) {
         return next();
       }
     );
+
     router.addRoute(
       "POST",
       `/category/:category/${type.name}`,
@@ -448,6 +478,7 @@ export async function prepareHttpServer(config, sd, master) {
         return next();
       }
     );
+    
     router.addRoute(
       "DELETE",
       `/category/:category/${type.name}`,
