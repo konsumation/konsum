@@ -291,7 +291,7 @@ test("can insert + get values", async t => {
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
-test("can insert + can delete", async (t) => {
+test.serial("can insert + can delete", async (t) => {
   const master = t.context.master;
 
   const c = new Category(`CAT2`, { unit: "kWh" });

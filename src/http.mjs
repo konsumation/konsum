@@ -188,6 +188,13 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    *
    * /category:
+   *   parameters:
+   *   - name: category
+   *     in: path
+   *     description: ID of category that needs to be inserted
+   *     required: true
+   *     schema:
+   *       type: string
    *   put:
    *     produces:
    *       - application/json
@@ -215,6 +222,13 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    *
    * /category:
+   *   parameters:
+   *   - name: category
+   *     in: path
+   *     description: ID of category that needs to be deleted
+   *     required: true
+   *     schema:
+   *       type: string
    *   delete:
    *     produces:
    *       - application/json
@@ -241,7 +255,27 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    *
    * /category/:category/value:
+   *   parameters:
+   *   - name: category
+   *     in: path
+   *     description: ID of category that needs to be updated
+   *     required: true
+   *     schema:
+   *       type: string
+   *   - name: value
+   *     in: body
+   *     description: time of the value
+   *     required: true
+   *     schema:
+   *       type: string
+   *   - name: time
+   *     in: body
+   *     description: time of the value
+   *     required: true
+   *     schema:
+   *       type: string
    *   get:
+   *     description: Insert a value into a category
    *     produces:
    *       - application/json
    */
@@ -293,7 +327,6 @@ export async function prepareHttpServer(config, sd, master) {
       enshureEntitlement(ctx, "konsum.value.add");
 
       const category = await Category.entry(master.db, ctx.params.category);
-
       const values = ctx.request.body;
 
       for (const v of Array.isArray(values) ? values : [values]) {
@@ -313,7 +346,7 @@ export async function prepareHttpServer(config, sd, master) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
-      //enshureEntitlement(ctx, "konsum.value.delete");
+      enshureEntitlement(ctx, "konsum.value.delete");
 
       const category = await Category.entry(master.db, ctx.params.category);
       const body = ctx.request.body;
