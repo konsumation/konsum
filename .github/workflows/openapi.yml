@@ -33,7 +33,7 @@ jobs:
         with:
           repository: konsumation/konsumation.github.io
       - name: ENV
-        run: exports
+        run: export
       - uses: actions/download-artifact@v2
         with:
           name: openapi
