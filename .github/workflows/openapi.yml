@@ -10,6 +10,7 @@ jobs:
           node-version: 14.15.4
       - run: npm install
       - run: node openapi/openapi.mjs
+      - run: npx bootprint openapi openapi/openapi.json build
       - uses: gr2m/create-or-update-pull-request-action@v1.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -17,4 +18,31 @@ jobs:
           path: openapi/openapi.json
           title: update openapi definition
           branch: openapi
-          commit-message: 'docs(openapi): update openapi definition'
+          commit-message: 'chore(openapi): update openapi definition'
+      - uses: actions/upload-artifact@v2
+        with:
+          name: openapi
+          path: ${{ github.workspace }}/build/**/*
+          retention-days: 2
+  publish_doc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: konsumation/konsumation.github.io
+      - uses: actions/download-artifact@v2
+        with:
+          name: openapi
+          path: openapi
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: openapi
+      - uses: gr2m/create-or-update-pull-request-action@v1.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: openapi/*
+          title: update openapi documentation
+          branch: openapi
+          commit-message: 'docs(openapi): update openapi documentation'
+
