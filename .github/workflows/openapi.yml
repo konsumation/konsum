@@ -43,6 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          repository: konsumation/konsumation.github.io
           path: openapi/*
           title: update openapi documentation
           branch: openapi
