@@ -38,14 +38,11 @@ jobs:
           path: openapi
       - name: list files
         run: ls -R
-      - uses: gr2m/create-or-update-pull-request-action@v1.3.0
+      - uses: stefanzweifel/git-auto-commit-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: konsumation/konsumation.github.io
         with:
-          author: "Markus Felten<markus.felten@gmx.de>"
-          path: openapi/*
-          title: update openapi documentation
-          branch: openapi
-          commit-message: 'docs(openapi): update openapi documentation'
+          commit_author: "Markus Felten<markus.felten@gmx.de>"
+          commit_message: 'docs(openapi): update openapi documentation'
 
