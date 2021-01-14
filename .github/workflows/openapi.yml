@@ -39,9 +39,6 @@ jobs:
       - name: list files
         run: ls -R
       - uses: stefanzweifel/git-auto-commit-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: konsumation/konsumation.github.io
         with:
           commit_author: "Markus Felten<markus.felten@gmx.de>"
           commit_message: 'docs(openapi): update openapi documentation'
