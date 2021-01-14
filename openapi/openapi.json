@@ -27,29 +27,25 @@
     },
     "/category": {
       "get": {
-        "200": {
-          "description": "A list of categories.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/category"
-                }
-              }
-            }
-          }
-        },
+        "description": "list notes of a category",
         "produces": [
           "application/json"
-        ],
-        "responses": null
+        ]
       },
       "parameters": [
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category that needs to be deleted",
+          "description": "ID of category to be listed",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "note",
+          "in": "path",
+          "description": "ID of note to be listed",
           "required": true,
           "schema": {
             "type": "string"
