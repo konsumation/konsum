@@ -28,6 +28,7 @@ MemoryAccounting=true
 MemoryHigh=60M
 MemoryMax=100M
 OOMPolicy=stop
+FileDescriptorStoreMax=4
 
 [Install]
 WantedBy=multi-user.target
