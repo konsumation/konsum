@@ -43,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: konsumation/konsumation.github.io
         with:
-          author: "Markus Felten <markus.felten@gmx.de>"
+          author: "Markus Felten<markus.felten@gmx.de>"
           path: openapi/*
           title: update openapi documentation
           branch: openapi
