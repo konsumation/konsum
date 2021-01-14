@@ -102,6 +102,9 @@ see [openapi](https://konsumation.github.io/openapi)
 -   [addRoute](#addroute-3)
 -   [addRoute](#addroute-4)
 -   [addRoute](#addroute-5)
+-   [addRoute](#addroute-6)
+
+## addRoute
 
 ## addRoute
 
