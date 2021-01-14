@@ -100,6 +100,17 @@ test("get backup", async t => {
   //t.regex(response.body, /\d+ 77.34/);
 });
 
+test("list categories", async t => {
+  const response = await got.get(
+    `http://localhost:${t.context.port}/category`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` }
+    }
+  );
+
+  t.is(response.statusCode, 200);
+});
+
 test("update category", async t => {
   const response = await got.put(
     `http://localhost:${t.context.port}/category/CAT7`,

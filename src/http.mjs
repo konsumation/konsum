@@ -165,7 +165,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * @swagger
    *
-   * /categories:
+   * /category:
    *   get:
    *     produces:
    *       - application/json
@@ -179,7 +179,7 @@ export async function prepareHttpServer(config, sd, master) {
    *             items:
    *               $ref: '#/components/schemas/category'
    */
-  router.addRoute("GET", "/categories", restricted, async (ctx, next) => {
+  router.addRoute("GET", "/category", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
     const cs = [];
 
