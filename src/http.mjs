@@ -419,6 +419,49 @@ export async function prepareHttpServer(config, sd, master) {
     { name: "meter", accessor: "meters", factory: Meter },
     { name: "note", accessor: "notes", factory: Note }
   ]) {
+    /**
+     * @swagger
+     *
+     * /category:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category to be listed
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: mater
+     *     in: path
+     *     description: ID of meter to be listed
+     *     required: true
+     *     schema:
+     *       type: string
+     *   get:
+     *     description: list meters of a category
+     *     produces:
+     *       - application/json
+     *
+     * @swagger
+     *
+     * /category:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category to be listed
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: note
+     *     in: path
+     *     description: ID of note to be listed
+     *     required: true
+     *     schema:
+     *       type: string
+     *   get:
+     *     description: list notes of a category
+     *     produces:
+     *       - application/json
+     */
     router.addRoute(
       "GET",
       `/category/:category/${type.name}`,
@@ -478,7 +521,7 @@ export async function prepareHttpServer(config, sd, master) {
         return next();
       }
     );
-    
+
     router.addRoute(
       "DELETE",
       `/category/:category/${type.name}`,
