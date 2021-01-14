@@ -25,7 +25,7 @@
         ]
       }
     },
-    "/categories": {
+    "/category": {
       "get": {
         "200": {
           "description": "A list of categories.",
@@ -44,9 +44,7 @@
           "application/json"
         ],
         "responses": null
-      }
-    },
-    "/category": {
+      },
       "parameters": [
         {
           "name": "category",
