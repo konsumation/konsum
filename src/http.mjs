@@ -128,7 +128,7 @@ export async function prepareHttpServer(config, sd, master) {
    *         content: 
    *           'application/json': {}
    *       '401':
-   *         description: Authentication failed
+   *         description: Authentication failed.
    *         content: 
    *           'application/json': {}
    */
@@ -176,6 +176,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /category:
    *   get:
+   *     description: retrieve list of categories.
    *     produces:
    *       - application/json
    *     responses:
@@ -212,6 +213,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     schema:
    *       type: string
    *   put:
+   *     description: insert a new category
    *     produces:
    *       - application/json
    */
@@ -246,6 +248,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     schema:
    *       type: string
    *   delete:
+   *     description: Delete a category.
    *     produces:
    *       - application/json
    */
@@ -274,26 +277,26 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - name: category
    *     in: path
-   *     description: ID of category that needs to be retrieved
+   *     description: ID of category that needs to be retrieved.
    *     required: true
    *     schema:
    *       type: string
    *   - name: limit
    *     in: query
-   *     description: limits the number of entries delivered
+   *     description: Limits the number of entries delivered.
    *     required: false
    *     default: 10
    *     schema:
    *       type: integer
    *   - name: reverse
    *     in: query
-   *     description: reverses the order in which the entries are delivered
+   *     description: Reverses the order in which the entries are delivered.
    *     required: false
    *     default: false
    *     schema:
    *       type: boolean
    *   get:
-   *     description: List values of a category
+   *     description: List values of a category.
    *     produces:
    *       - application/json
    */
@@ -343,24 +346,24 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - name: category
    *     in: path
-   *     description: ID of category that needs to be retrieved
+   *     description: ID of category that needs to be retrieved.
    *     required: true
    *     schema:
    *       type: string
    *   - name: value
    *     in: body
-   *     description: time of the value
+   *     description: The value itself.
    *     required: true
    *     schema:
    *       type: string
    *   - name: time
    *     in: body
-   *     description: time of the value
+   *     description: Time the value was present.
    *     required: true
    *     schema:
    *       type: string
    *   post:
-   *     description: Insert a value into a category
+   *     description: Insert a value into a category.
    *     produces:
    *       - application/json
    */
@@ -393,18 +396,18 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - name: category
    *     in: path
-   *     description: ID of category from where the value bill deleted
+   *     description: ID of category from where the value bill deleted.
    *     required: true
    *     schema:
    *       type: string
    *   - name: time
    *     in: body
-   *     description: time of the value
+   *     description: Time the value was present.
    *     required: true
    *     schema:
    *       type: string
    *   delete:
-   *     description: Delete a value from a category
+   *     description: Delete a value from a category.
    *     produces:
    *       - application/json
    */
@@ -434,38 +437,36 @@ export async function prepareHttpServer(config, sd, master) {
      *   parameters:
      *   - name: category
      *     in: path
-     *     description: ID of category to be listed
+     *     description: ID of category to be listed.
      *     required: true
      *     schema:
      *       type: string
      *   - name: mater
      *     in: path
-     *     description: ID of meter to be listed
+     *     description: ID of meter to be listed.
      *     required: true
      *     schema:
      *       type: string
      *   get:
-     *     description: list meters of a category
+     *     description: list meters of a category.
      *     produces:
      *       - application/json
-     *
-     * @swagger
      * /category/{category}/note:
      *   parameters:
      *   - name: category
      *     in: path
-     *     description: ID of category to be listed
+     *     description: ID of category to be listed.
      *     required: true
      *     schema:
      *       type: string
      *   - name: note
      *     in: path
-     *     description: ID of note to be listed
+     *     description: ID of note to be listed.
      *     required: true
      *     schema:
      *       type: string
      *   get:
-     *     description: list notes of a category
+     *     description: list notes of a category.
      *     produces:
      *       - application/json
      */
@@ -489,6 +490,45 @@ export async function prepareHttpServer(config, sd, master) {
       }
     );
 
+    /**
+     * @swagger
+     * /category/{category}/meter:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category to be added.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: mater
+     *     in: path
+     *     description: ID of meter to be added.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   put:
+     *     description: Add a meter to a category.
+     *     produces:
+     *       - application/json
+     * /category/{category}/note:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category to be added.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: note
+     *     in: path
+     *     description: ID of note to be added.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   put:
+     *     description: add a note to a category.
+     *     produces:
+     *       - application/json
+     */
     router.addRoute(
       "PUT",
       `/category/:category/${type.name}`,
@@ -510,6 +550,45 @@ export async function prepareHttpServer(config, sd, master) {
       }
     );
 
+    /**
+     * @swagger
+     * /category/{category}/meter:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category the meter belongs to.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: mater
+     *     in: path
+     *     description: ID of meter to be updated.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   post:
+     *     description: Update a meter.
+     *     produces:
+     *       - application/json
+     * /category/{category}/note:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category to note belongs to.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: note
+     *     in: path
+     *     description: ID of note to be updated.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   post:
+     *     description: Update a note.
+     *     produces:
+     *       - application/json
+     */
     router.addRoute(
       "POST",
       `/category/:category/${type.name}`,
