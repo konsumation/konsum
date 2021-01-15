@@ -122,6 +122,15 @@ export async function prepareHttpServer(config, sd, master) {
    *       - name: password
    *         required: true
    *         type: string
+   *     responses:
+   *       '200':
+   *         description: Token generated.
+   *         content: 
+   *           'application/json': {}
+   *       '401':
+   *         description: Authentication failed
+   *         content: 
+   *           'application/json': {}
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
@@ -194,7 +203,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * @swagger
    *
-   * /category:
+   * /category/{category}:
    *   parameters:
    *   - name: category
    *     in: path
@@ -228,7 +237,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * @swagger
    *
-   * /category:
+   * /category/{category}:
    *   parameters:
    *   - name: category
    *     in: path
@@ -261,7 +270,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * @swagger
    *
-   * /category/:category/value:
+   * /category/{category}/value:
    *   parameters:
    *   - name: category
    *     in: path
@@ -330,7 +339,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * @swagger
    *
-   * /category/:category/value:
+   * /category/{category}/value:
    *   parameters:
    *   - name: category
    *     in: path
@@ -380,7 +389,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * @swagger
    *
-   * /category/:category/value:
+   * /category/{category}/value:
    *   parameters:
    *   - name: category
    *     in: path
@@ -421,8 +430,7 @@ export async function prepareHttpServer(config, sd, master) {
   ]) {
     /**
      * @swagger
-     *
-     * /category:
+     * /category/{category}/meter:
      *   parameters:
      *   - name: category
      *     in: path
@@ -442,8 +450,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       - application/json
      *
      * @swagger
-     *
-     * /category:
+     * /category/{category}/note:
      *   parameters:
      *   - name: category
      *     in: path
