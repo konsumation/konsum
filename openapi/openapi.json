@@ -31,7 +31,7 @@
             }
           },
           "401": {
-            "description": "Authentication failed",
+            "description": "Authentication failed.",
             "content": {
               "application/json": {}
             }
@@ -54,6 +54,7 @@
             }
           }
         },
+        "description": "retrieve list of categories.",
         "produces": [
           "application/json"
         ],
@@ -73,11 +74,13 @@
         }
       ],
       "put": {
+        "description": "insert a new category",
         "produces": [
           "application/json"
         ]
       },
       "delete": {
+        "description": "Delete a category.",
         "produces": [
           "application/json"
         ]
@@ -88,7 +91,7 @@
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category from where the value bill deleted",
+          "description": "ID of category from where the value bill deleted.",
           "required": true,
           "schema": {
             "type": "string"
@@ -97,7 +100,7 @@
         {
           "name": "time",
           "in": "body",
-          "description": "time of the value",
+          "description": "Time the value was present.",
           "required": true,
           "schema": {
             "type": "string"
@@ -105,19 +108,19 @@
         }
       ],
       "get": {
-        "description": "List values of a category",
+        "description": "List values of a category.",
         "produces": [
           "application/json"
         ]
       },
       "post": {
-        "description": "Insert a value into a category",
+        "description": "Insert a value into a category.",
         "produces": [
           "application/json"
         ]
       },
       "delete": {
-        "description": "Delete a value from a category",
+        "description": "Delete a value from a category.",
         "produces": [
           "application/json"
         ]
@@ -128,7 +131,7 @@
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category to be listed",
+          "description": "ID of category the meter belongs to.",
           "required": true,
           "schema": {
             "type": "string"
@@ -137,7 +140,7 @@
         {
           "name": "mater",
           "in": "path",
-          "description": "ID of meter to be listed",
+          "description": "ID of meter to be updated.",
           "required": true,
           "schema": {
             "type": "string"
@@ -145,7 +148,19 @@
         }
       ],
       "get": {
-        "description": "list meters of a category",
+        "description": "list meters of a category.",
+        "produces": [
+          "application/json"
+        ]
+      },
+      "put": {
+        "description": "Add a meter to a category.",
+        "produces": [
+          "application/json"
+        ]
+      },
+      "post": {
+        "description": "Update a meter.",
         "produces": [
           "application/json"
         ]
@@ -156,7 +171,7 @@
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category to be listed",
+          "description": "ID of category to note belongs to.",
           "required": true,
           "schema": {
             "type": "string"
@@ -165,7 +180,7 @@
         {
           "name": "note",
           "in": "path",
-          "description": "ID of note to be listed",
+          "description": "ID of note to be updated.",
           "required": true,
           "schema": {
             "type": "string"
@@ -173,7 +188,19 @@
         }
       ],
       "get": {
-        "description": "list notes of a category",
+        "description": "list notes of a category.",
+        "produces": [
+          "application/json"
+        ]
+      },
+      "put": {
+        "description": "add a note to a category.",
+        "produces": [
+          "application/json"
+        ]
+      },
+      "post": {
+        "description": "Update a note.",
         "produces": [
           "application/json"
         ]
