@@ -8,19 +8,20 @@
     "/authenticate": {
       "post": {
         "description": "Login to request api token.",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "username",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "password",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -31,7 +32,7 @@
             }
           },
           "401": {
-            "description": "Authentication failed",
+            "description": "Authentication failed.",
             "content": {
               "application/json": {}
             }
@@ -41,23 +42,22 @@
     },
     "/category": {
       "get": {
-        "200": {
-          "description": "A list of categories.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/category"
+        "description": "retrieve list of categories.",
+        "responses": {
+          "200": {
+            "description": "A list of categories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/category"
+                  }
                 }
               }
             }
           }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "responses": null
+        }
       }
     },
     "/category/{category}": {
@@ -73,14 +73,32 @@
         }
       ],
       "put": {
-        "produces": [
-          "application/json"
-        ]
+        "description": "insert a new category",
+        "responses": {
+          "200": {
+            "description": "success message.",
+            "content": {
+              "application/json": null
+            }
+          }
+        }
       },
       "delete": {
-        "produces": [
-          "application/json"
-        ]
+        "description": "Delete a category.",
+        "responses": {
+          "200": {
+            "description": "success message.",
+            "content": {
+              "application/json": null
+            }
+          },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": null
+            }
+          }
+        }
       }
     },
     "/category/{category}/value": {
@@ -88,7 +106,7 @@
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category from where the value bill deleted",
+          "description": "ID of category from where the value bill deleted.",
           "required": true,
           "schema": {
             "type": "string"
@@ -97,7 +115,7 @@
         {
           "name": "time",
           "in": "body",
-          "description": "time of the value",
+          "description": "Time the value was present.",
           "required": true,
           "schema": {
             "type": "string"
@@ -105,22 +123,43 @@
         }
       ],
       "get": {
-        "description": "List values of a category",
-        "produces": [
-          "application/json"
-        ]
+        "description": "List values of a category.",
+        "responses": {
+          "200": {
+            "description": "Value list.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "406": {
+            "description": "Unsupported content-type.",
+            "content": {
+              "text": "json, or text only"
+            }
+          }
+        }
       },
       "post": {
-        "description": "Insert a value into a category",
-        "produces": [
-          "application/json"
-        ]
+        "description": "Insert a value into a category.",
+        "responses": {
+          "200": {
+            "description": "Success message.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
       },
       "delete": {
-        "description": "Delete a value from a category",
-        "produces": [
-          "application/json"
-        ]
+        "description": "Delete a value from a category.",
+        "responses": {
+          "200": {
+            "description": "Success message.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
       }
     },
     "/category/{category}/meter": {
@@ -128,7 +167,7 @@
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category to be listed",
+          "description": "ID of category the meter belongs to.",
           "required": true,
           "schema": {
             "type": "string"
@@ -137,7 +176,7 @@
         {
           "name": "mater",
           "in": "path",
-          "description": "ID of meter to be listed",
+          "description": "ID of meter to be updated.",
           "required": true,
           "schema": {
             "type": "string"
@@ -145,10 +184,37 @@
         }
       ],
       "get": {
-        "description": "list meters of a category",
-        "produces": [
-          "application/json"
-        ]
+        "description": "List meters of a category.",
+        "responses": {
+          "200": {
+            "description": "List of meters.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Add a meter to a category.",
+        "responses": {
+          "200": {
+            "description": "Success message.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update a meter.",
+        "responses": {
+          "200": {
+            "description": "Success message.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
       }
     },
     "/category/{category}/note": {
@@ -156,7 +222,7 @@
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category to be listed",
+          "description": "ID of category to note belongs to.",
           "required": true,
           "schema": {
             "type": "string"
@@ -165,7 +231,7 @@
         {
           "name": "note",
           "in": "path",
-          "description": "ID of note to be listed",
+          "description": "ID of note to be updated.",
           "required": true,
           "schema": {
             "type": "string"
@@ -173,10 +239,37 @@
         }
       ],
       "get": {
-        "description": "list notes of a category",
-        "produces": [
-          "application/json"
-        ]
+        "description": "List notes of a category.",
+        "responses": {
+          "200": {
+            "description": "List of notes.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "add a note to a category.",
+        "responses": {
+          "200": {
+            "description": "Success message.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Update a note.",
+        "responses": {
+          "200": {
+            "description": "Success message.",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
       }
     }
   },
