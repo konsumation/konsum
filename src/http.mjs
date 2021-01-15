@@ -113,15 +113,15 @@ export async function prepareHttpServer(config, sd, master) {
    * /authenticate:
    *   post:
    *     description: Login to request api token.
-   *     produces:
-   *       - application/json
    *     parameters:
    *       - name: username
    *         required: true
-   *         type: string
+   *         schema:
+   *           type: string
    *       - name: password
    *         required: true
-   *         type: string
+   *         schema:
+   *           type: string
    *     responses:
    *       '200':
    *         description: Token generated.
@@ -177,17 +177,15 @@ export async function prepareHttpServer(config, sd, master) {
    * /category:
    *   get:
    *     description: retrieve list of categories.
-   *     produces:
-   *       - application/json
    *     responses:
-   *     '200':
-   *       description: A list of categories.
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: array
-   *             items:
-   *               $ref: '#/components/schemas/category'
+   *       '200':
+   *         description: A list of categories.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/category'
    */
   router.addRoute("GET", "/category", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -214,8 +212,11 @@ export async function prepareHttpServer(config, sd, master) {
    *       type: string
    *   put:
    *     description: insert a new category
-   *     produces:
-   *       - application/json
+   *     responses:
+   *       '200':
+   *         description: success message.
+   *         content:
+   *           application/json:
    */
   router.addRoute(
     "PUT",
@@ -249,8 +250,15 @@ export async function prepareHttpServer(config, sd, master) {
    *       type: string
    *   delete:
    *     description: Delete a category.
-   *     produces:
-   *       - application/json
+   *     responses:
+   *       '200':
+   *         description: success message.
+   *         content:
+   *           application/json:
+   *       '404':
+   *         description: No such category error message.
+   *         content:
+   *           application/json:
    */
   router.addRoute(
     "DELETE",
@@ -297,8 +305,15 @@ export async function prepareHttpServer(config, sd, master) {
    *       type: boolean
    *   get:
    *     description: List values of a category.
-   *     produces:
-   *       - application/json
+   *     responses:
+   *       '200':
+   *         description: Value list.
+   *         content: 
+   *           'application/json': {}
+   *       '406':
+   *         description: Unsupported content-type.
+   *         content: 
+   *           'text': "json, or text only"
    */
   router.addRoute(
     "GET",
@@ -364,8 +379,11 @@ export async function prepareHttpServer(config, sd, master) {
    *       type: string
    *   post:
    *     description: Insert a value into a category.
-   *     produces:
-   *       - application/json
+   *     responses:
+   *       '200':
+   *         description: Success message.
+   *         content: 
+   *           'application/json': {}
    */
   router.addRoute(
     "POST",
@@ -408,8 +426,11 @@ export async function prepareHttpServer(config, sd, master) {
    *       type: string
    *   delete:
    *     description: Delete a value from a category.
-   *     produces:
-   *       - application/json
+   *     responses:
+   *       '200':
+   *         description: Success message.
+   *         content: 
+   *           'application/json': {}
    */
   router.addRoute(
     "DELETE",
@@ -448,9 +469,12 @@ export async function prepareHttpServer(config, sd, master) {
      *     schema:
      *       type: string
      *   get:
-     *     description: list meters of a category.
-     *     produces:
-     *       - application/json
+     *     description: List meters of a category.
+     *     responses:
+     *       '200':
+     *         description: List of meters.
+     *         content: 
+     *           'application/json': {}
      * /category/{category}/note:
      *   parameters:
      *   - name: category
@@ -466,9 +490,12 @@ export async function prepareHttpServer(config, sd, master) {
      *     schema:
      *       type: string
      *   get:
-     *     description: list notes of a category.
-     *     produces:
-     *       - application/json
+     *     description: List notes of a category.
+     *     responses:
+     *       '200':
+     *         description: List of notes.
+     *         content: 
+     *           'application/json': {}
      */
     router.addRoute(
       "GET",
@@ -508,8 +535,11 @@ export async function prepareHttpServer(config, sd, master) {
      *       type: string
      *   put:
      *     description: Add a meter to a category.
-     *     produces:
-     *       - application/json
+     *     responses:
+     *       '200':
+     *         description: Success message.
+     *         content: 
+     *           'application/json': {}
      * /category/{category}/note:
      *   parameters:
      *   - name: category
@@ -526,8 +556,11 @@ export async function prepareHttpServer(config, sd, master) {
      *       type: string
      *   put:
      *     description: add a note to a category.
-     *     produces:
-     *       - application/json
+     *     responses:
+     *       '200':
+     *         description: Success message.
+     *         content: 
+     *           'application/json': {}
      */
     router.addRoute(
       "PUT",
@@ -568,8 +601,11 @@ export async function prepareHttpServer(config, sd, master) {
      *       type: string
      *   post:
      *     description: Update a meter.
-     *     produces:
-     *       - application/json
+     *     responses:
+     *       '200':
+     *         description: Success message.
+     *         content: 
+     *           'application/json': {}
      * /category/{category}/note:
      *   parameters:
      *   - name: category
@@ -586,8 +622,11 @@ export async function prepareHttpServer(config, sd, master) {
      *       type: string
      *   post:
      *     description: Update a note.
-     *     produces:
-     *       - application/json
+     *     responses:
+     *       '200':
+     *         description: Success message.
+     *         content: 
+     *           'application/json': {}
      */
     router.addRoute(
       "POST",
