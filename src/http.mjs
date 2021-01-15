@@ -52,12 +52,36 @@ export async function prepareHttpServer(config, sd, master) {
 
   process.on("SIGINT", () => shutdown());
 
+  /**
+   * @swagger
+   *
+   * /admin/stop:
+   *   post:
+   *     description: Stop konsum server.
+   *     responses:
+   *       '200':
+   *         description: Progress message.
+   *         content:
+   *           application/text:
+   */
   router.addRoute("POST", "/admin/stop", async (ctx, next) => {
     shutdown();
     ctx.body = "stopping...";
     return next();
   });
 
+  /**
+   * @swagger
+   *
+   * /admin/reload:
+   *   post:
+   *     description: Reload konsum systemd config.
+   *     responses:
+   *       '200':
+   *         description: Progress message.
+   *         content:
+   *           application/text:
+   */
   router.addRoute("POST", "/admin/reload", async (ctx, next) => {
     sd.notify("RELOADING=1");
     // TODO
@@ -80,6 +104,18 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  /**
+   * @swagger
+   *
+   * /admin/backup:
+   *   get:
+   *     description: Create backup.
+   *     responses:
+   *       '200':
+   *         description: Backup data as text.
+   *         content:
+   *           application/text:
+   */
   router.addRoute("GET", "/admin/backup", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.backup");
 
@@ -95,6 +131,21 @@ export async function prepareHttpServer(config, sd, master) {
     return next();
   });
 
+  /**
+   * @swagger
+   *
+   * /state:
+   *   get:
+   *     description: Retrieve application state.
+   *     responses:
+   *       '200':
+   *         description: Server status.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               items:
+   *                 $ref: '#/components/schemas/State'
+   */
   router.addRoute("GET", "/state", async (ctx, next) => {
     setNoCacheHeaders(ctx);
 
@@ -125,11 +176,11 @@ export async function prepareHttpServer(config, sd, master) {
    *     responses:
    *       '200':
    *         description: Token generated.
-   *         content: 
+   *         content:
    *           'application/json': {}
    *       '401':
    *         description: Authentication failed.
-   *         content: 
+   *         content:
    *           'application/json': {}
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
@@ -185,7 +236,7 @@ export async function prepareHttpServer(config, sd, master) {
    *             schema:
    *               type: array
    *               items:
-   *                 $ref: '#/components/schemas/category'
+   *                 $ref: '#/components/schemas/Category'
    */
   router.addRoute("GET", "/category", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -308,11 +359,15 @@ export async function prepareHttpServer(config, sd, master) {
    *     responses:
    *       '200':
    *         description: Value list.
-   *         content: 
-   *           'application/json': {}
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Value'
    *       '406':
    *         description: Unsupported content-type.
-   *         content: 
+   *         content:
    *           'text': "json, or text only"
    */
   router.addRoute(
@@ -382,7 +437,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     responses:
    *       '200':
    *         description: Success message.
-   *         content: 
+   *         content:
    *           'application/json': {}
    */
   router.addRoute(
@@ -429,7 +484,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     responses:
    *       '200':
    *         description: Success message.
-   *         content: 
+   *         content:
    *           'application/json': {}
    */
   router.addRoute(
@@ -473,8 +528,12 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: List of meters.
-     *         content: 
-     *           'application/json': {}
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 $ref: '#/components/schemas/Meter'
      * /category/{category}/note:
      *   parameters:
      *   - name: category
@@ -494,8 +553,12 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: List of notes.
-     *         content: 
-     *           'application/json': {}
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 $ref: '#/components/schemas/Note'
      */
     router.addRoute(
       "GET",
@@ -538,7 +601,7 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: Success message.
-     *         content: 
+     *         content:
      *           'application/json': {}
      * /category/{category}/note:
      *   parameters:
@@ -559,7 +622,7 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: Success message.
-     *         content: 
+     *         content:
      *           'application/json': {}
      */
     router.addRoute(
@@ -604,7 +667,7 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: Success message.
-     *         content: 
+     *         content:
      *           'application/json': {}
      * /category/{category}/note:
      *   parameters:
@@ -625,7 +688,7 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: Success message.
-     *         content: 
+     *         content:
      *           'application/json': {}
      */
     router.addRoute(
@@ -647,6 +710,51 @@ export async function prepareHttpServer(config, sd, master) {
       }
     );
 
+    /**
+     * @swagger
+     * /category/{category}/meter:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category the meter belongs to.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: mater
+     *     in: path
+     *     description: ID of meter to be deleted.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   delete:
+     *     description: Delete a meter.
+     *     responses:
+     *       '200':
+     *         description: Success message.
+     *         content:
+     *           'application/json': {}
+     * /category/{category}/note:
+     *   parameters:
+     *   - name: category
+     *     in: path
+     *     description: ID of category to note belongs to.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   - name: note
+     *     in: path
+     *     description: ID of note to be deleted.
+     *     required: true
+     *     schema:
+     *       type: string
+     *   delete:
+     *     description: Delete a note.
+     *     responses:
+     *       '200':
+     *         description: Success message.
+     *         content:
+     *           'application/json': {}
+     */
     router.addRoute(
       "DELETE",
       `/category/:category/${type.name}`,
@@ -677,3 +785,65 @@ export async function prepareHttpServer(config, sd, master) {
     router
   };
 }
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       required:
+ *         - id
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The id of the category.
+ *         description:
+ *           type: string
+ *           description: The human readable description of your category.
+ *         unit:
+ *           type: string
+ *           description: The physical measurment unit.
+ *       example:
+ *         id: EV
+ *         description: "mains power"
+ *         unit: "m3"
+ *     Meter:
+ *       type: object
+ *       required:
+ *         - id
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The id of the meter.
+ *         description:
+ *           type: string
+ *           description: The human readable description of your meter.
+ *         unit:
+ *           type: string
+ *           description: The physical measurment unit.
+ *         serial:
+ *           type: string
+ *           description: The serial number of the meter.
+ *     Note:
+ *       type: object
+ *       required:
+ *         - id
+ *     Value:
+ *       type: object
+ *       required:
+ *         - id
+ *     State:
+ *       type: object
+ *       properties:
+ *         version:
+ *           type: string
+ *           description: The software version of the server.
+ *         uptime:
+ *           type: number
+ *           description: The duration the sever is up and running.
+ *         memory:
+ *           type: object
+ *           description: The memory usage of the server.
+ */
