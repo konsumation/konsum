@@ -38,8 +38,10 @@ jobs:
           path: openapi
       - name: list files
         run: ls -R
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: EndBug/add-and-commit@v6
         with:
-          commit_author: "Markus Felten<markus.felten@gmx.de>"
-          commit_message: 'docs(openapi): update openapi documentation'
+          add: 'openapi/*.html'
+          author_name: "Markus Felten"
+          author_email: "markus.felten@gmx.de"
+          message: 'docs(openapi): update openapi documentation'
 
