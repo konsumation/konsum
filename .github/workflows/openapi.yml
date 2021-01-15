@@ -44,4 +44,5 @@ jobs:
           author_name: "Markus Felten"
           author_email: "markus.felten@gmx.de"
           message: 'docs(openapi): update openapi documentation'
+          token: ${{ secrets.GH_TOKEN }}
 
