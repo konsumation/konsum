@@ -22,30 +22,50 @@
             "required": true,
             "type": "string"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "Token generated.",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
       }
     },
     "/category": {
       "get": {
-        "description": "list notes of a category",
+        "200": {
+          "description": "A list of categories.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/category"
+                }
+              }
+            }
+          }
+        },
         "produces": [
           "application/json"
-        ]
-      },
+        ],
+        "responses": null
+      }
+    },
+    "/category/{category}": {
       "parameters": [
         {
           "name": "category",
           "in": "path",
-          "description": "ID of category to be listed",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "note",
-          "in": "path",
-          "description": "ID of note to be listed",
+          "description": "ID of category that needs to be deleted",
           "required": true,
           "schema": {
             "type": "string"
@@ -63,7 +83,7 @@
         ]
       }
     },
-    "/category/:category/value": {
+    "/category/{category}/value": {
       "parameters": [
         {
           "name": "category",
@@ -98,6 +118,62 @@
       },
       "delete": {
         "description": "Delete a value from a category",
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/category/{category}/meter": {
+      "parameters": [
+        {
+          "name": "category",
+          "in": "path",
+          "description": "ID of category to be listed",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "mater",
+          "in": "path",
+          "description": "ID of meter to be listed",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "description": "list meters of a category",
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/category/{category}/note": {
+      "parameters": [
+        {
+          "name": "category",
+          "in": "path",
+          "description": "ID of category to be listed",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "note",
+          "in": "path",
+          "description": "ID of note to be listed",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "description": "list notes of a category",
         "produces": [
           "application/json"
         ]
