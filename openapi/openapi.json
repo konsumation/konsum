@@ -170,6 +170,13 @@
           }
         }
       },
+      "security": [
+        {
+          "auth": [
+            "konsum.category.delete"
+          ]
+        }
+      ],
       "delete": {
         "description": "Delete a category.",
         "responses": {
@@ -444,6 +451,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "auth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "Category": {
         "type": "object",
