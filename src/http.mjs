@@ -164,15 +164,12 @@ export async function prepareHttpServer(config, sd, master) {
    * /authenticate:
    *   post:
    *     description: Login to request api token.
-   *     parameters:
-   *       - name: username
-   *         required: true
-   *         schema:
-   *           type: string
-   *       - name: password
-   *         required: true
-   *         schema:
-   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/Auth'
    *     responses:
    *       '200':
    *         description: Token generated.
@@ -846,4 +843,11 @@ export async function prepareHttpServer(config, sd, master) {
  *         memory:
  *           type: object
  *           description: The memory usage of the server.
+ *     Auth:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *         password:
+ *           type: string
  */
