@@ -233,8 +233,11 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    *
    * /category:
+   *   tags:
+   *     - category
+   *   summary: Retrieve list of categories
+   *   operationId: getCategories
    *   get:
-   *     description: retrieve list of categories.
    *     responses:
    *       '200':
    *         description: A list of categories.
@@ -244,6 +247,9 @@ export async function prepareHttpServer(config, sd, master) {
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Category'
+   *   security:
+   *     - auth:
+   *       - konsum.category
    */
   router.addRoute("GET", "/category", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
