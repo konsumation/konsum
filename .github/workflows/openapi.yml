@@ -24,6 +24,10 @@ jobs:
           name: openapi
           path: ${{ github.workspace }}/build/**/*
           retention-days: 2
+      - uses: blake-mealey/openapi-review-action@v1
+        with:
+          spec-paths: openapi/openapi.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   publish_doc:
     needs:
       - update_openapi
