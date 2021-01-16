@@ -230,8 +230,8 @@ export async function prepareHttpServer(config, sd, master) {
   app.use(router.middleware());
 
   /**
+   * Retrieve list of categories
    * @swagger
-   *
    * /category:
    *   tags:
    *     - category

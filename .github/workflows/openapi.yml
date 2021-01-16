@@ -20,6 +20,7 @@ jobs:
           commit-message: 'chore(openapi): update openapi definition'
       - run: npx bootprint openapi openapi/openapi.json build
       - run: npx widdershins --environment openapi/env.json openapi/openapi.json -o build/openapi.md
+      - run: npx widdershins --environment openapi/env.json openapi/openapi.json --html -o build/openapi.html
       - uses: actions/upload-artifact@v2
         with:
           name: openapi
