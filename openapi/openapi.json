@@ -12,7 +12,11 @@
           "200": {
             "description": "Progress message.",
             "content": {
-              "application/text": null
+              "application/text": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextOnlyMessage"
+                }
+              }
             }
           }
         }
@@ -25,7 +29,11 @@
           "200": {
             "description": "Progress message.",
             "content": {
-              "application/text": null
+              "application/text": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextOnlyMessage"
+                }
+              }
             }
           }
         }
@@ -38,7 +46,11 @@
           "200": {
             "description": "Backup data as text.",
             "content": {
-              "application/text": null
+              "application/text": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextOnlyMessage"
+                }
+              }
             }
           }
         }
@@ -71,7 +83,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Auth"
+                "$ref": "#/components/schemas/AuthRequest"
               }
             }
           }
@@ -80,13 +92,21 @@
           "200": {
             "description": "Token generated.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
             }
           },
           "401": {
             "description": "Authentication failed.",
             "content": {
-              "application/json": {}
+              "application/text": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextOnlyMessage"
+                }
+              }
             }
           }
         }
@@ -130,7 +150,11 @@
           "200": {
             "description": "success message.",
             "content": {
-              "application/json": null
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -141,13 +165,21 @@
           "200": {
             "description": "success message.",
             "content": {
-              "application/json": null
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           },
           "404": {
             "description": "No such category error message.",
             "content": {
-              "application/json": null
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -204,7 +236,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -215,7 +251,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -266,7 +306,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -277,7 +321,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -288,7 +336,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -339,7 +391,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -350,7 +406,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -361,7 +421,11 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {}
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         }
@@ -448,7 +512,7 @@
           }
         }
       },
-      "Auth": {
+      "AuthRequest": {
         "type": "object",
         "properties": {
           "username": {
@@ -458,6 +522,28 @@
             "type": "string"
           }
         }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "TextOnlyMessage": {
+        "type": "string"
       }
     }
   },
