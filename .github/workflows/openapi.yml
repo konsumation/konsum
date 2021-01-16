@@ -38,6 +38,14 @@ jobs:
           path: openapi
       - name: list files
         run: ls -R
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          external_repository: konsumation/konsumation.github.io
+          publish_branch: master
+          publish_dir: openapi
+          destination_dir: openapi
       - uses: EndBug/add-and-commit@v6
         with:
           add: 'openapi/*.html'
