@@ -113,8 +113,12 @@
       }
     },
     "/category": {
+      "tags": [
+        "category"
+      ],
+      "summary": "Retrieve list of categories",
+      "operationId": "getCategories",
       "get": {
-        "description": "retrieve list of categories.",
         "responses": {
           "200": {
             "description": "A list of categories.",
@@ -130,7 +134,14 @@
             }
           }
         }
-      }
+      },
+      "security": [
+        {
+          "auth": [
+            "konsum.category"
+          ]
+        }
+      ]
     },
     "/category/{category}": {
       "parameters": [
