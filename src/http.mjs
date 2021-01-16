@@ -63,6 +63,8 @@ export async function prepareHttpServer(config, sd, master) {
    *         description: Progress message.
    *         content:
    *           application/text:
+   *             schema:
+   *               $ref: '#/components/schemas/TextOnlyMessage'
    */
   router.addRoute("POST", "/admin/stop", async (ctx, next) => {
     shutdown();
@@ -81,6 +83,8 @@ export async function prepareHttpServer(config, sd, master) {
    *         description: Progress message.
    *         content:
    *           application/text:
+   *             schema:
+   *               $ref: '#/components/schemas/TextOnlyMessage'
    */
   router.addRoute("POST", "/admin/reload", async (ctx, next) => {
     sd.notify("RELOADING=1");
@@ -115,6 +119,8 @@ export async function prepareHttpServer(config, sd, master) {
    *         description: Backup data as text.
    *         content:
    *           application/text:
+   *             schema:
+   *               $ref: '#/components/schemas/TextOnlyMessage'
    */
   router.addRoute("GET", "/admin/backup", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.backup");
@@ -169,16 +175,20 @@ export async function prepareHttpServer(config, sd, master) {
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/Auth'
+   *             $ref: '#/components/schemas/AuthRequest'
    *     responses:
    *       '200':
    *         description: Token generated.
    *         content:
-   *           'application/json': {}
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/AuthResponse'
    *       '401':
    *         description: Authentication failed.
    *         content:
-   *           'application/json': {}
+   *           'application/text':
+   *             schema:
+   *               $ref: '#/components/schemas/TextOnlyMessage'
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
@@ -264,7 +274,9 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: success message.
    *         content:
-   *           application/json:
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    */
   router.addRoute(
     "PUT",
@@ -302,11 +314,15 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: success message.
    *         content:
-   *           application/json:
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    *       '404':
    *         description: No such category error message.
    *         content:
-   *           application/json:
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    */
   router.addRoute(
     "DELETE",
@@ -435,7 +451,9 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: Success message.
    *         content:
-   *           'application/json': {}
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    */
   router.addRoute(
     "POST",
@@ -482,7 +500,9 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: Success message.
    *         content:
-   *           'application/json': {}
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    */
   router.addRoute(
     "DELETE",
@@ -599,7 +619,9 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json': {}
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      * /category/{category}/note:
      *   parameters:
      *   - name: category
@@ -620,7 +642,9 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json': {}
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      */
     router.addRoute(
       "PUT",
@@ -665,7 +689,9 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json': {}
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      * /category/{category}/note:
      *   parameters:
      *   - name: category
@@ -686,7 +712,9 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json': {}
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      */
     router.addRoute(
       "POST",
@@ -729,7 +757,9 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json': {}
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      * /category/{category}/note:
      *   parameters:
      *   - name: category
@@ -750,7 +780,9 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json': {}
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      */
     router.addRoute(
       "DELETE",
@@ -843,11 +875,25 @@ export async function prepareHttpServer(config, sd, master) {
  *         memory:
  *           type: object
  *           description: The memory usage of the server.
- *     Auth:
+ *     AuthRequest:
  *       type: object
  *       properties:
  *         username:
  *           type: string
  *         password:
  *           type: string
+ *     AuthResponse:
+ *       type: object
+ *       properties:
+ *         access_token:
+ *           type: string
+ *         refresh_token:
+ *           type: string
+ *     Message:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *     TextOnlyMessage:
+ *       type: string
  */
