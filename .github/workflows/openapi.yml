@@ -36,9 +36,7 @@ jobs:
         with:
           name: openapi
           path: openapi
-      - name: list files
-        run: ls -R
-      - name: Deploy
+      - name: Deploy Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GH_TOKEN }}
@@ -46,11 +44,3 @@ jobs:
           publish_branch: master
           publish_dir: openapi
           destination_dir: openapi
-      - uses: EndBug/add-and-commit@v6
-        with:
-          add: 'openapi/*.html'
-          author_name: "Markus Felten"
-          author_email: "markus.felten@gmx.de"
-          message: 'docs(openapi): update openapi documentation'
-          token: ${{ secrets.GH_TOKEN }}
-
