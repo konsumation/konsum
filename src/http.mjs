@@ -283,6 +283,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
+   *   security:
+   *     - auth:
+   *       - konsum.category.add
    */
   router.addRoute(
     "PUT",
@@ -329,6 +332,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
+   *   security:
+   *     - auth:
+   *       - konsum.category.delete
    */
   router.addRoute(
     "DELETE",
@@ -825,6 +831,11 @@ export async function prepareHttpServer(config, sd, master) {
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     auth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  *   schemas:
  *     Category:
  *       type: object
