@@ -165,11 +165,15 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
+   * Authenticate.
    * @swagger
    *
    * /authenticate:
+   *   tags:
+   *     - authenticate
    *   post:
    *     description: Login to request api token.
+   *     operationId: authenticate
    *     requestBody:
    *       required: true
    *       content:
