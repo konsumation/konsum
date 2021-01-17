@@ -107,8 +107,27 @@ see [openapi B](https://konsumation.github.io/openapi/openapi.html)
 -   [addRoute](#addroute-7)
 -   [addRoute](#addroute-8)
 -   [addRoute](#addroute-9)
+-   [addRoute](#addroute-10)
+-   [addRoute](#addroute-11)
+-   [addRoute](#addroute-12)
+-   [addRoute](#addroute-13)
+-   [addRoute](#addroute-14)
+
+## 
 
 ## addRoute
+
+## addRoute
+
+## addRoute
+
+## addRoute
+
+## addRoute
+
+## addRoute
+
+Retrieve list of categories
 
 ## addRoute
 
