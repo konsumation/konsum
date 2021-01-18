@@ -79,13 +79,14 @@ program
 program.parse(process.argv);
 
 async function prepareConfig() {
+  const options = program.opts();
   let sd = { notify: () => {}, listeners: () => [] };
   try {
     sd = await import("sd-daemon");
   } catch (e) {}
   sd.notify("STATUS=starting");
 
-  const configDir = process.env.CONFIGURATION_DIRECTORY || program.config;
+  const configDir = process.env.CONFIGURATION_DIRECTORY || options.config;
 
   // some constants used while loading the configuration
   const constants = {
