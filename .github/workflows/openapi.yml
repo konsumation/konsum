@@ -18,6 +18,7 @@ jobs:
           title: update openapi definition
           branch: openapi
           commit-message: 'chore(openapi): update openapi definition'
+      - run: mkdir -p build
       - run: npx api2html -o build/index.html -l shell,javascript openapi/openapi.json
       - uses: actions/upload-artifact@v2
         with:
