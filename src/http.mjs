@@ -67,6 +67,7 @@ export async function prepareHttpServer(config, sd, master) {
    *               $ref: '#/components/schemas/TextOnlyMessage'
    */
   router.addRoute("POST", "/admin/stop", async (ctx, next) => {
+    enshureEntitlement(ctx, "konsum.admin.stop");
     shutdown();
     ctx.body = "stopping...";
     return next();
@@ -87,6 +88,7 @@ export async function prepareHttpServer(config, sd, master) {
    *               $ref: '#/components/schemas/TextOnlyMessage'
    */
   router.addRoute("POST", "/admin/reload", async (ctx, next) => {
+    enshureEntitlement(ctx, "konsum.admin.reload");
     sd.notify("RELOADING=1");
     // TODO
     return next();
@@ -98,6 +100,8 @@ export async function prepareHttpServer(config, sd, master) {
     restricted,
     BodyParser(),
     async (ctx, next) => {
+      enshureEntitlement(ctx, "konsum.admin.backup");
+
       const q = ctx.request.body;
       const name = q.filename || "/tmp/konsum.txt";
 

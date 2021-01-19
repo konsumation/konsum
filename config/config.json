@@ -23,7 +23,11 @@
       },
       "admin": {
         "password": "start123",
-        "entitlements": ["konsum", "konsum.admin.backup"]
+        "entitlements": ["konsum", 
+          "konsum.admin.backup",
+          "konsum.admin.stop",
+          "konsum.admin.reload"
+        ]
       }
     },
     "jwt": {

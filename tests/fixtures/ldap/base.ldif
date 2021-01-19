@@ -100,3 +100,13 @@ dn: cn=konsum.admin.backup,ou=groups,dc=example,dc=com
 cn: konsum.admin.backup
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.admin.stop,ou=groups,dc=example,dc=com
+cn: konsum.admin.stop
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.admin.reload,ou=groups,dc=example,dc=com
+cn: konsum.admin.reload
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
