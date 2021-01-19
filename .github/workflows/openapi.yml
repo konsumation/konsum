@@ -22,9 +22,7 @@ jobs:
       - run: >-
           npx widdershins --environment openapi/env.json openapi/openapi.json -o
           build/openapi.md
-      - run: >-
-          npx widdershins --environment openapi/env.json openapi/openapi.json
-          --html -o build/openapi.html
+      - run: npx api2html -o build/openapi.html -l shell,javascript openapi/openapi.json
       - uses: actions/upload-artifact@v2
         with:
           name: openapi
