@@ -256,7 +256,7 @@ export async function prepareHttpServer(config, sd, master) {
    *               items:
    *                 $ref: '#/components/schemas/Category'
    *   security:
-   *     - auth:
+   *     - konsum_auth:
    *       - konsum.category
    */
   router.addRoute("GET", "/category", restricted, async (ctx, next) => {
@@ -276,12 +276,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /category/{category}:
    *   parameters:
-   *   - name: category
-   *     in: path
-   *     description: ID of category that needs to be inserted
-   *     required: true
-   *     schema:
-   *       type: string
+   *   - $ref: '#/components/parameters/category'
    *   put:
    *     description: insert a new category
    *     responses:
@@ -292,7 +287,7 @@ export async function prepareHttpServer(config, sd, master) {
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *   security:
-   *     - auth:
+   *     - konsum_auth:
    *       - konsum.category.add
    */
   router.addRoute(
@@ -319,12 +314,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /category/{category}:
    *   parameters:
-   *   - name: category
-   *     in: path
-   *     description: ID of category that needs to be deleted
-   *     required: true
-   *     schema:
-   *       type: string
+   *   - $ref: '#/components/parameters/category'
    *   delete:
    *     description: Delete a category.
    *     responses:
@@ -341,7 +331,7 @@ export async function prepareHttpServer(config, sd, master) {
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *   security:
-   *     - auth:
+   *     - konsum_auth:
    *       - konsum.category.delete
    */
   router.addRoute(
@@ -367,12 +357,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /category/{category}/value:
    *   parameters:
-   *   - name: category
-   *     in: path
-   *     description: ID of category that needs to be retrieved.
-   *     required: true
-   *     schema:
-   *       type: string
+   *   - $ref: '#/components/parameters/category'
    *   - name: limit
    *     in: query
    *     description: Limits the number of entries delivered.
@@ -447,12 +432,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /category/{category}/value:
    *   parameters:
-   *   - name: category
-   *     in: path
-   *     description: ID of category where the values belong to.
-   *     required: true
-   *     schema:
-   *       type: string
+   *   - $ref: '#/components/parameters/category'
    *   - name: value
    *     in: body
    *     description: The value itself.
@@ -502,12 +482,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /category/{category}/value:
    *   parameters:
-   *   - name: category
-   *     in: path
-   *     description: ID of category from where the value bill deleted.
-   *     required: true
-   *     schema:
-   *       type: string
+   *   - $ref: '#/components/parameters/category'
    *   - name: time
    *     in: body
    *     description: Time the value was present.
@@ -548,18 +523,8 @@ export async function prepareHttpServer(config, sd, master) {
      * @swagger
      * /category/{category}/meter:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category to be listed.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: mater
-     *     in: path
-     *     description: ID of meter to be listed.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/meter'
      *   get:
      *     description: List meters of a category.
      *     responses:
@@ -573,18 +538,8 @@ export async function prepareHttpServer(config, sd, master) {
      *                 $ref: '#/components/schemas/Meter'
      * /category/{category}/note:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category to be listed.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: note
-     *     in: path
-     *     description: ID of note to be listed.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/note'
      *   get:
      *     description: List notes of a category.
      *     responses:
@@ -621,18 +576,8 @@ export async function prepareHttpServer(config, sd, master) {
      * @swagger
      * /category/{category}/meter:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category to be added.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: mater
-     *     in: path
-     *     description: ID of meter to be added.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/meter'
      *   put:
      *     description: Add a meter to a category.
      *     responses:
@@ -644,18 +589,8 @@ export async function prepareHttpServer(config, sd, master) {
      *               $ref: '#/components/schemas/Message'
      * /category/{category}/note:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category to be added.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: note
-     *     in: path
-     *     description: ID of note to be added.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/note'
      *   put:
      *     description: add a note to a category.
      *     responses:
@@ -691,18 +626,8 @@ export async function prepareHttpServer(config, sd, master) {
      * @swagger
      * /category/{category}/meter:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category the meter belongs to.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: mater
-     *     in: path
-     *     description: ID of meter to be updated.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/meter'
      *   post:
      *     description: Update a meter.
      *     responses:
@@ -714,18 +639,8 @@ export async function prepareHttpServer(config, sd, master) {
      *               $ref: '#/components/schemas/Message'
      * /category/{category}/note:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category to note belongs to.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: note
-     *     in: path
-     *     description: ID of note to be updated.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/note'
      *   post:
      *     description: Update a note.
      *     responses:
@@ -757,20 +672,10 @@ export async function prepareHttpServer(config, sd, master) {
 
     /**
      * @swagger
-     * /category/{category}/meter:
+     * /category/{category}/{meter}:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category the meter belongs to.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: mater
-     *     in: path
-     *     description: ID of meter to be deleted.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/meter'
      *   delete:
      *     description: Delete a meter.
      *     responses:
@@ -780,20 +685,10 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
-     * /category/{category}/note:
+     * /category/{category}/{note}:
      *   parameters:
-     *   - name: category
-     *     in: path
-     *     description: ID of category to note belongs to.
-     *     required: true
-     *     schema:
-     *       type: string
-     *   - name: note
-     *     in: path
-     *     description: ID of note to be deleted.
-     *     required: true
-     *     schema:
-     *       type: string
+     *   - $ref: '#/components/parameters/category'
+     *   - $ref: '#/components/parameters/note'
      *   delete:
      *     description: Delete a note.
      *     responses:
@@ -839,8 +734,27 @@ export async function prepareHttpServer(config, sd, master) {
 /**
  * @swagger
  * components:
+ *   parameters:
+ *     category:
+ *       name: category
+ *       in: path
+ *       description: Category identifier
+ *       schema:
+ *         type: string
+ *     meter:
+ *       name: meter
+ *       in: path
+ *       description: Meter identifier
+ *       schema:
+ *         type: string
+ *     note:
+ *       name: note
+ *       in: path
+ *       description: Note identifier
+ *       schema:
+ *         type: string
  *   securitySchemes:
- *     auth:
+ *     konsum_auth:
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
