@@ -449,7 +449,7 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - name: category
    *     in: path
-   *     description: ID of category that needs to be retrieved.
+   *     description: ID of category where the values belong to.
    *     required: true
    *     schema:
    *       type: string
