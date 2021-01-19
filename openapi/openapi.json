@@ -141,7 +141,7 @@
       },
       "security": [
         {
-          "auth": [
+          "konsum_auth": [
             "konsum.category"
           ]
         }
@@ -150,13 +150,7 @@
     "/category/{category}": {
       "parameters": [
         {
-          "name": "category",
-          "in": "path",
-          "description": "ID of category that needs to be deleted",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
+          "$ref": "#/components/parameters/category"
         }
       ],
       "put": {
@@ -176,7 +170,7 @@
       },
       "security": [
         {
-          "auth": [
+          "konsum_auth": [
             "konsum.category.delete"
           ]
         }
@@ -210,13 +204,7 @@
     "/category/{category}/value": {
       "parameters": [
         {
-          "name": "category",
-          "in": "path",
-          "description": "ID of category from where the value bill deleted.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
+          "$ref": "#/components/parameters/category"
         },
         {
           "name": "time",
@@ -286,22 +274,10 @@
     "/category/{category}/meter": {
       "parameters": [
         {
-          "name": "category",
-          "in": "path",
-          "description": "ID of category the meter belongs to.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
+          "$ref": "#/components/parameters/category"
         },
         {
-          "name": "mater",
-          "in": "path",
-          "description": "ID of meter to be deleted.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
+          "$ref": "#/components/parameters/meter"
         }
       ],
       "get": {
@@ -351,42 +327,15 @@
             }
           }
         }
-      },
-      "delete": {
-        "description": "Delete a meter.",
-        "responses": {
-          "200": {
-            "description": "Success message.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/category/{category}/note": {
       "parameters": [
         {
-          "name": "category",
-          "in": "path",
-          "description": "ID of category to note belongs to.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
+          "$ref": "#/components/parameters/category"
         },
         {
-          "name": "note",
-          "in": "path",
-          "description": "ID of note to be deleted.",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
+          "$ref": "#/components/parameters/note"
         }
       ],
       "get": {
@@ -436,7 +385,42 @@
             }
           }
         }
-      },
+      }
+    },
+    "/category/{category}/{meter}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/category"
+        },
+        {
+          "$ref": "#/components/parameters/meter"
+        }
+      ],
+      "delete": {
+        "description": "Delete a meter.",
+        "responses": {
+          "200": {
+            "description": "Success message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/category/{category}/{note}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/category"
+        },
+        {
+          "$ref": "#/components/parameters/note"
+        }
+      ],
       "delete": {
         "description": "Delete a note.",
         "responses": {
@@ -455,8 +439,34 @@
     }
   },
   "components": {
+    "parameters": {
+      "category": {
+        "name": "category",
+        "in": "path",
+        "description": "Category identifier",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "meter": {
+        "name": "meter",
+        "in": "path",
+        "description": "Meter identifier",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "note": {
+        "name": "note",
+        "in": "path",
+        "description": "Note identifier",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
     "securitySchemes": {
-      "auth": {
+      "konsum_auth": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
