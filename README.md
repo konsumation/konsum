@@ -124,6 +124,8 @@ see [openapi A](https://konsumation.github.io/openapi/index.html)
 
 ## addRoute
 
+Authenticate.
+
 ## addRoute
 
 Retrieve list of categories
