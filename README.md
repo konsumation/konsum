@@ -89,7 +89,6 @@ konsum insert ev 90091.3 '2019-06-22T13:44:17'
 # openapi
 
 see [openapi A](https://konsumation.github.io/openapi/index.html)
-see [openapi B](https://konsumation.github.io/openapi/openapi.html)
 
 # API
 
