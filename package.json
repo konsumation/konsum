@@ -25,9 +25,9 @@
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 2m tests/*.mjs",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m tests/*.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme ./src/konsum-cli.mjs --section=API",
+    "docs": "documentation readme --section=API ./src/**/*.mjs",
     "lint": "npm run lint:docs",
-    "lint:docs": "documentation lint ./src/konsum-cli.mjs"
+    "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
     "commander": "^7.0.0",
@@ -53,7 +53,7 @@
     "execa": "^5.0.0",
     "got": "^11.8.1",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^6.12.19",
+    "npm-pkgbuild": "^6.12.21",
     "semantic-release": "^17.3.3",
     "swagger-jsdoc": "^6.0.1",
     "tmp": "^0.2.1"
