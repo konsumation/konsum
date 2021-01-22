@@ -94,6 +94,21 @@ export async function prepareHttpServer(config, sd, master) {
     return next();
   });
 
+  /**
+   * @swagger
+   *
+   * /admin/backup:
+   *   post:
+   *     operationId: backupDataOnServer
+   *     description: Create backup on server.
+   *     responses:
+   *       '200':
+   *         description: Success message. 
+   *         content:
+   *           application/text:
+   *             schema:
+   *               $ref: '#/components/schemas/TextOnlyMessage'
+   */
   router.addRoute(
     "POST",
     "/admin/backup",
@@ -117,6 +132,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /admin/backup:
    *   get:
+   *     operationId: backupData
    *     description: Create backup.
    *     responses:
    *       '200':
@@ -146,10 +162,11 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /state:
    *   get:
-   *     description: Retrieve application state.
+   *     description: Retrieve service state.
+   *     operationId: getServiceState 
    *     responses:
    *       '200':
-   *         description: Server status.
+   *         description: Service state.
    *         content:
    *           application/json:
    *             schema:
@@ -278,6 +295,7 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - $ref: '#/components/parameters/category'
    *   put:
+   *     operationId: addCategories
    *     description: insert a new category
    *     responses:
    *       '200':
