@@ -387,7 +387,7 @@
         }
       }
     },
-    "/category/{category}/{meter}": {
+    "/category/{category}/meter/{meter}": {
       "parameters": [
         {
           "$ref": "#/components/parameters/category"
@@ -412,7 +412,7 @@
         }
       }
     },
-    "/category/{category}/{note}": {
+    "/category/{category}/note/{note}": {
       "parameters": [
         {
           "$ref": "#/components/parameters/category"
@@ -443,7 +443,7 @@
       "category": {
         "name": "category",
         "in": "path",
-        "description": "Category identifier",
+        "description": "Category identifier.",
         "schema": {
           "type": "string"
         }
@@ -451,7 +451,7 @@
       "meter": {
         "name": "meter",
         "in": "path",
-        "description": "Meter identifier",
+        "description": "Meter identifier.",
         "schema": {
           "type": "string"
         }
@@ -459,7 +459,7 @@
       "note": {
         "name": "note",
         "in": "path",
-        "description": "Note identifier",
+        "description": "Note identifier.",
         "schema": {
           "type": "string"
         }
