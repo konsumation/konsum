@@ -672,7 +672,7 @@ export async function prepareHttpServer(config, sd, master) {
 
     /**
      * @swagger
-     * /category/{category}/{meter}:
+     * /category/{category}/meter/{meter}:
      *   parameters:
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/meter'
@@ -685,7 +685,7 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
-     * /category/{category}/{note}:
+     * /category/{category}/note/{note}:
      *   parameters:
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/note'
@@ -738,19 +738,19 @@ export async function prepareHttpServer(config, sd, master) {
  *     category:
  *       name: category
  *       in: path
- *       description: Category identifier
+ *       description: Category identifier.
  *       schema:
  *         type: string
  *     meter:
  *       name: meter
  *       in: path
- *       description: Meter identifier
+ *       description: Meter identifier.
  *       schema:
  *         type: string
  *     note:
  *       name: note
  *       in: path
- *       description: Note identifier
+ *       description: Note identifier.
  *       schema:
  *         type: string
  *   securitySchemes:
