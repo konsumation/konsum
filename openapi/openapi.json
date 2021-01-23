@@ -172,8 +172,8 @@
         }
       ],
       "put": {
-        "operationId": "addCategories",
-        "description": "insert a new category",
+        "operationId": "addCategory",
+        "description": "Add a new category.",
         "responses": {
           "200": {
             "description": "success message.",
@@ -195,6 +195,7 @@
         }
       ],
       "delete": {
+        "operationId": "deleteCategory",
         "description": "Delete a category.",
         "responses": {
           "200": {
@@ -236,6 +237,7 @@
         }
       ],
       "get": {
+        "operationId": "getCategoryValues",
         "description": "List values of a category.",
         "responses": {
           "200": {
