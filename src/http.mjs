@@ -295,8 +295,8 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - $ref: '#/components/parameters/category'
    *   put:
-   *     operationId: addCategories
-   *     description: insert a new category
+   *     operationId: addCategory
+   *     description: Add a new category.
    *     responses:
    *       '200':
    *         description: success message.
@@ -334,6 +334,7 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - $ref: '#/components/parameters/category'
    *   delete:
+   *     operationId: deleteCategory
    *     description: Delete a category.
    *     responses:
    *       '200':
@@ -391,6 +392,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     schema:
    *       type: boolean
    *   get:
+   *     operationId: getCategoryValues
    *     description: List values of a category.
    *     responses:
    *       '200':
