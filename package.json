@@ -53,8 +53,8 @@
     "execa": "^5.0.0",
     "got": "^11.8.1",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^6.12.21",
-    "semantic-release": "^17.3.3",
+    "npm-pkgbuild": "^6.12.22",
+    "semantic-release": "^17.3.7",
     "swagger-jsdoc": "^6.0.1",
     "tmp": "^0.2.1"
   },
