@@ -51,3 +51,4 @@ jobs:
           publish_branch: master
           publish_dir: openapi
           destination_dir: openapi
+          enable_jekyll: true
