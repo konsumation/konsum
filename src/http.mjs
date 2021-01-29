@@ -876,21 +876,31 @@ export async function prepareHttpServer(config, sd, master) {
  *       properties:
  *         username:
  *           type: string
+ *           required: true
  *         password:
  *           type: string
+ *           required: true
  *     AuthResponse:
  *       type: object
  *       properties:
  *         access_token:
  *           type: string
+ *           required: true
  *         token_type:
  *           type: string
+ *           description: Type of the token.
+ *           restriction: 'bearer'
+ *           required: true
  *         refresh_token:
  *           type: string
- *         expires_in:
- *           type: string
+ *           required: true
+ *         expires:
+ *           type: integer
+ *           description: Number of seconds the access token is valid.
+ *           required: true
  *         scope:
  *           type: string
+ *           required: true
  *     Message:
  *       type: object
  *       properties:
