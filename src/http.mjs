@@ -35,18 +35,28 @@ function isTrue(v) {
   return v && v !== "false" && v != "0";
 }
 
+/**
+ * Recode duration string into seconds.
+ * 2h -> 7200
+ * @param {string} duration
+ * @returns {number} seconds
+ */
 function durationAsSeconds(duration) {
-  if(!duration) { return 0; }
-  
-  const m = duration.match(/(\d+)(\w+)/);
-  if(m) {
-    switch(m[2]) {
-      case 'm': return   60 * m[1];
-      case 'h': return 3600 * m[1];
+  if (duration) {
+    const m = duration.match(/^(\d+)(\w+)/);
+
+    if (m) {
+      const n2s = { m: 60, h: 3600 };
+      const unitName = m[2];
+      if (n2s[unitName]) {
+        return n2s[unitName] * parseInt(m[1]);
+      }
     }
   }
-  return duration;
+
+  return 0;
 }
+
 
 export async function prepareHttpServer(config, sd, master) {
   const app = new Koa();
