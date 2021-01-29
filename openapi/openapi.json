@@ -7,7 +7,7 @@
   "paths": {
     "/admin/stop": {
       "post": {
-        "operationId": "stopKonsumServer",
+        "operationId": "stopServer",
         "description": "Stop konsum server.",
         "responses": {
           "200": {
@@ -25,7 +25,7 @@
     },
     "/admin/reload": {
       "post": {
-        "operationId": "reloadKonsumConfig",
+        "operationId": "reloadConfig",
         "description": "Reload konsum systemd config.",
         "responses": {
           "200": {
@@ -601,7 +601,16 @@
           "access_token": {
             "type": "string"
           },
+          "token_type": {
+            "type": "string"
+          },
           "refresh_token": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "scope": {
             "type": "string"
           }
         }
