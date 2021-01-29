@@ -35,6 +35,19 @@ function isTrue(v) {
   return v && v !== "false" && v != "0";
 }
 
+function durationAsSeconds(duration) {
+  if(!duration) { return 0; }
+  
+  const m = duration.match(/(\d+)(\w+)/);
+  if(m) {
+    switch(m[2]) {
+      case 'm': return   60 * m[1];
+      case 'h': return 3600 * m[1];
+    }
+  }
+  return duration;
+}
+
 export async function prepareHttpServer(config, sd, master) {
   const app = new Koa();
   const router = Router();
@@ -57,7 +70,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /admin/stop:
    *   post:
-   *     operationId: stopKonsumServer
+   *     operationId: stopServer
    *     description: Stop konsum server.
    *     responses:
    *       '200':
@@ -79,7 +92,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /admin/reload:
    *   post:
-   *     operationId: reloadKonsumConfig
+   *     operationId: reloadConfig
    *     description: Reload konsum systemd config.
    *     responses:
    *       '200':
@@ -246,7 +259,9 @@ export async function prepareHttpServer(config, sd, master) {
       ctx.status = 200;
       ctx.body = {
         access_token,
-        refresh_token
+        refresh_token,
+        token_type: "bearer",
+        expires: durationAsSeconds(config.auth.jwt.options.expiresIn)
       };
     } else {
       ctx.throw(401, "Authentication failed");
@@ -858,7 +873,13 @@ export async function prepareHttpServer(config, sd, master) {
  *       properties:
  *         access_token:
  *           type: string
+ *         token_type:
+ *           type: string
  *         refresh_token:
+ *           type: string
+ *         expires_in:
+ *           type: string
+ *         scope:
  *           type: string
  *     Message:
  *       type: object
