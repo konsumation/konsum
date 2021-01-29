@@ -588,10 +588,12 @@
         "type": "object",
         "properties": {
           "username": {
-            "type": "string"
+            "type": "string",
+            "required": true
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "required": true
           }
         }
       },
@@ -599,19 +601,27 @@
         "type": "object",
         "properties": {
           "access_token": {
-            "type": "string"
+            "type": "string",
+            "required": true
           },
           "token_type": {
-            "type": "string"
+            "type": "string",
+            "description": "Type of the token.",
+            "restriction": "bearer",
+            "required": true
           },
           "refresh_token": {
-            "type": "string"
+            "type": "string",
+            "required": true
           },
-          "expires_in": {
-            "type": "string"
+          "expires": {
+            "type": "integer",
+            "description": "Number of seconds the access token is valid.",
+            "required": true
           },
           "scope": {
-            "type": "string"
+            "type": "string",
+            "required": true
           }
         }
       },
