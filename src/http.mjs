@@ -1,6 +1,7 @@
 import { createWriteStream } from "fs";
 import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
+import ms from "ms";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
@@ -33,28 +34,6 @@ function enshureEntitlement(ctx, entitlement) {
 
 function isTrue(v) {
   return v && v !== "false" && v != "0";
-}
-
-/**
- * Recode duration string into seconds.
- * 2h -> 7200
- * @param {string} duration
- * @returns {number} seconds
- */
-function durationAsSeconds(duration) {
-  if (duration) {
-    const m = duration.match(/^(\d+)(\w+)/);
-
-    if (m) {
-      const n2s = { m: 60, h: 3600 };
-      const unitName = m[2];
-      if (n2s[unitName]) {
-        return n2s[unitName] * parseInt(m[1]);
-      }
-    }
-  }
-
-  return 0;
 }
 
 
@@ -271,7 +250,7 @@ export async function prepareHttpServer(config, sd, master) {
         access_token,
         refresh_token,
         token_type: "bearer",
-        expires: durationAsSeconds(config.auth.jwt.options.expiresIn)
+        expires_in: ms(config.auth.jwt.options.expiresIn || "1h") / 1000
       };
     } else {
       ctx.throw(401, "Authentication failed");
@@ -885,18 +864,21 @@ export async function prepareHttpServer(config, sd, master) {
  *       properties:
  *         access_token:
  *           type: string
+ *           description: The access token issued.
  *           required: true
  *         token_type:
  *           type: string
- *           description: Type of the token.
+ *           description: The type of the token issued. Value is case insensitive.
  *           restriction: 'bearer'
  *           required: true
  *         refresh_token:
  *           type: string
  *           required: true
- *         expires:
+ *         expires_in:
  *           type: integer
- *           description: Number of seconds the access token is valid.
+ *           description: The lifetime in seconds of the access token. For
+ *                        example, the value "3600" denotes that the access token will
+ *                        expire in one hour from the time the response was generated.
  *           required: true
  *         scope:
  *           type: string
@@ -908,4 +890,7 @@ export async function prepareHttpServer(config, sd, master) {
  *           type: string
  *     TextOnlyMessage:
  *       type: string
+ * externalDocs:
+ *   description: OAuth response
+ *   url: https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2
  */
