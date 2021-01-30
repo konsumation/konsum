@@ -190,9 +190,8 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
-   * Authenticate.
+   * Login to request api token.
    * @swagger
-   *
    * /authenticate:
    *   tags:
    *     - authenticate
@@ -261,7 +260,7 @@ export async function prepareHttpServer(config, sd, master) {
   app.use(router.middleware());
 
   /**
-   * Retrieve list of categories
+   * Retrieve list of categories.
    * @swagger
    * /category:
    *   tags:
@@ -295,8 +294,8 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
+   * Add a new category.
    * @swagger
-   *
    * /category/{category}:
    *   parameters:
    *   - $ref: '#/components/parameters/category'
@@ -334,8 +333,8 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   /**
+   * Delete a category.
    * @swagger
-   *
    * /category/{category}:
    *   parameters:
    *   - $ref: '#/components/parameters/category'
@@ -378,8 +377,8 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   /**
+   * List values of a category.
    * @swagger
-   *
    * /category/{category}/value:
    *   parameters:
    *   - $ref: '#/components/parameters/category'
@@ -454,8 +453,8 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   /**
+   * Insert a value into a category.
    * @swagger
-   *
    * /category/{category}/value:
    *   parameters:
    *   - $ref: '#/components/parameters/category'
@@ -505,8 +504,8 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   /**
+   * Delete a value from a category.
    * @swagger
-   *
    * /category/{category}/value:
    *   parameters:
    *   - $ref: '#/components/parameters/category'
