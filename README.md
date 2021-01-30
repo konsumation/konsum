@@ -96,8 +96,6 @@ see [openapi A](https://konsumation.github.io/openapi/index.html)
 
 ### Table of Contents
 
--   [durationAsSeconds](#durationasseconds)
-    -   [Parameters](#parameters)
 -   [addRoute](#addroute)
 -   [addRoute](#addroute-1)
 -   [addRoute](#addroute-2)
@@ -114,17 +112,6 @@ see [openapi A](https://konsumation.github.io/openapi/index.html)
 -   [addRoute](#addroute-13)
 -   [addRoute](#addroute-14)
 -   [addRoute](#addroute-15)
-
-## durationAsSeconds
-
-Recode duration string into seconds.
-2h -> 7200
-
-### Parameters
-
--   `duration` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-Returns **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** seconds
 
 ## 
 
