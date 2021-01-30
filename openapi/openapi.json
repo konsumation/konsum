@@ -469,6 +469,10 @@
           }
         }
       }
+    },
+    "externalDocs": {
+      "description": "OAuth response",
+      "url": "https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2"
     }
   },
   "components": {
@@ -602,11 +606,12 @@
         "properties": {
           "access_token": {
             "type": "string",
+            "description": "The access token issued.",
             "required": true
           },
           "token_type": {
             "type": "string",
-            "description": "Type of the token.",
+            "description": "The type of the token issued. Value is case insensitive.",
             "restriction": "bearer",
             "required": true
           },
@@ -614,9 +619,9 @@
             "type": "string",
             "required": true
           },
-          "expires": {
+          "expires_in": {
             "type": "integer",
-            "description": "Number of seconds the access token is valid.",
+            "description": "The lifetime in seconds of the access token. For example, the value \"3600\" denotes that the access token will expire in one hour from the time the response was generated.",
             "required": true
           },
           "scope": {
