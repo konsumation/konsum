@@ -127,21 +127,31 @@ see [openapi A](https://konsumation.github.io/openapi/index.html)
 
 ## addRoute
 
-Authenticate.
+Login to request api token.
 
 ## addRoute
 
-Retrieve list of categories
+Retrieve list of categories.
 
 ## addRoute
 
-## addRoute
+Add a new category.
 
 ## addRoute
 
-## addRoute
+Delete a category.
 
 ## addRoute
+
+List values of a category.
+
+## addRoute
+
+Insert a value into a category.
+
+## addRoute
+
+Delete a value from a category.
 
 ## addRoute
 
