@@ -36,7 +36,6 @@ function isTrue(v) {
   return v && v !== "false" && v != "0";
 }
 
-
 export async function prepareHttpServer(config, sd, master) {
   const app = new Koa();
   const router = Router();
@@ -69,7 +68,7 @@ export async function prepareHttpServer(config, sd, master) {
    *             schema:
    *               $ref: '#/components/schemas/TextOnlyMessage'
    */
-  router.addRoute("POST", "/admin/stop", async (ctx, next) => {
+  router.addRoute("POST", "/admin/stop", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.stop");
     shutdown();
     ctx.body = "stopping...";
@@ -91,7 +90,7 @@ export async function prepareHttpServer(config, sd, master) {
    *             schema:
    *               $ref: '#/components/schemas/TextOnlyMessage'
    */
-  router.addRoute("POST", "/admin/reload", async (ctx, next) => {
+  router.addRoute("POST", "/admin/reload", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.reload");
     sd.notify("RELOADING=1");
     // TODO
@@ -107,7 +106,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     description: Create backup on server.
    *     responses:
    *       '200':
-   *         description: Success message. 
+   *         description: Success message.
    *         content:
    *           application/text:
    *             schema:
@@ -166,7 +165,7 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /state:
    *   get:
-   *     operationId: getServiceState 
+   *     operationId: getServiceState
    *     description: Retrieve service state.
    *     responses:
    *       '200':
@@ -191,6 +190,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Login to request api token.
+   * At least one entitlement starting with "konsum" is required.
    * @swagger
    * /authenticate:
    *   tags:
@@ -223,37 +223,41 @@ export async function prepareHttpServer(config, sd, master) {
 
     const { entitlements } = await authenticate(config, q.username, q.password);
 
-    if (entitlements.has("konsum")) {
-      const claims = {
-        name: q.username,
-        entitlements: [...entitlements].join(",")
-      };
-      if (config.auth.jwt.audience) {
-        claims.audience = config.auth.jwt.audience;
+    for (const e of entitlements) {
+      if (e.startsWith("konsum")) {
+        const claims = {
+          name: q.username,
+          entitlements: [...entitlements].join(",")
+        };
+        if (config.auth.jwt.audience) {
+          claims.audience = config.auth.jwt.audience;
+        }
+
+        const access_token = jsonwebtoken.sign(
+          claims,
+          config.auth.jwt.private,
+          config.auth.jwt.options
+        );
+
+        const refresh_token = jsonwebtoken.sign(
+          {},
+          config.auth.jwt.private,
+          config.auth.jwt.options
+        );
+
+        ctx.status = 200;
+        ctx.body = {
+          access_token,
+          refresh_token,
+          token_type: "bearer",
+          expires_in: ms(config.auth.jwt.options.expiresIn || "1h") / 1000
+        };
+
+        return next();
       }
-
-      const access_token = jsonwebtoken.sign(
-        claims,
-        config.auth.jwt.private,
-        config.auth.jwt.options
-      );
-
-      const refresh_token = jsonwebtoken.sign(
-        {},
-        config.auth.jwt.private,
-        config.auth.jwt.options
-      );
-
-      ctx.status = 200;
-      ctx.body = {
-        access_token,
-        refresh_token,
-        token_type: "bearer",
-        expires_in: ms(config.auth.jwt.options.expiresIn || "1h") / 1000
-      };
-    } else {
-      ctx.throw(401, "Authentication failed");
     }
+
+    ctx.throw(401, "Authentication failed");
     return next();
   });
 
@@ -764,7 +768,6 @@ export async function prepareHttpServer(config, sd, master) {
     router
   };
 }
-
 
 /**
  * @swagger
