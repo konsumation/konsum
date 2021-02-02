@@ -581,10 +581,6 @@
           }
         ]
       }
-    },
-    "externalDocs": {
-      "description": "OAuth response",
-      "url": "https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2"
     }
   },
   "components": {
@@ -690,6 +686,10 @@
             "type": "string",
             "description": "The software version of the server."
           },
+          "database": {
+            "type": "object",
+            "description": "details of the database."
+          },
           "uptime": {
             "type": "number",
             "description": "The duration the sever is up and running."
@@ -753,6 +753,10 @@
       "TextOnlyMessage": {
         "type": "string"
       }
+    },
+    "externalDocs": {
+      "description": "OAuth response",
+      "url": "https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2"
     }
   },
   "tags": []
