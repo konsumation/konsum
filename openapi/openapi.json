@@ -124,10 +124,10 @@
       }
     },
     "/authenticate": {
-      "tags": [
-        "authenticate"
-      ],
       "post": {
+        "tags": [
+          "authenticate"
+        ],
         "operationId": "authenticate",
         "description": "Login to request api token.",
         "requestBody": {
@@ -165,10 +165,10 @@
       }
     },
     "/category": {
-      "tags": [
-        "category"
-      ],
       "get": {
+        "tags": [
+          "category"
+        ],
         "operationId": "getCategories",
         "summary": "Retrieve list of categories.",
         "responses": {
