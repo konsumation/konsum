@@ -193,6 +193,7 @@ export async function prepareHttpServer(config, sd, master) {
 
     ctx.body = {
       version: config.version,
+      database: { schemaVersion: master.schemaVersion }, 
       uptime: process.uptime(),
       memory: process.memoryUsage()
     };
@@ -891,6 +892,9 @@ export async function prepareHttpServer(config, sd, master) {
  *         version:
  *           type: string
  *           description: The software version of the server.
+ *         database:
+ *           type: object
+ *           description: details of the database.
  *         uptime:
  *           type: number
  *           description: The duration the sever is up and running.
@@ -937,7 +941,7 @@ export async function prepareHttpServer(config, sd, master) {
  *           type: string
  *     TextOnlyMessage:
  *       type: string
- * externalDocs:
- *   description: OAuth response
- *   url: https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2
+ *   externalDocs:
+ *     description: OAuth response
+ *     url: https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2
  */
