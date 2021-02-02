@@ -281,9 +281,9 @@ export async function prepareHttpServer(config, sd, master) {
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Category'
-   *   security:
-   *     - konsum_auth:
-   *       - konsum.category
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.category
    */
   router.addRoute("GET", "/category", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -313,9 +313,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
-   *   security:
-   *     - konsum_auth:
-   *       - konsum.category.add
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.category.add
    */
   router.addRoute(
     "PUT",
@@ -358,9 +358,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
-   *   security:
-   *     - konsum_auth:
-   *       - konsum.category.delete
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.category.delete
    */
   router.addRoute(
     "DELETE",
@@ -416,6 +416,9 @@ export async function prepareHttpServer(config, sd, master) {
    *         description: Unsupported content-type.
    *         content:
    *           'text': "json, or text only"
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.value
    */
   router.addRoute(
     "GET",
@@ -484,6 +487,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.value.add
    */
   router.addRoute(
     "POST",
@@ -529,6 +535,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.value.delete
    */
   router.addRoute(
     "DELETE",
