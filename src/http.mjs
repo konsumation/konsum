@@ -58,6 +58,8 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /admin/stop:
    *   post:
+   *     tags:
+   *       - admin
    *     operationId: stopServer
    *     description: Stop konsum server.
    *     responses:
@@ -83,6 +85,8 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /admin/reload:
    *   post:
+   *     tags:
+   *       - admin
    *     operationId: reloadConfig
    *     description: Reload konsum systemd config.
    *     responses:
@@ -108,6 +112,8 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /admin/backup:
    *   post:
+   *     tags:
+   *       - admin
    *     operationId: backupDataOnServer
    *     description: Create backup on server.
    *     responses:
@@ -144,6 +150,8 @@ export async function prepareHttpServer(config, sd, master) {
    *
    * /admin/backup:
    *   get:
+   *     tags:
+   *       - admin
    *     operationId: backupData
    *     description: Create backup.
    *     responses:
@@ -317,6 +325,8 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - $ref: '#/components/parameters/category'
    *   put:
+   *     tags:
+   *       - category
    *     operationId: addCategory
    *     description: Add a new category.
    *     responses:
@@ -356,6 +366,8 @@ export async function prepareHttpServer(config, sd, master) {
    *   parameters:
    *   - $ref: '#/components/parameters/category'
    *   delete:
+   *     tags:
+   *       - category
    *     operationId: deleteCategory
    *     description: Delete a category.
    *     responses:
@@ -414,6 +426,8 @@ export async function prepareHttpServer(config, sd, master) {
    *     schema:
    *       type: boolean
    *   get:
+   *     tags:
+   *       - value
    *     operationId: getCategoryValues
    *     description: List values of a category.
    *     responses:
@@ -491,6 +505,8 @@ export async function prepareHttpServer(config, sd, master) {
    *     schema:
    *       type: string
    *   post:
+   *     tags:
+   *       - value
    *     operationId: insertCategoryValues
    *     description: Insert a value into a category.
    *     responses:
@@ -539,6 +555,8 @@ export async function prepareHttpServer(config, sd, master) {
    *     schema:
    *       type: string
    *   delete:
+   *     tags:
+   *       - value
    *     operationId: deleteCategoryValues
    *     description: Delete a value from a category.
    *     responses:
@@ -579,6 +597,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/meter'
      *   get:
+     *     tags:
+     *       - meter
      *     operationId: getCategoryMeters
      *     description: List meters of a category.
      *     responses:
@@ -598,6 +618,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/note'
      *   get:
+     *     tags:
+     *       - note
      *     operationId: getCategoryNotes
      *     description: List notes of a category.
      *     responses:
@@ -640,6 +662,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/meter'
      *   put:
+     *     tags:
+     *       - meter
      *     operationId: addCategoryMeter
      *     description: Add a meter to a category.
      *     responses:
@@ -657,6 +681,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/note'
      *   put:
+     *     tags:
+     *       - note
      *     operationId: addCategoryNote
      *     description: add a note to a category.
      *     responses:
@@ -698,6 +724,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/meter'
      *   post:
+     *     tags:
+     *       - meter
      *     operationId: updateCategoryMeter
      *     description: Update a meter.
      *     responses:
@@ -715,6 +743,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/note'
      *   post:
+     *     tags:
+     *       - note
      *     operationId: updateCategoryNote
      *     description: Update a note.
      *     responses:
@@ -754,6 +784,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/meter'
      *   delete:
+     *     tags:
+     *       - meter
      *     operationId: deleteCategoryMeter
      *     description: Delete a meter.
      *     responses:
@@ -771,6 +803,8 @@ export async function prepareHttpServer(config, sd, master) {
      *   - $ref: '#/components/parameters/category'
      *   - $ref: '#/components/parameters/note'
      *   delete:
+     *     tags:
+     *       - note
      *     operationId: deleteCategoryNote
      *     description: Delete a note.
      *     responses:
