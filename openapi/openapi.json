@@ -7,6 +7,9 @@
   "paths": {
     "/admin/stop": {
       "post": {
+        "tags": [
+          "admin"
+        ],
         "operationId": "stopServer",
         "description": "Stop konsum server.",
         "responses": {
@@ -32,6 +35,9 @@
     },
     "/admin/reload": {
       "post": {
+        "tags": [
+          "admin"
+        ],
         "operationId": "reloadConfig",
         "description": "Reload konsum systemd config.",
         "responses": {
@@ -57,6 +63,9 @@
     },
     "/admin/backup": {
       "post": {
+        "tags": [
+          "admin"
+        ],
         "operationId": "backupDataOnServer",
         "description": "Create backup on server.",
         "responses": {
@@ -80,6 +89,9 @@
         ]
       },
       "get": {
+        "tags": [
+          "admin"
+        ],
         "operationId": "backupData",
         "description": "Create backup.",
         "responses": {
@@ -202,6 +214,9 @@
         }
       ],
       "put": {
+        "tags": [
+          "category"
+        ],
         "operationId": "addCategory",
         "description": "Add a new category.",
         "responses": {
@@ -225,6 +240,9 @@
         ]
       },
       "delete": {
+        "tags": [
+          "category"
+        ],
         "operationId": "deleteCategory",
         "description": "Delete a category.",
         "responses": {
@@ -274,6 +292,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "value"
+        ],
         "operationId": "getCategoryValues",
         "description": "List values of a category.",
         "responses": {
@@ -306,6 +327,9 @@
         ]
       },
       "post": {
+        "tags": [
+          "value"
+        ],
         "operationId": "insertCategoryValues",
         "description": "Insert a value into a category.",
         "responses": {
@@ -329,6 +353,9 @@
         ]
       },
       "delete": {
+        "tags": [
+          "value"
+        ],
         "operationId": "deleteCategoryValues",
         "description": "Delete a value from a category.",
         "responses": {
@@ -362,6 +389,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "meter"
+        ],
         "operationId": "getCategoryMeters",
         "description": "List meters of a category.",
         "responses": {
@@ -388,6 +418,9 @@
         ]
       },
       "put": {
+        "tags": [
+          "meter"
+        ],
         "operationId": "addCategoryMeter",
         "description": "Add a meter to a category.",
         "responses": {
@@ -411,6 +444,9 @@
         ]
       },
       "post": {
+        "tags": [
+          "meter"
+        ],
         "operationId": "updateCategoryMeter",
         "description": "Update a meter.",
         "responses": {
@@ -444,6 +480,9 @@
         }
       ],
       "get": {
+        "tags": [
+          "note"
+        ],
         "operationId": "getCategoryNotes",
         "description": "List notes of a category.",
         "responses": {
@@ -470,6 +509,9 @@
         ]
       },
       "put": {
+        "tags": [
+          "note"
+        ],
         "operationId": "addCategoryNote",
         "description": "add a note to a category.",
         "responses": {
@@ -493,6 +535,9 @@
         ]
       },
       "post": {
+        "tags": [
+          "note"
+        ],
         "operationId": "updateCategoryNote",
         "description": "Update a note.",
         "responses": {
@@ -526,6 +571,9 @@
         }
       ],
       "delete": {
+        "tags": [
+          "meter"
+        ],
         "operationId": "deleteCategoryMeter",
         "description": "Delete a meter.",
         "responses": {
@@ -559,6 +607,9 @@
         }
       ],
       "delete": {
+        "tags": [
+          "note"
+        ],
         "operationId": "deleteCategoryNote",
         "description": "Delete a note.",
         "responses": {
