@@ -205,9 +205,9 @@ export async function prepareHttpServer(config, sd, master) {
    * At least one entitlement starting with "konsum" is required.
    * @swagger
    * /authenticate:
-   *   tags:
-   *     - authenticate
    *   post:
+   *     tags:
+   *       - authenticate
    *     operationId: authenticate
    *     description: Login to request api token.
    *     requestBody:
@@ -279,9 +279,9 @@ export async function prepareHttpServer(config, sd, master) {
    * Retrieve list of categories.
    * @swagger
    * /category:
-   *   tags:
-   *     - category
    *   get:
+   *     tags:
+   *       - category
    *     operationId: getCategories
    *     summary: Retrieve list of categories.
    *     responses:
