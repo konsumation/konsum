@@ -67,6 +67,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           application/text:
    *             schema:
    *               $ref: '#/components/schemas/TextOnlyMessage'
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.admin.stop
    */
   router.addRoute("POST", "/admin/stop", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.stop");
@@ -89,6 +92,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           application/text:
    *             schema:
    *               $ref: '#/components/schemas/TextOnlyMessage'
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.admin.reload
    */
   router.addRoute("POST", "/admin/reload", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.reload");
@@ -111,6 +117,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           application/text:
    *             schema:
    *               $ref: '#/components/schemas/TextOnlyMessage'
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.admin.backup
    */
   router.addRoute(
     "POST",
@@ -144,6 +153,9 @@ export async function prepareHttpServer(config, sd, master) {
    *           application/text:
    *             schema:
    *               $ref: '#/components/schemas/TextOnlyMessage'
+   *     security:
+   *       - konsum_auth:
+   *         - konsum.admin.backup
    */
   router.addRoute("GET", "/admin/backup", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.backup");
@@ -577,6 +589,9 @@ export async function prepareHttpServer(config, sd, master) {
      *               type: array
      *               items:
      *                 $ref: '#/components/schemas/Meter'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.meter
      * /category/{category}/note:
      *   parameters:
      *   - $ref: '#/components/parameters/category'
@@ -593,6 +608,9 @@ export async function prepareHttpServer(config, sd, master) {
      *               type: array
      *               items:
      *                 $ref: '#/components/schemas/Note'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.note
      */
     router.addRoute(
       "GET",
@@ -630,6 +648,9 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.meter.add
      * /category/{category}/note:
      *   parameters:
      *   - $ref: '#/components/parameters/category'
@@ -644,6 +665,9 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.note.add
      */
     router.addRoute(
       "PUT",
@@ -682,6 +706,9 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.meter.modify
      * /category/{category}/note:
      *   parameters:
      *   - $ref: '#/components/parameters/category'
@@ -696,6 +723,9 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.note.modify
      */
     router.addRoute(
       "POST",
@@ -732,6 +762,9 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.meter.delete
      * /category/{category}/note/{note}:
      *   parameters:
      *   - $ref: '#/components/parameters/category'
@@ -746,6 +779,9 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *     security:
+     *       - konsum_auth:
+     *         - konsum.note.delete
      */
     router.addRoute(
       "DELETE",
