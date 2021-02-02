@@ -157,15 +157,15 @@
               }
             }
           }
-        }
-      },
-      "security": [
-        {
-          "konsum_auth": [
-            "konsum.category"
-          ]
-        }
-      ]
+        },
+        "security": [
+          {
+            "konsum_auth": [
+              "konsum.category"
+            ]
+          }
+        ]
+      }
     },
     "/category/{category}": {
       "parameters": [
@@ -187,15 +187,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "konsum_auth": [
+              "konsum.category.add"
+            ]
+          }
+        ]
       },
-      "security": [
-        {
-          "konsum_auth": [
-            "konsum.category.delete"
-          ]
-        }
-      ],
       "delete": {
         "operationId": "deleteCategory",
         "description": "Delete a category.",
@@ -220,7 +220,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "konsum_auth": [
+              "konsum.category.delete"
+            ]
+          }
+        ]
       }
     },
     "/category/{category}/value": {
@@ -261,7 +268,14 @@
               "text": "json, or text only"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "konsum_auth": [
+              "konsum.value"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "insertCategoryValues",
@@ -277,7 +291,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "konsum_auth": [
+              "konsum.value.add"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "deleteCategoryValues",
@@ -293,7 +314,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "konsum_auth": [
+              "konsum.value.delete"
+            ]
+          }
+        ]
       }
     },
     "/category/{category}/meter": {
