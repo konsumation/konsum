@@ -86,6 +86,15 @@ test.after.always(async t => {
   await rmdir(t.context.file, { recursive: true });
 });
 
+test("get state", async t => {
+  const response = await got.get(
+    `http://localhost:${t.context.port}/state`
+  );
+
+  t.is(response.statusCode, 200);
+  t.like(JSON.parse(response.body), { version: "1.2.3", database: { schemaVersion: "1" }});
+});
+
 test("get backup", async t => {
   const response = await got.get(
     `http://localhost:${t.context.port}/admin/backup`,
@@ -93,8 +102,6 @@ test("get backup", async t => {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
   );
-
-  t.log(response.body);
 
   t.is(response.statusCode, 200);
   //t.regex(response.body, /\d+ 77.34/);
