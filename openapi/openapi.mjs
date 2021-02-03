@@ -9,7 +9,7 @@ const pkg = JSON.parse(
 
 const options = {
   definition: {
-    openapi: "3.0.0",
+    openapi: "3.0.3",
     info: {
       title: pkg.description,
       version: pkg.version
