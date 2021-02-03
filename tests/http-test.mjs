@@ -86,7 +86,7 @@ test("delete category", async t => {
   t.is(response.statusCode, 200);
 });
 
-test("list category meters", async t => {
+test.serial("list category meters", async t => {
   const master = t.context.master;
   const catName = "CAT1";
 
@@ -112,7 +112,7 @@ test("list category meters", async t => {
   ]);
 });
 
-test("insert category meters", async t => {
+test.serial("insert category meters", async t => {
   const master = t.context.master;
   const catName = "CAT2";
 
@@ -183,7 +183,7 @@ test("list category notes", async t => {
   */
 });
 
-test("can insert + get values", async t => {
+test.serial("can insert + get values", async t => {
   const master = t.context.master;
 
   const c = new Category(`CAT1`, { unit: "kWh" });
