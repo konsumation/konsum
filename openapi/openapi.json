@@ -356,6 +356,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -375,6 +385,16 @@
         "responses": {
           "200": {
             "description": "Success message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such category error message.",
             "content": {
               "application/json": {
                 "schema": {
@@ -418,6 +438,16 @@
                   "items": {
                     "$ref": "#/components/schemas/Meter"
                   }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
