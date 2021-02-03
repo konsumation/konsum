@@ -1,103 +1,21 @@
 import test from "ava";
-import { readFileSync } from "fs";
-import { mkdir, rmdir } from "fs/promises";
+import { startServer, stopServer } from "./helpers/server.mjs";
 import got from "got";
 import { Category, Meter, Note } from "konsum-db";
 
-import { prepareHttpServer } from "../src/http.mjs";
-import { prepareDatabase } from "../src/database.mjs";
 
-const sd = { notify: () => {}, listeners: () => [] };
-
-let port = 3149;
-
-test.before(async t => {
-  await mkdir(new URL("../build", import.meta.url).pathname, {
-    recursive: true
-  });
-
-  port++;
-
-  const file = new URL(`../build/db-${port}`, import.meta.url).pathname;
-  const config = {
-    version: "1.2.3",
-    database: {
-      file
-    },
-    auth: {
-      jwt: {
-        public: readFileSync(
-          new URL("../config/demo.rsa.pub", import.meta.url).pathname
-        ),
-        private: readFileSync(
-          new URL("../config/demo.rsa", import.meta.url).pathname
-        ),
-        options: {
-          algorithm: "RS256"
-        }
-      },
-      users: {
-        admin: {
-          password: "start123",
-          entitlements: [
-            "konsum",
-            "konsum.admin.backup",
-            "konsum.category.add",
-            "konsum.category.update",
-            "konsum.category.delete",
-            "konsum.value.add",
-            "konsum.value.delete",
-            "konsum.meter.add",
-            "konsum.meter.update",
-            "konsum.meter.delete",
-            "konsum.note.add",
-            "konsum.note.update",
-            "konsum.note.delete"
-          ]
-        }
-      }
-    },
-    http: {
-      port
-    }
-  };
-
-  const { master } = await prepareDatabase(config);
-  const { server } = await prepareHttpServer(config, sd, master);
-
-  let response = await got.post(`http://localhost:${port}/authenticate`, {
-    json: {
-      username: "admin",
-      password: "start123"
-    }
-  });
-
-  t.context.token = JSON.parse(response.body).access_token;
-  t.context.master = master;
-  t.context.file = file;
-  t.context.server = server;
-  t.context.port = port;
-});
-
-test.after.always(async t => {
-  t.context.server.close();
-  t.context.server.unref();
-  await t.context.master.close();
-  await rmdir(t.context.file, { recursive: true });
-});
+test.beforeEach(t => startServer(t));
+test.afterEach(t => stopServer(t));
 
 test("get state", async t => {
-  const response = await got.get(
-    `http://localhost:${t.context.port}/state`
-  );
+  const response = await got.get(`${t.context.url}/state`);
 
   t.is(response.statusCode, 200);
   t.like(JSON.parse(response.body), { version: "1.2.3", database: { schemaVersion: "1" }});
 });
 
 test("get backup", async t => {
-  const response = await got.get(
-    `http://localhost:${t.context.port}/admin/backup`,
+  const response = await got.get(`${t.context.url}/admin/backup`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
@@ -109,7 +27,7 @@ test("get backup", async t => {
 
 test("list categories", async t => {
   const response = await got.get(
-    `http://localhost:${t.context.port}/category`,
+    `${t.context.url}/category`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
@@ -120,7 +38,7 @@ test("list categories", async t => {
 
 test("update category", async t => {
   const response = await got.put(
-    `http://localhost:${t.context.port}/category/CAT7`,
+    `${t.context.url}/category/CAT7`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
       json: {
@@ -136,7 +54,7 @@ test("update category", async t => {
 test("delete category unknown", async t => {
   try {
     const response = await got.delete(
-      `http://localhost:${t.context.port}/category/CAT7777`,
+      `${t.context.url}/category/CAT7777`,
       {
         headers: { Authorization: `Bearer ${t.context.token}` }
       }
@@ -149,7 +67,7 @@ test("delete category unknown", async t => {
 
 test("delete category", async t => {
   let response = await got.put(
-    `http://localhost:${t.context.port}/category/CAT7`,
+    `${t.context.url}/category/CAT7`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
       json: {
@@ -160,7 +78,7 @@ test("delete category", async t => {
   );
 
   response = await got.delete(
-    `http://localhost:${t.context.port}/category/CAT7`,
+    `${t.context.url}/category/CAT7`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
@@ -180,7 +98,7 @@ test("list category meters", async t => {
   await m2.write(master.db);
 
   const response = await got.get(
-    `http://localhost:${t.context.port}/category/${catName}/meter`,
+    `${t.context.url}/category/${catName}/meter`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
@@ -202,7 +120,7 @@ test("insert category meters", async t => {
   await c.write(master.db);
 
   let response = await got.put(
-    `http://localhost:${t.context.port}/category/${catName}/meter`,
+    `${t.context.url}/category/${catName}/meter`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
       json: {
@@ -217,7 +135,7 @@ test("insert category meters", async t => {
   t.is(response.statusCode, 200);
 
   response = await got.get(
-    `http://localhost:${t.context.port}/category/${catName}/meter`,
+    `${t.context.url}/category/${catName}/meter`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
@@ -244,7 +162,7 @@ test("list category notes", async t => {
   await n2.write(master.db);
 
   const response = await got.get(
-    `http://localhost:${t.context.port}/category/${catName}/note`,
+    `${t.context.url}/category/${catName}/note`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` }
     }
@@ -274,7 +192,7 @@ test("can insert + get values", async t => {
   await c.writeValue(master.db, 77.34, now);
 
   let response = await got.post(
-    `http://localhost:${t.context.port}/category/CAT1/value`,
+    `${t.context.url}/category/CAT1/value`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
       json: {
@@ -284,7 +202,7 @@ test("can insert + get values", async t => {
   );
 
   response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT1/value`,
+    `${t.context.url}/category/CAT1/value`,
     {
       headers: {
         Accept: "text/plain",
@@ -297,7 +215,7 @@ test("can insert + get values", async t => {
   t.regex(response.body, /\d+ 78/);
 
   response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT1/value`,
+    `${t.context.url}/category/CAT1/value`,
     {
       headers: {
         Accept: "application/json",
@@ -318,7 +236,7 @@ test.serial("can insert + can delete", async (t) => {
   await c.writeValue(master.db, 77.34, now);
 
   let response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT2/value`,
+    `${t.context.url}/category/CAT2/value`,
     {
       headers: {
         Accept: "text/plain",
@@ -329,7 +247,7 @@ test.serial("can insert + can delete", async (t) => {
   //t.log(response.body);
   t.regex(response.body, /\d+ 77.34/);
   response = await got.get(
-    `http://localhost:${t.context.port}/category/CAT2/value`,
+    `${t.context.url}/category/CAT2/value`,
     {
       headers: {
         Accept: "application/json",
@@ -340,7 +258,7 @@ test.serial("can insert + can delete", async (t) => {
 
   t.is(JSON.parse(response.body)[0].value, 77.34);
   response = await got.delete(
-    `http://localhost:${t.context.port}/category/CAT2/value`,
+    `${t.context.url}/category/CAT2/value`,
     {
       headers: { Authorization: `Bearer ${t.context.token}` },
       json: {
