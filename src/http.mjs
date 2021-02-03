@@ -219,6 +219,9 @@ export async function prepareHttpServer(config, sd, master) {
    *       - authenticate
    *     operationId: authenticate
    *     description: Login to request api token.
+   *     externalDocs:
+   *       description: OAuth response
+   *       url: https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2
    *     requestBody:
    *       required: true
    *       content:
@@ -975,7 +978,4 @@ export async function prepareHttpServer(config, sd, master) {
  *           type: string
  *     TextOnlyMessage:
  *       type: string
- *   externalDocs:
- *     description: OAuth response
- *     url: https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2
  */
