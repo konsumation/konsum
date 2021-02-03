@@ -315,6 +315,16 @@
               }
             }
           },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
           "406": {
             "description": "Unsupported content-type.",
             "content": {
@@ -437,6 +447,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -456,6 +476,16 @@
         "responses": {
           "200": {
             "description": "Success message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such category error message.",
             "content": {
               "application/json": {
                 "schema": {
@@ -502,6 +532,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -528,6 +568,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -547,6 +597,16 @@
         "responses": {
           "200": {
             "description": "Success message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such category error message.",
             "content": {
               "application/json": {
                 "schema": {
@@ -590,6 +650,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "No such category error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -619,6 +689,16 @@
         "responses": {
           "200": {
             "description": "Success message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such category error message.",
             "content": {
               "application/json": {
                 "schema": {
