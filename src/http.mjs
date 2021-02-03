@@ -201,7 +201,7 @@ export async function prepareHttpServer(config, sd, master) {
 
     ctx.body = {
       version: config.version,
-      database: { schemaVersion: master.schemaVersion }, 
+      database: { schemaVersion: master.schemaVersion },
       uptime: process.uptime(),
       memory: process.memoryUsage()
     };
@@ -840,9 +840,17 @@ export async function prepareHttpServer(config, sd, master) {
     );
   }
 
-  const server = app.listen(config.http.port, () => {
-    console.log("listen on", server.address());
-    sd.notify("READY=1\nSTATUS=running");
+  const server = await new Promise((resolve, reject) => {
+    const server = app.listen(config.http.port, error => {
+      if (error) {
+        sd.notify("READY=1\nERRNO=" + error);
+        reject(error);
+      } else {
+        console.log("listen on", server.address());
+        sd.notify("READY=1\nSTATUS=running");
+        resolve(server);
+      }
+    });
   });
 
   return {
