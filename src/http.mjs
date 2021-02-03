@@ -362,12 +362,11 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
-  async function withCategory(ctx, cb) { 
+  async function withCategory(ctx, cb) {
     const c = await Category.entry(master.db, ctx.params.category);
-    if(c) {
+    if (c) {
       await cb(c);
-    }
-    else { 
+    } else {
       ctx.throw(404, "No such category");
     }
   }
@@ -407,7 +406,7 @@ export async function prepareHttpServer(config, sd, master) {
     async (ctx, next) => {
       enshureEntitlement(ctx, "konsum.category.delete");
 
-      await withCategory(ctx, async (category) => {
+      await withCategory(ctx, async category => {
         await category.delete(master.db);
         ctx.body = { message: "deleted" };
       });
@@ -469,37 +468,37 @@ export async function prepareHttpServer(config, sd, master) {
     "/category/:category/value",
     restricted,
     async (ctx, next) => {
-      await withCategory(ctx, async (category) => {
-      setNoCacheHeaders(ctx);
+      await withCategory(ctx, async category => {
+        setNoCacheHeaders(ctx);
 
-      const reverse = isTrue(ctx.query.reverse);
-      const limit =
-        ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
-      const options = { reverse, limit };
+        const reverse = isTrue(ctx.query.reverse);
+        const limit =
+          ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
+        const options = { reverse, limit };
 
-      switch (ctx.accepts("json", "text")) {
-        case "json":
-          const it = category.values(master.db, options);
+        switch (ctx.accepts("json", "text")) {
+          case "json":
+            const it = category.values(master.db, options);
 
-          const values = [];
+            const values = [];
 
-          for await (const { value, time } of it) {
-            values.push({ value, time });
-          }
+            for await (const { value, time } of it) {
+              values.push({ value, time });
+            }
 
-          ctx.body = values;
-          break;
+            ctx.body = values;
+            break;
 
-        case "text":
-          ctx.response.set("content-type", "text/plain");
-          ctx.body = category.readStream(master.db, options);
-          break;
+          case "text":
+            ctx.response.set("content-type", "text/plain");
+            ctx.body = category.readStream(master.db, options);
+            break;
 
-        default:
-          ctx.throw(406, "json, or text only");
-      }
+          default:
+            ctx.throw(406, "json, or text only");
+        }
       });
- 
+
       return next();
     }
   );
@@ -534,6 +533,12 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
+   *       '404':
+   *         description: No such category error message.
+   *         content:
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    *     security:
    *       - konsum_auth:
    *         - konsum.value.add
@@ -546,16 +551,17 @@ export async function prepareHttpServer(config, sd, master) {
     async (ctx, next) => {
       enshureEntitlement(ctx, "konsum.value.add");
 
-      const category = await Category.entry(master.db, ctx.params.category);
-      const values = ctx.request.body;
+      await withCategory(ctx, async category => {
+        const values = ctx.request.body;
 
-      for (const v of Array.isArray(values) ? values : [values]) {
-        const time =
-          v.time === undefined ? Date.now() : new Date(v.time).valueOf();
-        await category.writeValue(master.db, v.value, time / 1000);
-      }
+        for (const v of Array.isArray(values) ? values : [values]) {
+          const time =
+            v.time === undefined ? Date.now() : new Date(v.time).valueOf();
+          await category.writeValue(master.db, v.value, time / 1000);
+        }
 
-      ctx.body = { message: "inserted" };
+        ctx.body = { message: "inserted" };
+      });
       return next();
     }
   );
@@ -584,6 +590,12 @@ export async function prepareHttpServer(config, sd, master) {
    *           'application/json':
    *             schema:
    *               $ref: '#/components/schemas/Message'
+   *       '404':
+   *         description: No such category error message.
+   *         content:
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    *     security:
    *       - konsum_auth:
    *         - konsum.value.delete
@@ -596,10 +608,12 @@ export async function prepareHttpServer(config, sd, master) {
     async (ctx, next) => {
       enshureEntitlement(ctx, "konsum.value.delete");
 
-      const category = await Category.entry(master.db, ctx.params.category);
-      const body = ctx.request.body;
-      await category.deleteValue(master.db, body.key);
-      ctx.body = { message: "deleted" };
+      await withCategory(ctx, async category => {
+        const body = ctx.request.body;
+        await category.deleteValue(master.db, body.key);
+        ctx.body = { message: "deleted" };
+      });
+
       return next();
     }
   );
@@ -628,6 +642,12 @@ export async function prepareHttpServer(config, sd, master) {
      *               type: array
      *               items:
      *                 $ref: '#/components/schemas/Meter'
+     *       '404':
+     *         description: No such category error message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      *     security:
      *       - konsum_auth:
      *         - konsum.meter
@@ -664,7 +684,7 @@ export async function prepareHttpServer(config, sd, master) {
       `/category/:category/${type.name}`,
       restricted,
       async (ctx, next) => {
-        await withCategory(ctx, async (category) => {
+        await withCategory(ctx, async category => {
           setNoCacheHeaders(ctx);
 
           const details = [];
@@ -675,7 +695,7 @@ export async function prepareHttpServer(config, sd, master) {
 
           ctx.body = details;
         });
- 
+
         return next();
       }
     );
@@ -740,7 +760,7 @@ export async function prepareHttpServer(config, sd, master) {
       BodyParser(),
       async (ctx, next) => {
         enshureEntitlement(ctx, `konsum.${type.name}.add`);
-        await withCategory(ctx, async (category) => {
+        await withCategory(ctx, async category => {
           setNoCacheHeaders(ctx);
 
           const body = ctx.request.body;
@@ -816,7 +836,7 @@ export async function prepareHttpServer(config, sd, master) {
       BodyParser(),
       async (ctx, next) => {
         enshureEntitlement(ctx, `konsum.${type.name}.modify`);
-        await withCategory(ctx, async (category) => {
+        await withCategory(ctx, async category => {
           setNoCacheHeaders(ctx);
 
           // TODO update type
@@ -824,7 +844,7 @@ export async function prepareHttpServer(config, sd, master) {
 
           ctx.body = {};
         });
- 
+
         return next();
       }
     );
@@ -888,7 +908,7 @@ export async function prepareHttpServer(config, sd, master) {
       restricted,
       async (ctx, next) => {
         enshureEntitlement(ctx, `konsum.${type.name}.delete`);
-        await withCategory(ctx, async (category) => {
+        await withCategory(ctx, async category => {
           setNoCacheHeaders(ctx);
 
           // TODO delete type
