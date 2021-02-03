@@ -128,6 +128,7 @@ see [openapi A](https://konsumation.github.io/openapi/index.html)
 ## addRoute
 
 Login to request api token.
+At least one entitlement starting with "konsum" is required.
 
 ## addRoute
 
