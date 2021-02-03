@@ -55,7 +55,7 @@
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^6.12.22",
     "semantic-release": "^17.3.7",
-    "swagger-jsdoc": "^6.0.1",
+    "swagger-jsdoc": "^6.0.2",
     "tmp": "^0.2.1"
   },
   "optionalDependencies": {
