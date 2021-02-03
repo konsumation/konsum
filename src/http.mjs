@@ -362,6 +362,16 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  async function withCategory(ctx, cb) { 
+    const c = await Category.entry(master.db, ctx.params.category);
+    if(c) {
+      await cb(c);
+    }
+    else { 
+      ctx.throw(404, "No such category");
+    }
+  }
+
   /**
    * Delete a category.
    * @swagger
@@ -397,13 +407,11 @@ export async function prepareHttpServer(config, sd, master) {
     async (ctx, next) => {
       enshureEntitlement(ctx, "konsum.category.delete");
 
-      const c = await Category.entry(master.db, ctx.params.category);
-      if (c) {
-        await c.delete(master.db);
+      await withCategory(ctx, async (category) => {
+        await category.delete(master.db);
         ctx.body = { message: "deleted" };
-      } else {
-        ctx.throw(404, "No such category");
-      }
+      });
+
       return next();
     }
   );
@@ -442,6 +450,12 @@ export async function prepareHttpServer(config, sd, master) {
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Value'
+   *       '404':
+   *         description: No such category error message.
+   *         content:
+   *           'application/json':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    *       '406':
    *         description: Unsupported content-type.
    *         content:
@@ -455,17 +469,17 @@ export async function prepareHttpServer(config, sd, master) {
     "/category/:category/value",
     restricted,
     async (ctx, next) => {
+      await withCategory(ctx, async (category) => {
       setNoCacheHeaders(ctx);
 
       const reverse = isTrue(ctx.query.reverse);
       const limit =
         ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
       const options = { reverse, limit };
-      const c = await Category.entry(master.db, ctx.params.category);
 
       switch (ctx.accepts("json", "text")) {
         case "json":
-          const it = c.values(master.db, options);
+          const it = category.values(master.db, options);
 
           const values = [];
 
@@ -478,13 +492,14 @@ export async function prepareHttpServer(config, sd, master) {
 
         case "text":
           ctx.response.set("content-type", "text/plain");
-          ctx.body = c.readStream(master.db, options);
+          ctx.body = category.readStream(master.db, options);
           break;
 
         default:
           ctx.throw(406, "json, or text only");
       }
-
+      });
+ 
       return next();
     }
   );
@@ -634,6 +649,12 @@ export async function prepareHttpServer(config, sd, master) {
      *               type: array
      *               items:
      *                 $ref: '#/components/schemas/Note'
+     *       '404':
+     *         description: No such category error message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      *     security:
      *       - konsum_auth:
      *         - konsum.note
@@ -643,17 +664,18 @@ export async function prepareHttpServer(config, sd, master) {
       `/category/:category/${type.name}`,
       restricted,
       async (ctx, next) => {
-        setNoCacheHeaders(ctx);
+        await withCategory(ctx, async (category) => {
+          setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(master.db, ctx.params.category);
+          const details = [];
 
-        const details = [];
+          for await (const detail of category[type.accessor](master.db)) {
+            details.push(detail.toJSON());
+          }
 
-        for await (const detail of category[type.accessor](master.db)) {
-          details.push(detail.toJSON());
-        }
-
-        ctx.body = details;
+          ctx.body = details;
+        });
+ 
         return next();
       }
     );
@@ -672,6 +694,12 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: Success message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
+     *       '404':
+     *         description: No such category error message.
      *         content:
      *           'application/json':
      *             schema:
@@ -695,6 +723,12 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *       '404':
+     *         description: No such category error message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      *     security:
      *       - konsum_auth:
      *         - konsum.note.add
@@ -706,16 +740,18 @@ export async function prepareHttpServer(config, sd, master) {
       BodyParser(),
       async (ctx, next) => {
         enshureEntitlement(ctx, `konsum.${type.name}.add`);
-        setNoCacheHeaders(ctx);
+        await withCategory(ctx, async (category) => {
+          setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(master.db, ctx.params.category);
-        const body = ctx.request.body;
-        const name = body.name;
-        delete body.name;
-        const t = new type.factory(name, category, body);
-        await t.write(master.db);
+          const body = ctx.request.body;
+          const name = body.name;
+          delete body.name;
+          const t = new type.factory(name, category, body);
+          await t.write(master.db);
 
-        ctx.body = { message: "inserted" };
+          ctx.body = { message: "inserted" };
+        });
+
         return next();
       }
     );
@@ -734,6 +770,12 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: Success message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
+     *       '404':
+     *         description: No such category error message.
      *         content:
      *           'application/json':
      *             schema:
@@ -757,6 +799,12 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *       '404':
+     *         description: No such category error message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      *     security:
      *       - konsum_auth:
      *         - konsum.note.modify
@@ -768,14 +816,15 @@ export async function prepareHttpServer(config, sd, master) {
       BodyParser(),
       async (ctx, next) => {
         enshureEntitlement(ctx, `konsum.${type.name}.modify`);
-        setNoCacheHeaders(ctx);
+        await withCategory(ctx, async (category) => {
+          setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(master.db, ctx.params.category);
+          // TODO update type
+          //category[type](database);
 
-        // TODO update type
-        //category[type](database);
-
-        ctx.body = {};
+          ctx.body = {};
+        });
+ 
         return next();
       }
     );
@@ -794,6 +843,12 @@ export async function prepareHttpServer(config, sd, master) {
      *     responses:
      *       '200':
      *         description: Success message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
+     *       '404':
+     *         description: No such category error message.
      *         content:
      *           'application/json':
      *             schema:
@@ -817,6 +872,12 @@ export async function prepareHttpServer(config, sd, master) {
      *           'application/json':
      *             schema:
      *               $ref: '#/components/schemas/Message'
+     *       '404':
+     *         description: No such category error message.
+     *         content:
+     *           'application/json':
+     *             schema:
+     *               $ref: '#/components/schemas/Message'
      *     security:
      *       - konsum_auth:
      *         - konsum.note.delete
@@ -827,14 +888,15 @@ export async function prepareHttpServer(config, sd, master) {
       restricted,
       async (ctx, next) => {
         enshureEntitlement(ctx, `konsum.${type.name}.delete`);
-        setNoCacheHeaders(ctx);
+        await withCategory(ctx, async (category) => {
+          setNoCacheHeaders(ctx);
 
-        const category = await Category.entry(master.db, ctx.params.category);
+          // TODO delete type
+          //category[type](database);
 
-        // TODO delete type
-        //category[type](database);
+          ctx.body = {};
+        });
 
-        ctx.body = {};
         return next();
       }
     );
