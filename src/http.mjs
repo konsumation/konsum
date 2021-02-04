@@ -54,8 +54,8 @@ export async function prepareHttpServer(config, sd, master) {
   process.on("SIGINT", () => shutdown());
 
   /**
+   * Stop konsum server.
    * @swagger
-   *
    * /admin/stop:
    *   post:
    *     tags:
@@ -81,8 +81,8 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
+   * Reload konsum systemd config.
    * @swagger
-   *
    * /admin/reload:
    *   post:
    *     tags:
@@ -108,8 +108,8 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
+   * Create backup on server.
    * @swagger
-   *
    * /admin/backup:
    *   post:
    *     tags:
@@ -146,8 +146,8 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   /**
+   * Backup data as text.
    * @swagger
-   *
    * /admin/backup:
    *   get:
    *     tags:
@@ -181,8 +181,8 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
+   * Retrieve service state.
    * @swagger
-   *
    * /state:
    *   get:
    *     operationId: getServiceState
@@ -623,6 +623,7 @@ export async function prepareHttpServer(config, sd, master) {
     { name: "note", accessor: "notes", factory: Note }
   ]) {
     /**
+     * List meters/notes of a category.
      * @swagger
      * /category/{category}/meter:
      *   parameters:
@@ -701,6 +702,7 @@ export async function prepareHttpServer(config, sd, master) {
     );
 
     /**
+     * Add a meter/note to a category.
      * @swagger
      * /category/{category}/meter:
      *   parameters:
@@ -777,6 +779,7 @@ export async function prepareHttpServer(config, sd, master) {
     );
 
     /**
+     * Update a meter/note.
      * @swagger
      * /category/{category}/meter:
      *   parameters:
@@ -850,6 +853,7 @@ export async function prepareHttpServer(config, sd, master) {
     );
 
     /**
+     * Delete a meter/note.
      * @swagger
      * /category/{category}/meter/{meter}:
      *   parameters:
