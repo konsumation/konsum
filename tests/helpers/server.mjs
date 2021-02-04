@@ -67,7 +67,7 @@ export async function startServer(t, users = defaultUsers) {
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
-  await wait(500);
+  await wait(300);
 
   const response = await got.post(`http://localhost:${port}/authenticate`, {
     json: {
@@ -80,6 +80,7 @@ export async function startServer(t, users = defaultUsers) {
   t.context.master = master;
   t.context.databaseFile = file;
   t.context.server = server;
+  t.context.config = config;
   t.context.port = port;
   t.context.url = `http://localhost:${port}`;
 }
