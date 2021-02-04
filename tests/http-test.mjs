@@ -3,8 +3,9 @@ import { startServer, stopServer } from "./helpers/server.mjs";
 import got from "got";
 import { Category, Meter, Note } from "konsum-db";
 
+let port = 3150;
 
-test.beforeEach(t => startServer(t));
+test.beforeEach(t => startServer(t,port++));
 test.afterEach(t => stopServer(t));
 
 test("get state", async t => {

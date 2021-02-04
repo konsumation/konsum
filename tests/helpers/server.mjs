@@ -7,8 +7,6 @@ import { prepareDatabase } from "../../src/database.mjs";
 
 const sd = { notify: () => {}, listeners: () => [] };
 
-let port = 3149;
-
 const defaultUsers = {
   admin: {
     password: "start123",
@@ -30,12 +28,10 @@ const defaultUsers = {
   }
 };
 
-export async function startServer(t, users = defaultUsers) {
+export async function startServer(t, port = 3150, users = defaultUsers) {
   await mkdir(new URL("../../build", import.meta.url).pathname, {
     recursive: true
   });
-
-  port++;
 
   const file = new URL(`../../build/db-${port}`, import.meta.url).pathname;
   const config = {
@@ -67,7 +63,7 @@ export async function startServer(t, users = defaultUsers) {
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
-  await wait(300);
+  await wait(200);
 
   const response = await got.post(`http://localhost:${port}/authenticate`, {
     json: {
@@ -92,7 +88,6 @@ export async function stopServer(t) {
   await rmdir(t.context.databaseFile, { recursive: true });
 }
 
-
-export async function wait(msecs=1000) {
-    await new Promise((resolve) => setTimeout(resolve,msecs));
+export async function wait(msecs = 1000) {
+  await new Promise(resolve => setTimeout(resolve, msecs));
 }
