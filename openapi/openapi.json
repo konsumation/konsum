@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "collect resource usage in a home environment",
+    "title": "Collect resource usage in a home environment",
     "version": "0.0.0-semantic-release"
   },
   "paths": {
