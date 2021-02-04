@@ -18,13 +18,15 @@ async function assertPath(t, path, expected) {
   const p = t.context.api.paths[path];
   t.truthy(p, `Does not exists in api: ${path}`);
 
+  const headers = { Authorization: `Bearer ${t.context.token}` };
+
   for (const [emn, em] of Object.entries(p)) {
     switch (emn) {
       case "get":
         for (const [erc, er] of Object.entries(em.responses)) {
           try {
             const response = await got.get(`${t.context.url}${path}`, {
-              headers: { Authorization: `Bearer ${t.context.token}` }
+              headers
             });
 
             t.is(response.statusCode, parseInt(erc), "${path}");
@@ -49,6 +51,41 @@ async function assertPath(t, path, expected) {
           }
         }
         break;
+      case "put":
+        try {
+          const response = await got.put(`${t.context.url}${path}`, {
+            headers
+          });
+        } catch (e) {
+          const response = e.response;
+          t.deepEqual(response.body, expected[response.statusCode]);
+        }
+        break;
+      case "post":
+        try {
+          const response = await got.post(`${t.context.url}${path}`, {
+            headers
+          });
+        } catch (e) {
+          const response = e.response;
+          t.deepEqual(response.body, expected[response.statusCode]);
+        }
+        break;
+      case "delete":
+        try {
+          const response = await got.delete(`${t.context.url}${path}`, {
+            headers
+          });
+        } catch (e) {
+          const response = e.response;
+          t.deepEqual(response.body, expected[response.statusCode]);
+        }
+        break;
+
+      case "parameters":
+        break;
+      default:
+        t.log(`Unknown method ${emn}`);
     }
   }
 }
@@ -80,4 +117,8 @@ test(openapiPathTest, "/admin/backup", {
   200: `schemaVersion=1
 
 `
+});
+
+test(openapiPathTest, "/admin/reload", {
+  403: "missing konsum.admin.reload"
 });

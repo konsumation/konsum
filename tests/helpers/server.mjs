@@ -14,15 +14,15 @@ const defaultUsers = {
       "konsum",
       "konsum.admin.backup",
       "konsum.category.add",
-      "konsum.category.update",
+      "konsum.category.modify",
       "konsum.category.delete",
       "konsum.value.add",
       "konsum.value.delete",
       "konsum.meter.add",
-      "konsum.meter.update",
+      "konsum.meter.modify",
       "konsum.meter.delete",
       "konsum.note.add",
-      "konsum.note.update",
+      "konsum.note.modify",
       "konsum.note.delete"
     ]
   }

@@ -46,8 +46,8 @@ cn: konsum.category.add
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
-dn: cn=konsum.category.update,ou=groups,dc=example,dc=com
-cn: konsum.category.update
+dn: cn=konsum.category.modify,ou=groups,dc=example,dc=com
+cn: konsum.category.modify
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
@@ -71,8 +71,8 @@ cn: konsum.meter.add
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
-dn: cn=konsum.meter.update,ou=groups,dc=example,dc=com
-cn: konsum.meter.update
+dn: cn=konsum.meter.modify,ou=groups,dc=example,dc=com
+cn: konsum.meter.modify
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
@@ -86,8 +86,8 @@ cn: konsum.note.add
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
-dn: cn=konsum.note.update,ou=groups,dc=example,dc=com
-cn: konsum.note.update
+dn: cn=konsum.note.modify,ou=groups,dc=example,dc=com
+cn: konsum.note.modify
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
