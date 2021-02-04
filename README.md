@@ -10,6 +10,8 @@
 
 # konsum
 
+Collect resource usage in a home environment.
+
 # run
 
 ```shell
@@ -89,7 +91,7 @@ konsum insert ev 90091.3 '2019-06-22T13:44:17'
 
 # openapi
 
-see [openapi A](https://konsumation.github.io/openapi/index.html)
+see [openapi](https://konsumation.github.io/openapi/index.html)
 
 # API
 

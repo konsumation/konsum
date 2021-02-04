@@ -5,7 +5,7 @@
     "access": "public"
   },
   "main": "./src/konsum-cli.mjs",
-  "description": "collect resource usage in a home environment",
+  "description": "Collect resource usage in a home environment",
   "contributors": [
     {
       "name": "Markus Felten",
