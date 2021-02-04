@@ -118,13 +118,23 @@ see [openapi A](https://konsumation.github.io/openapi/index.html)
 
 ## addRoute
 
-## addRoute
+Stop konsum server.
 
 ## addRoute
 
-## addRoute
+Reload konsum systemd config.
 
 ## addRoute
+
+Create backup on server.
+
+## addRoute
+
+Backup data as text.
+
+## addRoute
+
+Retrieve service state.
 
 ## addRoute
 
@@ -157,8 +167,16 @@ Delete a value from a category.
 
 ## addRoute
 
-## addRoute
+List meters/notes of a category.
 
 ## addRoute
 
+Add a meter/note to a category.
+
 ## addRoute
+
+Update a meter/note.
+
+## addRoute
+
+Delete a meter/note.
