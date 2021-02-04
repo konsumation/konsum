@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "collect resource usage in a home environment",
+    "title": "Collect resource usage in a home environment",
     "version": "0.0.0-semantic-release"
   },
   "paths": {
@@ -481,7 +481,7 @@
           "404": {
             "description": "No such category error message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -507,7 +507,7 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -517,7 +517,7 @@
           "404": {
             "description": "No such category error message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -592,7 +592,7 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -602,7 +602,7 @@
           "404": {
             "description": "No such category error message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -628,7 +628,7 @@
           "200": {
             "description": "Success message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -638,7 +638,7 @@
           "404": {
             "description": "No such category error message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -684,7 +684,7 @@
           "404": {
             "description": "No such category error message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
@@ -730,7 +730,7 @@
           "404": {
             "description": "No such category error message.",
             "content": {
-              "application/json": {
+              "application/text": {
                 "schema": {
                   "$ref": "#/components/schemas/Message"
                 }
