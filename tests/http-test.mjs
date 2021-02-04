@@ -8,13 +8,6 @@ let port = 3150;
 test.beforeEach(t => startServer(t,port++));
 test.afterEach(t => stopServer(t));
 
-test("get state", async t => {
-  const response = await got.get(`${t.context.url}/state`);
-
-  t.is(response.statusCode, 200);
-  t.like(JSON.parse(response.body), { version: "1.2.3", database: { schemaVersion: "1" }});
-});
-
 test("get backup", async t => {
   const response = await got.get(`${t.context.url}/admin/backup`,
     {
