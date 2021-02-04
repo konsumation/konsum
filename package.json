@@ -117,6 +117,7 @@
   },
   "template": {
     "inheritFrom": [
+      "arlac77/template-ava-coverage",
       "arlac77/template-documentation",
       "arlac77/template-nginx",
       "arlac77/template-node-app",
