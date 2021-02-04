@@ -8,17 +8,6 @@ let port = 3150;
 test.beforeEach(t => startServer(t,port++));
 test.afterEach(t => stopServer(t));
 
-test("get backup", async t => {
-  const response = await got.get(`${t.context.url}/admin/backup`,
-    {
-      headers: { Authorization: `Bearer ${t.context.token}` }
-    }
-  );
-
-  t.is(response.statusCode, 200);
-  //t.regex(response.body, /\d+ 77.34/);
-});
-
 test("list categories", async t => {
   const response = await got.get(
     `${t.context.url}/category`,
