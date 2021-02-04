@@ -723,7 +723,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:
@@ -742,13 +742,13 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:
@@ -794,13 +794,13 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:
@@ -819,13 +819,13 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:
@@ -874,7 +874,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:
@@ -899,7 +899,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:

@@ -1,7 +1,7 @@
 import test from "ava";
 import { readFile } from "fs/promises";
 import { startServer, stopServer } from "./helpers/server.mjs";
-import got from "got";
+import { openapiPathTest } from "./helpers/openapi.mjs";
 
 test.before(async t => {
   await startServer(t, 3190);
@@ -14,88 +14,7 @@ test.before(async t => {
 });
 test.after(t => stopServer(t));
 
-async function assertPath(t, path, expected) {
-  const p = t.context.api.paths[path];
-  t.truthy(p, `Does not exists in api: ${path}`);
 
-  const headers = { Authorization: `Bearer ${t.context.token}` };
-
-  for (const [emn, em] of Object.entries(p)) {
-    switch (emn) {
-      case "get":
-        for (const [erc, er] of Object.entries(em.responses)) {
-          try {
-            const response = await got.get(`${t.context.url}${path}`, {
-              headers
-            });
-
-            t.is(response.statusCode, parseInt(erc), "${path}");
-
-            for (const [ct, c] of Object.entries(er.content)) {
-              switch (ct) {
-                case "application/json":
-                  const body = JSON.parse(response.body);
-                  t.like(body, expected[erc]);
-                  break;
-                case "application/text":
-                  t.is(response.body, expected[erc]);
-                  break;
-
-                default:
-                  t.log(`Unknown content type ${ct}`);
-              }
-            }
-          } catch (e) {
-            const response = e.response;
-            t.deepEqual(response.body, expected[response.statusCode]);
-          }
-        }
-        break;
-      case "put":
-        try {
-          const response = await got.put(`${t.context.url}${path}`, {
-            headers
-          });
-        } catch (e) {
-          const response = e.response;
-          t.deepEqual(response.body, expected[response.statusCode]);
-        }
-        break;
-      case "post":
-        try {
-          const response = await got.post(`${t.context.url}${path}`, {
-            headers
-          });
-        } catch (e) {
-          const response = e.response;
-          t.deepEqual(response.body, expected[response.statusCode]);
-        }
-        break;
-      case "delete":
-        try {
-          const response = await got.delete(`${t.context.url}${path}`, {
-            headers
-          });
-        } catch (e) {
-          const response = e.response;
-          t.deepEqual(response.body, expected[response.statusCode]);
-        }
-        break;
-
-      case "parameters":
-        break;
-      default:
-        t.log(`Unknown method ${emn}`);
-    }
-  }
-}
-
-async function openapiPathTest(t, path, expected) {
-  await assertPath(t, path, expected);
-}
-
-openapiPathTest.title = (providedTitle = "openapi", path, expected) =>
-  `${providedTitle} ${path}`.trim();
 
 test(openapiPathTest, "/state", {
   200: { version: "1.2.3", database: { schemaVersion: "1" } }
