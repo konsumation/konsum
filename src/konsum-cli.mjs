@@ -7,10 +7,12 @@ import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
 
+const encodingOptions = {
+  endoding: "utf8"
+};
+
 const { version, description } = JSON.parse(
-  readFileSync(new URL("../package.json", import.meta.url).pathname, {
-    endoding: "utf8"
-  })
+  readFileSync(new URL("../package.json", import.meta.url).pathname, encodingOptions)
 );
 
 program
@@ -40,8 +42,9 @@ program.command("backup [file]").action(async output => {
   await master.backup(
     output === undefined
       ? process.stdout
-      : createWriteStream(output, { encoding: "utf8" })
+      : createWriteStream(output, encodingOptions)
   );
+  console.log(`${output} saved`);
 });
 
 program.command("restore [file]").action(async input => {
@@ -49,8 +52,9 @@ program.command("restore [file]").action(async input => {
   await master.restore(
     input === undefined
       ? process.stdin
-      : createReadStream(input, { encoding: "utf8" })
+      : createReadStream(input, encodingOptions)
   );
+  console.log(`${input} restored`);
 });
 
 program

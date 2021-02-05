@@ -43,3 +43,7 @@ test(openapiPathTest, "/admin/backup", {
 test(openapiPathTest, "/admin/reload", {
   403: "missing konsum.admin.reload"
 });
+
+test(openapiPathTest, "/admin/stop", {
+  403: "missing konsum.admin.stop"
+});
