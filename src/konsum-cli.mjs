@@ -35,6 +35,8 @@ program.command("list <category>").action(async cName => {
       console.log(c.name, new Date(time * 1000), value);
     }
   }
+
+  await master.close();
 });
 
 program.command("backup [file]").action(async output => {
@@ -44,6 +46,7 @@ program.command("backup [file]").action(async output => {
       ? process.stdout
       : createWriteStream(output, encodingOptions)
   );
+  await master.close();
   console.log(`${output} saved`);
 });
 
@@ -54,6 +57,7 @@ program.command("restore [file]").action(async input => {
       ? process.stdin
       : createReadStream(input, encodingOptions)
   );
+  await master.close();
   console.log(`${input} restored`);
 });
 
