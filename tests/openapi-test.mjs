@@ -1,5 +1,4 @@
 import test from "ava";
-import { readFile } from "fs/promises";
 import { startServer, stopServer } from "./helpers/server.mjs";
 import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
 
@@ -11,13 +10,16 @@ test.before(async t => {
 test.after(t => stopServer(t));
 
 
+test(openapiPathTest, "/authenticate", {
+  401: "Authentication failed"
+});
 
 test(openapiPathTest, "/state", {
   200: { version: "1.2.3", database: { schemaVersion: "1" } }
 });
 
-test(openapiPathTest, "/authenticate", {
-  401: "Authentication failed"
+test(openapiPathTest, "/category", {
+  200: []
 });
 
 test(openapiPathTest, "/category/{category}/meter", {

@@ -1,12 +1,8 @@
-import { readFile } from "fs/promises";
 import got from "got";
 import SwaggerParser from "@apidevtools/swagger-parser";
 
-export async function loadOpenAPI(t, path)
-{
+export async function loadOpenAPI(t, path) {
   t.context.api = await SwaggerParser.validate(path);
-
-  //t.context.api = JSON.parse( await readFile(path, { encoding: "utf8" }));
 }
 
 async function assertResponse(t, response, erc, er, expected) {
@@ -14,7 +10,11 @@ async function assertResponse(t, response, erc, er, expected) {
     switch (ct) {
       case "application/json":
         const body = JSON.parse(response.body);
-        t.like(body, expected[erc]);
+        if (Array.isArray(body)) {
+          t.deepEqual(body, expected[erc]);
+        } else {
+          t.like(body, expected[erc]);
+        }
         break;
       case "application/text":
         t.is(response.body, expected[erc]);
@@ -44,11 +44,10 @@ export async function assertOpenapiPath(t, path, expected) {
 
             t.is(response.statusCode, parseInt(erc), "${path}");
           } catch (e) {
-        //    await assertResponse(t, e.response, erc, er, expected);
+            //    await assertResponse(t, e.response, erc, er, expected);
 
             const response = e.response;
             t.deepEqual(response.body, expected[response.statusCode]);
-            
           }
         }
         break;
