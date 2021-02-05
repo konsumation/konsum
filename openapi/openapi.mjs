@@ -1,11 +1,16 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import { readFileSync, writeFileSync } from "fs";
+import SwaggerParser from "@apidevtools/swagger-parser";
 
-const pkg = JSON.parse(
-  readFileSync(new URL("../package.json", import.meta.url).pathname, {
-    encoding: "utf8"
-  })
-);
+const encodingOptions = {
+  encoding: "utf8"
+};
+
+function pn(path) {
+  return new URL(path, import.meta.url).pathname;
+}
+
+const pkg = JSON.parse(readFileSync(pn("../package.json"), encodingOptions));
 
 const options = {
   definition: {
@@ -15,13 +20,15 @@ const options = {
       version: pkg.version
     }
   },
-  apis: [new URL("../src/*.mjs", import.meta.url).pathname]
+  apis: [pn("../src/*.mjs")]
 };
 
+const fileName = pn("../openapi/openapi.json");
+
 writeFileSync(
-  new URL("../openapi/openapi.json", import.meta.url).pathname,
+  fileName,
   JSON.stringify(swaggerJsdoc(options), undefined, 2),
-  {
-    encoding: "utf8"
-  }
+  encodingOptions
 );
+
+await SwaggerParser.validate(fileName);

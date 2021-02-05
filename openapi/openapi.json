@@ -214,7 +214,12 @@
     "/category/{category}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/category"
+          "name": "category",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CategoryID"
+          }
         }
       ],
       "put": {
@@ -283,15 +288,11 @@
     "/category/{category}/value": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/category"
-        },
-        {
-          "name": "time",
-          "in": "body",
-          "description": "Time the value was present.",
+          "name": "category",
+          "in": "path",
           "required": true,
           "schema": {
-            "type": "string"
+            "$ref": "#/components/schemas/CategoryID"
           }
         }
       ],
@@ -328,7 +329,11 @@
           "406": {
             "description": "Unsupported content-type.",
             "content": {
-              "text": "json, or text only"
+              "text": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
             }
           }
         },
@@ -416,10 +421,20 @@
     "/category/{category}/meter": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/category"
+          "name": "category",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CategoryID"
+          }
         },
         {
-          "$ref": "#/components/parameters/meter"
+          "name": "meter",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/MeterID"
+          }
         }
       ],
       "get": {
@@ -537,10 +552,20 @@
     "/category/{category}/note": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/category"
+          "name": "category",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CategoryID"
+          }
         },
         {
-          "$ref": "#/components/parameters/note"
+          "name": "note",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/NoteID"
+          }
         }
       ],
       "get": {
@@ -658,10 +683,20 @@
     "/category/{category}/meter/{meter}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/category"
+          "name": "category",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CategoryID"
+          }
         },
         {
-          "$ref": "#/components/parameters/meter"
+          "name": "note",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/NoteID"
+          }
         }
       ],
       "delete": {
@@ -704,10 +739,20 @@
     "/category/{category}/note/{note}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/category"
+          "name": "category",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CategoryID"
+          }
         },
         {
-          "$ref": "#/components/parameters/note"
+          "name": "note",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/NoteID"
+          }
         }
       ],
       "delete": {
@@ -749,32 +794,6 @@
     }
   },
   "components": {
-    "parameters": {
-      "category": {
-        "name": "category",
-        "in": "path",
-        "description": "Category identifier.",
-        "schema": {
-          "type": "string"
-        }
-      },
-      "meter": {
-        "name": "meter",
-        "in": "path",
-        "description": "Meter identifier.",
-        "schema": {
-          "type": "string"
-        }
-      },
-      "note": {
-        "name": "note",
-        "in": "path",
-        "description": "Note identifier.",
-        "schema": {
-          "type": "string"
-        }
-      }
-    },
     "securitySchemes": {
       "konsum_auth": {
         "type": "http",
@@ -783,6 +802,10 @@
       }
     },
     "schemas": {
+      "CategoryID": {
+        "description": "Category identifier.",
+        "type": "string"
+      },
       "Category": {
         "type": "object",
         "required": [
@@ -808,6 +831,10 @@
           "unit": "m3"
         }
       },
+      "MeterID": {
+        "description": "Meter identifier.",
+        "type": "string"
+      },
       "Meter": {
         "type": "object",
         "required": [
@@ -831,6 +858,10 @@
             "description": "The serial number of the meter."
           }
         }
+      },
+      "NoteID": {
+        "description": "Note identifier.",
+        "type": "string"
       },
       "Note": {
         "type": "object",
@@ -869,43 +900,43 @@
         "type": "object",
         "properties": {
           "username": {
-            "type": "string",
-            "required": true
+            "type": "string"
           },
           "password": {
-            "type": "string",
-            "required": true
+            "type": "string"
           }
-        }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
       },
       "AuthResponse": {
         "type": "object",
         "properties": {
           "access_token": {
             "type": "string",
-            "description": "The access token issued.",
-            "required": true
+            "description": "The access token issued."
           },
           "token_type": {
             "type": "string",
-            "description": "The type of the token issued. Value is case insensitive.",
-            "restriction": "bearer",
-            "required": true
+            "description": "The type of the token issued. Value is case insensitive."
           },
           "refresh_token": {
-            "type": "string",
-            "required": true
+            "type": "string"
           },
           "expires_in": {
             "type": "integer",
-            "description": "The lifetime in seconds of the access token. For example, the value \"3600\" denotes that the access token will expire in one hour from the time the response was generated.",
-            "required": true
+            "description": "The lifetime in seconds of the access token. For example, the value \"3600\" denotes that the access token will expire in one hour from the time the response was generated."
           },
           "scope": {
-            "type": "string",
-            "required": true
+            "type": "string"
           }
-        }
+        },
+        "required": [
+          "token_type",
+          "access_token"
+        ]
       },
       "Message": {
         "type": "object",

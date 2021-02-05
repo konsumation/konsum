@@ -4,9 +4,9 @@ import SwaggerParser from "@apidevtools/swagger-parser";
 
 export async function loadOpenAPI(t, path)
 {
-  //t.context.api = await SwaggerParser.validate(path);
+  t.context.api = await SwaggerParser.validate(path);
 
-  t.context.api = JSON.parse( await readFile(path, { encoding: "utf8" }));
+  //t.context.api = JSON.parse( await readFile(path, { encoding: "utf8" }));
 }
 
 async function assertResponse(t, response, erc, er, expected) {

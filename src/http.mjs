@@ -326,7 +326,7 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    * /category/{category}:
    *   parameters:
-   *   - $ref: '#/components/parameters/category'
+   *   - $ref: '#/components/schemas/CategoryID'
    *   put:
    *     tags:
    *       - category
@@ -376,7 +376,11 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    * /category/{category}:
    *   parameters:
-   *   - $ref: '#/components/parameters/category'
+   *     - name: category
+   *       in: path
+   *       required: true
+   *       schema:
+   *         $ref: '#/components/schemas/CategoryID'
    *   delete:
    *     tags:
    *       - category
@@ -420,7 +424,7 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    * /category/{category}/value:
    *   parameters:
-   *   - $ref: '#/components/parameters/category'
+   *   - $ref: '#/components/schemas/CategoryID'
    *   - name: limit
    *     in: query
    *     description: Limits the number of entries delivered.
@@ -458,7 +462,9 @@ export async function prepareHttpServer(config, sd, master) {
    *       '406':
    *         description: Unsupported content-type.
    *         content:
-   *           'text': "json, or text only"
+   *           'text':
+   *             schema:
+   *               $ref: '#/components/schemas/Message'
    *     security:
    *       - konsum_auth:
    *         - konsum.value
@@ -508,19 +514,11 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    * /category/{category}/value:
    *   parameters:
-   *   - $ref: '#/components/parameters/category'
-   *   - name: value
-   *     in: body
-   *     description: The value itself.
-   *     required: true
-   *     schema:
-   *       type: string
-   *   - name: time
-   *     in: body
-   *     description: Time the value was present.
-   *     required: true
-   *     schema:
-   *       type: string
+   *     - name: category
+   *       in: path
+   *       required: true
+   *       schema:
+   *         $ref: '#/components/schemas/CategoryID'
    *   post:
    *     tags:
    *       - value
@@ -571,13 +569,11 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    * /category/{category}/value:
    *   parameters:
-   *   - $ref: '#/components/parameters/category'
-   *   - name: time
-   *     in: body
-   *     description: Time the value was present.
-   *     required: true
-   *     schema:
-   *       type: string
+   *     - name: category
+   *       in: path
+   *       required: true
+   *       schema:
+   *         $ref: '#/components/schemas/CategoryID'
    *   delete:
    *     tags:
    *       - value
@@ -627,8 +623,16 @@ export async function prepareHttpServer(config, sd, master) {
      * @swagger
      * /category/{category}/meter:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/meter'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: note
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/NoteID'
      *   get:
      *     tags:
      *       - meter
@@ -654,8 +658,16 @@ export async function prepareHttpServer(config, sd, master) {
      *         - konsum.meter
      * /category/{category}/note:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/note'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: note
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/NoteID'
      *   get:
      *     tags:
      *       - note
@@ -706,8 +718,16 @@ export async function prepareHttpServer(config, sd, master) {
      * @swagger
      * /category/{category}/meter:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/meter'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: meter
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/MeterID'
      *   put:
      *     tags:
      *       - meter
@@ -731,8 +751,16 @@ export async function prepareHttpServer(config, sd, master) {
      *         - konsum.meter.add
      * /category/{category}/note:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/note'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: note
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/NoteID'
      *   put:
      *     tags:
      *       - note
@@ -783,8 +811,16 @@ export async function prepareHttpServer(config, sd, master) {
      * @swagger
      * /category/{category}/meter:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/meter'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: meter
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/MeterID'
      *   post:
      *     tags:
      *       - meter
@@ -808,8 +844,16 @@ export async function prepareHttpServer(config, sd, master) {
      *         - konsum.meter.modify
      * /category/{category}/note:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/note'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: note
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/NoteID'
      *   post:
      *     tags:
      *       - note
@@ -857,8 +901,16 @@ export async function prepareHttpServer(config, sd, master) {
      * @swagger
      * /category/{category}/meter/{meter}:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/meter'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: note
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/NoteID'
      *   delete:
      *     tags:
      *       - meter
@@ -882,8 +934,16 @@ export async function prepareHttpServer(config, sd, master) {
      *         - konsum.meter.delete
      * /category/{category}/note/{note}:
      *   parameters:
-     *   - $ref: '#/components/parameters/category'
-     *   - $ref: '#/components/parameters/note'
+     *     - name: category
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/CategoryID'
+     *     - name: note
+     *       in: path
+     *       required: true
+     *       schema:
+     *         $ref: '#/components/schemas/NoteID'
      *   delete:
      *     tags:
      *       - note
@@ -949,31 +1009,15 @@ export async function prepareHttpServer(config, sd, master) {
 /**
  * @swagger
  * components:
- *   parameters:
- *     category:
- *       name: category
- *       in: path
- *       description: Category identifier.
- *       schema:
- *         type: string
- *     meter:
- *       name: meter
- *       in: path
- *       description: Meter identifier.
- *       schema:
- *         type: string
- *     note:
- *       name: note
- *       in: path
- *       description: Note identifier.
- *       schema:
- *         type: string
  *   securitySchemes:
  *     konsum_auth:
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
  *   schemas:
+ *     CategoryID:
+ *       description: Category identifier.
+ *       type: string
  *     Category:
  *       type: object
  *       required:
@@ -992,6 +1036,9 @@ export async function prepareHttpServer(config, sd, master) {
  *         id: EV
  *         description: "mains power"
  *         unit: "m3"
+ *     MeterID:
+ *       description: Meter identifier.
+ *       type: string
  *     Meter:
  *       type: object
  *       required:
@@ -1009,6 +1056,9 @@ export async function prepareHttpServer(config, sd, master) {
  *         serial:
  *           type: string
  *           description: The serial number of the meter.
+ *     NoteID:
+ *       description: Note identifier.
+ *       type: string
  *     Note:
  *       type: object
  *       required:
@@ -1037,34 +1087,32 @@ export async function prepareHttpServer(config, sd, master) {
  *       properties:
  *         username:
  *           type: string
- *           required: true
  *         password:
  *           type: string
- *           required: true
+ *       required:
+ *          - username
+ *          - password
  *     AuthResponse:
  *       type: object
  *       properties:
  *         access_token:
  *           type: string
  *           description: The access token issued.
- *           required: true
  *         token_type:
  *           type: string
  *           description: The type of the token issued. Value is case insensitive.
- *           restriction: 'bearer'
- *           required: true
  *         refresh_token:
  *           type: string
- *           required: true
  *         expires_in:
  *           type: integer
  *           description: The lifetime in seconds of the access token. For
  *                        example, the value "3600" denotes that the access token will
  *                        expire in one hour from the time the response was generated.
- *           required: true
  *         scope:
  *           type: string
- *           required: true
+ *       required:
+ *          - token_type
+ *          - access_token
  *     Message:
  *       type: object
  *       properties:
