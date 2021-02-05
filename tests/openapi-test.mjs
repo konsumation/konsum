@@ -1,23 +1,23 @@
 import test from "ava";
 import { readFile } from "fs/promises";
 import { startServer, stopServer } from "./helpers/server.mjs";
-import { openapiPathTest } from "./helpers/openapi.mjs";
+import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
 
 test.before(async t => {
   await startServer(t, 3190);
-  t.context.api = JSON.parse(
-    await readFile(
-      new URL("../openapi/openapi.json", import.meta.url).pathname,
-      { encoding: "utf8" }
-    )
-  );
+  await loadOpenAPI(t, new URL("../openapi/openapi.json", import.meta.url).pathname);
 });
+
 test.after(t => stopServer(t));
 
 
 
 test(openapiPathTest, "/state", {
   200: { version: "1.2.3", database: { schemaVersion: "1" } }
+});
+
+test(openapiPathTest, "/authenticate", {
+  401: "Authentication failed"
 });
 
 test(openapiPathTest, "/category/{category}/meter", {
