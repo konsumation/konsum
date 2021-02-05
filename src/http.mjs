@@ -326,7 +326,11 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    * /category/{category}:
    *   parameters:
-   *   - $ref: '#/components/schemas/CategoryID'
+   *     - name: category
+   *       in: path
+   *       required: true
+   *       schema:
+   *         $ref: '#/components/schemas/CategoryID'
    *   put:
    *     tags:
    *       - category
@@ -336,7 +340,7 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: success message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *     security:
@@ -390,13 +394,13 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: success message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *       '404':
    *         description: No such category error message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *     security:
@@ -424,21 +428,25 @@ export async function prepareHttpServer(config, sd, master) {
    * @swagger
    * /category/{category}/value:
    *   parameters:
-   *   - $ref: '#/components/schemas/CategoryID'
-   *   - name: limit
-   *     in: query
-   *     description: Limits the number of entries delivered.
-   *     required: false
-   *     default: 10
-   *     schema:
-   *       type: integer
-   *   - name: reverse
-   *     in: query
-   *     description: Reverses the order in which the entries are delivered.
-   *     required: false
-   *     default: false
-   *     schema:
-   *       type: boolean
+   *     - name: category
+   *       in: path
+   *       required: true
+   *       schema:
+   *         $ref: '#/components/schemas/CategoryID'
+   *     - name: limit
+   *       in: query
+   *       description: Limits the number of entries delivered.
+   *       required: false
+   *       default: 10
+   *       schema:
+   *         type: integer
+   *     - name: reverse
+   *       in: query
+   *       description: Reverses the order in which the entries are delivered.
+   *       required: false
+   *       default: false
+   *       schema:
+   *         type: boolean
    *   get:
    *     tags:
    *       - value
@@ -456,7 +464,7 @@ export async function prepareHttpServer(config, sd, master) {
    *       '404':
    *         description: No such category error message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *       '406':
@@ -528,13 +536,13 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: Success message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *       '404':
    *         description: No such category error message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *     security:
@@ -583,13 +591,13 @@ export async function prepareHttpServer(config, sd, master) {
    *       '200':
    *         description: Success message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *       '404':
    *         description: No such category error message.
    *         content:
-   *           'application/json':
+   *           'application/text':
    *             schema:
    *               $ref: '#/components/schemas/Message'
    *     security:
@@ -650,7 +658,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:
@@ -685,7 +693,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '404':
      *         description: No such category error message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *     security:
@@ -737,7 +745,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *       '404':
@@ -920,7 +928,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *       '404':
@@ -953,7 +961,7 @@ export async function prepareHttpServer(config, sd, master) {
      *       '200':
      *         description: Success message.
      *         content:
-     *           'application/json':
+     *           'application/text':
      *             schema:
      *               $ref: '#/components/schemas/Message'
      *       '404':
