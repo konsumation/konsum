@@ -80,6 +80,16 @@ test.serial("cli backup database", async t => {
   t.regex(p.stdout, /database.txt saved/);
 });
 
+test.serial("cli backup database stdout", async t => {
+  const p = await execa(pn("../src/konsum-cli.mjs"), [
+    "--config",
+    pn("../config"),
+    "backup"
+  ]);
+  t.regex(p.stdout, /77.34/);
+});
+
+
 test.serial("cli start", async t => {
   const p = execa(pn("../src/konsum-cli.mjs"), [
     "--config",

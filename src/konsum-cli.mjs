@@ -12,7 +12,10 @@ const encodingOptions = {
 };
 
 const { version, description } = JSON.parse(
-  readFileSync(new URL("../package.json", import.meta.url).pathname, encodingOptions)
+  readFileSync(
+    new URL("../package.json", import.meta.url).pathname,
+    encodingOptions
+  )
 );
 
 program
@@ -47,7 +50,10 @@ program.command("backup [file]").action(async output => {
       : createWriteStream(output, encodingOptions)
   );
   await master.close();
-  console.log(`${output} saved`);
+
+  if (output !== undefined) {
+    console.log(`${output} saved`);
+  }
 });
 
 program.command("restore [file]").action(async input => {
