@@ -6,22 +6,34 @@ export async function loadOpenAPI(t, path) {
 }
 
 async function assertResponse(t, response, erc, er, expected) {
-  for (const [ct, c] of Object.entries(er.content)) {
-    switch (ct) {
-      case "application/json":
-        const body = JSON.parse(response.body);
-        if (Array.isArray(body)) {
-          t.deepEqual(body, expected[erc]);
-        } else {
-          t.like(body, expected[erc]);
-        }
-        break;
-      case "application/text":
-        t.is(response.body, expected[erc]);
+  if (er && er.content) {
+    for (const [ct, c] of Object.entries(er.content)) {
+      switch (ct) {
+        case "application/json":
+          const body = JSON.parse(response.body);
+          if (Array.isArray(body)) {
+            t.deepEqual(body, expected[erc]);
+          } else {
+            t.like(body, expected[erc]);
+          }
+          break;
+
+        case "text/plain":
+        case "application/text":
+          t.is(response.body, expected[erc]);
+          break;
+
+        default:
+          t.log(`Unknown content type ${ct}`);
+      }
+    }
+  } else {
+    switch (erc) {
+      case 403:
         break;
 
       default:
-        t.log(`Unknown content type ${ct}`);
+        t.log("Unknown response " + erc);
     }
   }
 }
@@ -33,6 +45,17 @@ export async function assertOpenapiPath(t, path, expected) {
   const headers = { Authorization: `Bearer ${t.context.token}` };
 
   for (const [emn, em] of Object.entries(p)) {
+    async function handleError(e) {
+      const statusCode = e.response.statusCode;
+      await assertResponse(
+        t,
+        e.response,
+        statusCode,
+        em.responses[statusCode],
+        expected
+      );
+    }
+
     switch (emn) {
       case "get":
         for (const [erc, er] of Object.entries(em.responses)) {
@@ -44,10 +67,7 @@ export async function assertOpenapiPath(t, path, expected) {
 
             t.is(response.statusCode, parseInt(erc), "${path}");
           } catch (e) {
-            //    await assertResponse(t, e.response, erc, er, expected);
-
-            const response = e.response;
-            t.deepEqual(response.body, expected[response.statusCode]);
+            await handleError(e);
           }
         }
         break;
@@ -57,8 +77,7 @@ export async function assertOpenapiPath(t, path, expected) {
             headers
           });
         } catch (e) {
-          const response = e.response;
-          t.deepEqual(response.body, expected[response.statusCode]);
+          await handleError(e);
         }
         break;
       case "post":
@@ -67,8 +86,7 @@ export async function assertOpenapiPath(t, path, expected) {
             headers
           });
         } catch (e) {
-          const response = e.response;
-          t.deepEqual(response.body, expected[response.statusCode]);
+          await handleError(e);
         }
         break;
       case "delete":
@@ -77,8 +95,7 @@ export async function assertOpenapiPath(t, path, expected) {
             headers
           });
         } catch (e) {
-          const response = e.response;
-          t.deepEqual(response.body, expected[response.statusCode]);
+          await handleError(e);
         }
         break;
 
