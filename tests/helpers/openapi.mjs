@@ -43,7 +43,7 @@ export async function assertOpenapiPath(t, path, expected) {
   t.truthy(p, `Does not exists in api: ${path}`);
 
   const headers = { Authorization: `Bearer ${t.context.token}` };
-
+  
   for (const [emn, em] of Object.entries(p)) {
     async function handleError(e) {
       const statusCode = e.response.statusCode;
@@ -52,7 +52,7 @@ export async function assertOpenapiPath(t, path, expected) {
         e.response,
         statusCode,
         em.responses[statusCode],
-        expected
+        expected.response ? expected.response : expected
       );
     }
 
@@ -74,7 +74,8 @@ export async function assertOpenapiPath(t, path, expected) {
       case "put":
         try {
           const response = await got.put(`${t.context.url}${path}`, {
-            headers
+            headers,
+            json: expected.put
           });
         } catch (e) {
           await handleError(e);
@@ -83,7 +84,8 @@ export async function assertOpenapiPath(t, path, expected) {
       case "post":
         try {
           const response = await got.post(`${t.context.url}${path}`, {
-            headers
+            headers,
+            json: expected.post
           });
         } catch (e) {
           await handleError(e);

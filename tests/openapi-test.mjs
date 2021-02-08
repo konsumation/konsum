@@ -4,14 +4,19 @@ import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
 
 test.before(async t => {
   await startServer(t, 3190);
-  await loadOpenAPI(t, new URL("../openapi/openapi.json", import.meta.url).pathname);
+  await loadOpenAPI(
+    t,
+    new URL("../openapi/openapi.json", import.meta.url).pathname
+  );
 });
 
 test.after(t => stopServer(t));
 
-
 test(openapiPathTest, "/authenticate", {
-  401: "Authentication failed"
+  post: { username: "admin", password: "start123" },
+  response: {
+    401: "Authentication failed"
+  }
 });
 
 test(openapiPathTest, "/state", {
