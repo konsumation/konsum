@@ -63,7 +63,7 @@ export async function startServer(t, port = 3150, users = defaultUsers) {
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
-  await wait(100);
+  await wait(50);
 
   const response = await got.post(`http://localhost:${port}/authenticate`, {
     json: {
