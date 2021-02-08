@@ -13,8 +13,9 @@ test.before(async t => {
 test.after(t => stopServer(t));
 
 test(openapiPathTest, "/authenticate", {
-  post: { username: "admin", password: "start123" },
+  post: { username: "xadmin", password: "start123" },
   response: {
+    // 200: { token_type: 'bearer' },
     401: "Authentication failed"
   }
 });
@@ -39,10 +40,27 @@ test(openapiPathTest, "/category/{category}/value", {
   404: "No such category"
 });
 
-test(openapiPathTest, "/admin/backup", {
-  200: `schemaVersion=1
+test.skip(openapiPathTest, "/admin/backup", {
+  200: "backup to /tmp/konsum.txt..."
+
+/*    200: `schemaVersion=1
+
+`*/
+/*
+  response: {
+    200: "backup to /tmp/konsum.txt..."
+  }
+  */
+});
+
+
+test.skip(openapiPathTest, "/admin/backup", {
+  get: {},
+  response: {
+    200: `schemaVersion=1
 
 `
+  }
 });
 
 test(openapiPathTest, "/admin/reload", {
