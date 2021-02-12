@@ -172,7 +172,7 @@ test.serial("can insert + get values", async t => {
   const c = new Category(`CAT1`, { unit: "kWh" });
   await c.write(master.db);
   const now = Date.now();
-  await c.writeValue(master.db, 77.34, now);
+  await c.writeValue(master.db, 77.34, Math.round(now / 1000) - 1);
 
   let response = await got.post(
     `${t.context.url}/category/CAT1/value`,
@@ -193,6 +193,7 @@ test.serial("can insert + get values", async t => {
       }
     }
   );
+
   //t.log(response.body);
   t.regex(response.body, /\d+ 77.34/);
   t.regex(response.body, /\d+ 78/);
@@ -207,6 +208,7 @@ test.serial("can insert + get values", async t => {
     }
   );
 
+  //t.log(response.body);
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
