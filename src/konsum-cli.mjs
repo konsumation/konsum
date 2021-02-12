@@ -74,7 +74,7 @@ program
 
     time = time === undefined ? Date.now() : new Date(time).valueOf();
 
-    time = time / 1000;
+    time = Math.round(time / 1000);
 
     if (time < 941673600 || time > 2000000000) {
       console.log("Time out of range");

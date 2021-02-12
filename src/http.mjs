@@ -563,7 +563,7 @@ export async function prepareHttpServer(config, sd, master) {
         for (const v of Array.isArray(values) ? values : [values]) {
           const time =
             v.time === undefined ? Date.now() : new Date(v.time).valueOf();
-          await category.writeValue(master.db, v.value, time / 1000);
+          await category.writeValue(master.db, v.value, Math.round(time / 1000));
         }
 
         ctx.body = { message: "inserted" };
