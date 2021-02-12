@@ -21,7 +21,7 @@ test(openapiPathTest, "/authenticate", {
 });
 
 test(openapiPathTest, "/state", {
-  200: { version: "1.2.3", database: { schemaVersion: "1" } }
+  200: { version: "1.2.3", database: { schemaVersion: "2" } }
 });
 
 test(openapiPathTest, "/category", {
@@ -57,7 +57,7 @@ test.skip(openapiPathTest, "/admin/backup", {
 test.skip(openapiPathTest, "/admin/backup", {
   get: {},
   response: {
-    200: `schemaVersion=1
+    200: `schemaVersion=2
 
 `
   }
