@@ -53,7 +53,7 @@
     "got": "^11.8.1",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^6.12.23",
-    "semantic-release": "^17.4.0",
+    "semantic-release": "^17.4.1",
     "swagger-jsdoc": "^6.0.2",
     "tmp": "^0.2.1"
   },
