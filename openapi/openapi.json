@@ -294,6 +294,24 @@
           "schema": {
             "$ref": "#/components/schemas/CategoryID"
           }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Limits the number of entries delivered.",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "reverse",
+          "in": "query",
+          "description": "Reverses the order in which the entries are delivered.",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
         }
       ],
       "get": {
