@@ -437,14 +437,12 @@ export async function prepareHttpServer(config, sd, master) {
    *       in: query
    *       description: Limits the number of entries delivered.
    *       required: false
-   *       default: 10
    *       schema:
    *         type: integer
    *     - name: reverse
    *       in: query
    *       description: Reverses the order in which the entries are delivered.
    *       required: false
-   *       default: false
    *       schema:
    *         type: boolean
    *   get:
