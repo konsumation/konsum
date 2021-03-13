@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import swaggerJsdoc from "swagger-jsdoc";
 import { readFileSync, writeFileSync } from "fs";
 import SwaggerParser from "@apidevtools/swagger-parser";
