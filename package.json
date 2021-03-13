@@ -38,7 +38,7 @@
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.0",
     "konsum-db": "^3.4.0",
-    "ldapts": "^2.11.0",
+    "ldapts": "^2.11.1",
     "leveldown": "^5.6.0",
     "levelup": "^4.4.0"
   },
@@ -50,7 +50,7 @@
     "c8": "^7.6.0",
     "documentation": "github:arlac77/documentation",
     "execa": "^5.0.0",
-    "got": "^11.8.1",
+    "got": "^11.8.2",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^6.12.24",
     "semantic-release": "^17.4.2",
