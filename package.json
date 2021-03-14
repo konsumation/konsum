@@ -97,7 +97,7 @@
     },
     "depends": {
       "systemd": ">=247.3",
-      "nginx-mainline": ">=1.19.7"
+      "nginx-mainline": ">=1.19.8"
     }
   },
   "release": {
