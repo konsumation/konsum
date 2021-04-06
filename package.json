@@ -96,7 +96,7 @@
       "/etc/nginx/config.d/${name}.conf": "config/nginx.conf"
     },
     "depends": {
-      "systemd": ">=247.3",
+      "systemd": ">=248",
       "nginx-mainline": ">=1.19.8"
     }
   },
