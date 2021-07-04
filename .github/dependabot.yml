@@ -7,6 +7,13 @@ updates:
     commit-message:
       prefix: 'fix(deps):'
       prefix-development: 'chore(deps):'
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    commit-message:
+      prefix: 'fix(deps):'
+      prefix-development: 'chore(deps):'
   - package-ecosystem: github-actions
     directory: /
     schedule:
