@@ -1,7 +1,6 @@
 [Socket]
 ListenStream={{socket}}
 MaxConnections=4
-NoDelay=true
 FileDescriptorName=http.listen.socket
 SocketUser=http
 SocketGroup=http
