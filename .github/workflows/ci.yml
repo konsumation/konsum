@@ -35,6 +35,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
       - run: npm install
       - run: >-
           node tests/helpers/ldapadd.mjs -h localhost:389 -D
@@ -58,6 +59,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14.17.3
+          cache: npm
       - run: npm install
       - run: npx semantic-release
         env:
