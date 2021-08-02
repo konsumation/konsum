@@ -39,7 +39,7 @@
     "koa-jwt": "4.0.1",
     "konsum-db": "^3.4.3",
     "ldapts": "^3.0.5",
-    "leveldown": "^6.0.0",
+    "leveldown": "^6.0.1",
     "levelup": "^5.0.1"
   },
   "devDependencies": {
