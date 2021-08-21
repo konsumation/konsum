@@ -29,6 +29,18 @@ MemoryHigh=60M
 MemoryMax=100M
 OOMPolicy=stop
 FileDescriptorStoreMax=4
+ProtectHome=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=true
+ProtectSystem=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHostname=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+PrivateDevices=true
 
 [Install]
 WantedBy=multi-user.target
