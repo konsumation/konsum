@@ -265,7 +265,7 @@ export async function prepareHttpServer(config, sd, master) {
         );
 
         const refresh_token = jsonwebtoken.sign(
-          { seq: refreshTokenSequence },
+          { sequence: refreshTokenSequence },
           config.auth.jwt.private,
           { expiresIn: "90d" }  
         );
