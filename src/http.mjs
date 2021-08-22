@@ -244,7 +244,8 @@ export async function prepareHttpServer(config, sd, master) {
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
-
+   
+    let refreshTokenSequence = 1;
     const { entitlements } = await authenticate(config, q.username, q.password);
 
     for (const e of entitlements) {
@@ -264,9 +265,9 @@ export async function prepareHttpServer(config, sd, master) {
         );
 
         const refresh_token = jsonwebtoken.sign(
-          {},
+          { seq: refreshTokenSequence },
           config.auth.jwt.private,
-          config.auth.jwt.options
+          { expiresIn: "90d" }  
         );
 
         ctx.status = 200;
