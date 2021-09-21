@@ -38,7 +38,7 @@
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "4.0.1",
     "konsum-db": "^3.4.5",
-    "ldapts": "^3.0.7",
+    "ldapts": "^3.1.0",
     "leveldown": "^6.0.2",
     "levelup": "^5.0.1"
   },
