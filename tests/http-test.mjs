@@ -1,7 +1,7 @@
 import test from "ava";
 import { startServer, stopServer } from "./helpers/server.mjs";
 import got from "got";
-import { Category, Meter, Note } from "konsum-db";
+import { Category, Meter, Note } from "@konsumation/db";
 
 let port = 3150;
 

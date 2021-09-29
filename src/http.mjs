@@ -5,7 +5,7 @@ import ms from "ms";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
-import { Category, Meter, Note } from "konsum-db";
+import { Category, Meter, Note } from "@konsumation/db";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {

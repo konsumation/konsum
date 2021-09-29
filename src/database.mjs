@@ -1,6 +1,6 @@
 import levelup from "levelup";
 import leveldown from "leveldown";
-import { Master } from "konsum-db";
+import { Master } from "@konsumation/db";
 
 export const defaultDatabaseConfig = {
   database: {

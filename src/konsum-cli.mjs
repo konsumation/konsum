@@ -2,7 +2,7 @@
 import program from "commander";
 import { readFileSync, createWriteStream, createReadStream } from "fs";
 import { expand } from "config-expander";
-import { Category } from "konsum-db";
+import { Category } from "@konsumation/db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
