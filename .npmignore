@@ -5,7 +5,6 @@ doc
 *.tmp
 .test
 .tmp
-rollup.config.*
 .vscode
 config
 systemd
