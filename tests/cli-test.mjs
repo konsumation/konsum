@@ -1,7 +1,6 @@
 import test from "ava";
 import { mkdir } from "fs/promises";
-
-import execa from "execa";
+import {execa} from "execa";
 
 function pn(path) {
   return new URL(path, import.meta.url).pathname;
