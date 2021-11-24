@@ -43,7 +43,7 @@
     "levelup": "^5.1.1"
   },
   "devDependencies": {
-    "@semantic-release/commit-analyzer": "^9.0.1",
+    "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/exec": "^6.0.2",
     "@semantic-release/release-notes-generator": "^10.0.2",
     "ava": "^3.15.0",
@@ -52,8 +52,8 @@
     "execa": "^6.0.0",
     "got": "^11.8.2",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^6.12.72",
-    "semantic-release": "^18.0.0",
+    "npm-pkgbuild": "^6.12.73",
+    "semantic-release": "^18.0.1",
     "swagger-jsdoc": "^6.1.0",
     "tmp": "^0.2.1"
   },
