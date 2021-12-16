@@ -15,7 +15,7 @@ export const defaultHttpServerConfig = {
 };
 
 function setNoCacheHeaders(ctx) {
-  ctx.set("Cache-Control", "no-store, no-cache, must-revalidate");
+  ctx.set("Cache-Control", "no-cache");
 }
 
 function enshureEntitlement(ctx, entitlement) {
