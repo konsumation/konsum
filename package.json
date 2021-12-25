@@ -1,6 +1,6 @@
 {
   "name": "@konsumation/konsum",
-  "version": "5.0.16",
+  "version": "0.0.0-semantic-release",
   "publishConfig": {
     "access": "public"
   },
@@ -38,7 +38,7 @@
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.3",
-    "ldapts": "^3.1.2",
+    "ldapts": "^3.2.0",
     "leveldown": "^6.0.3",
     "levelup": "^5.1.1"
   },
