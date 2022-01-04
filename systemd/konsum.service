@@ -43,5 +43,7 @@ RestrictRealtime=true
 RestrictSUIDSGID=true
 PrivateDevices=true
 
+CapabilityBoundingSet=~CAP_SYS_BOOT CAP_SYS_ADMIN
+
 [Install]
 WantedBy=multi-user.target
