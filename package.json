@@ -89,13 +89,13 @@
     "name": "konsum",
     "groups": "home-automation",
     "backup": "etc/${name}/config.json",
-    "hooks": "pacman/hooks.sh",
+    "hooks": "pkg/hooks.sh",
     "installdir": "/services/${name}",
     "content": {
-      "/usr/lib/tmpfiles.d/${name}.conf": "pacman/tmpfiles.conf",
+      "/usr/lib/tmpfiles.d/${name}.conf": "pkg/tmpfiles.conf",
       "/etc/${name}/config.json": "config/config.json",
       "/etc/nginx/sites/common/${name}.conf": "config/nginx.conf",
-      "/etc/nginx/config.d/${name}.conf": "pacman/nginx.conf"
+      "/etc/nginx/config.d/${name}.conf": "pkg/nginx.conf"
     },
     "depends": {
       "systemd": ">=250",
