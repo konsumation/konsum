@@ -20,14 +20,14 @@
     "konsum": "./src/konsum-cli.mjs"
   },
   "scripts": {
-    "pkg": "npm-pkgbuild --verbose --publish dist",
     "start": "node src/konsum-cli.mjs --config=config start",
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 2m tests/*.mjs",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m tests/*.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme --section=API ./src/**/*.mjs",
     "lint": "npm run lint:docs",
-    "lint:docs": "documentation lint ./src/**/*.mjs"
+    "lint:docs": "documentation lint ./src/**/*.mjs",
+    "pkg": "npm-pkgbuild --verbose --publish dist"
   },
   "dependencies": {
     "@konsumation/db": "^4.0.1",
@@ -63,6 +63,9 @@
   "engines": {
     "node": ">=16.13.2"
   },
+  "cpu": [
+    "arm64"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/konsumation/konsum.git"
@@ -75,9 +78,37 @@
     "base": "/services/${name}/api",
     "socket": "/run/${name}/http/socket"
   },
-  "cpu": [
-    "arm64"
-  ],
+  "pacman": {
+    "depends": {
+      "systemd": ">=250.3"
+    }
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      [
+        "@semantic-release/exec",
+        {
+          "publishCmd": "npx npm-pkgbuild --verbose"
+        }
+      ]
+    ]
+  },
+  "template": {
+    "inheritFrom": [
+      "arlac77/template-coveralls",
+      "arlac77/template-documentation",
+      "arlac77/template-nginx",
+      "arlac77/template-node-app",
+      "arlac77/template-openapi",
+      "arlac77/template-pacman#next",
+      "arlac77/template-systemd",
+      "konsumation/template"
+    ]
+  },
   "pkg": {
     "name": "konsum",
     "groups": "home-automation",
@@ -108,31 +139,5 @@
       "systemd": ">=250.3",
       "nginx-mainline": ">=1.21.1"
     }
-  },
-  "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/npm",
-      "@semantic-release/github",
-      [
-        "@semantic-release/exec",
-        {
-          "publishCmd": "npx npm-pkgbuild --verbose"
-        }
-      ]
-    ]
-  },
-  "template": {
-    "inheritFrom": [
-      "arlac77/template-coveralls",
-      "arlac77/template-documentation",
-      "arlac77/template-nginx",
-      "arlac77/template-node-app",
-      "arlac77/template-openapi",
-      "arlac77/template-pacman#next",
-      "arlac77/template-systemd",
-      "konsumation/template"
-    ]
   }
 }
