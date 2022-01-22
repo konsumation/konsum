@@ -1,6 +1,10 @@
 build
 tests
 doc
+db
+dist
+pkg
+*.tgz
 *.log
 *.tmp
 .test
