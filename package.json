@@ -109,7 +109,7 @@
     "groups": "home-automation",
     "backup": "etc/${name}/config.json",
     "hooks": "pkg/hooks.sh",
-    "installdir": "/services/${name}",
+    "installdir": "/services/konsum/frontend",
     "content": {
       "/usr/lib/systemd/system/": {
         "base": "systemd"
