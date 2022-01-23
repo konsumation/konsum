@@ -1,6 +1,5 @@
 [![npm](https://img.shields.io/npm/v/@konsumation/konsum.svg)](https://www.npmjs.com/package/@konsumation/konsum)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![install size](https://packagephobia.now.sh/badge?p=@konsumation/konsum/@5.0.32)](https://packagephobia.now.sh/result?p=@konsumation/konsum@5.0.32)
 [![minified size](https://badgen.net/bundlephobia/min/@konsumation/konsum)](https://bundlephobia.com/result?p=@konsumation/konsum)
 [![downloads](http://img.shields.io/npm/dm/@konsumation/konsum.svg?style=flat-square)](https://npmjs.org/package/@konsumation/konsum)
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fkonsumation%2Fkonsum%2Fbadge\&style=flat)](https://actions-badge.atrox.dev/konsumation/konsum/goto)
