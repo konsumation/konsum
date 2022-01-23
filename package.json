@@ -78,11 +78,6 @@
     "base": "/services/${name}/api",
     "socket": "/run/${name}/http/socket"
   },
-  "pacman": {
-    "depends": {
-      "systemd": ">=250.3"
-    }
-  },
   "release": {
     "plugins": [
       "@semantic-release/commit-analyzer",
@@ -105,7 +100,7 @@
       "arlac77/template-node-app",
       "arlac77/template-openapi",
       "arlac77/template-pacman#next",
-      "arlac77/template-systemd",
+      "arlac77/template-systemd#next",
       "konsumation/template"
     ]
   },
