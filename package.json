@@ -133,5 +133,8 @@
       "systemd": ">=250.3",
       "nginx-mainline": ">=1.21.4"
     }
+  },
+  "peerDependencies": {
+    "mf-hosting": "github:arlac77/mf-hosting"
   }
 }
