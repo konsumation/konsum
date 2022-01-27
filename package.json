@@ -4,7 +4,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./src/konsum-cli.mjs",
   "description": "Collect resource usage in a home environment",
   "contributors": [
     {
