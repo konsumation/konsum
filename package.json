@@ -81,32 +81,6 @@
     "base": "/services/${name}/api",
     "socket": "/run/${name}/http/socket"
   },
-  "release": {
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/npm",
-      "@semantic-release/github",
-      [
-        "@semantic-release/exec",
-        {
-          "publishCmd": "npx npm-pkgbuild --verbose"
-        }
-      ]
-    ]
-  },
-  "template": {
-    "inheritFrom": [
-      "arlac77/template-coveralls",
-      "arlac77/template-documentation",
-      "arlac77/template-nginx#next",
-      "arlac77/template-node-app",
-      "arlac77/template-openapi",
-      "arlac77/template-pacman#next",
-      "arlac77/template-systemd#next",
-      "konsumation/template"
-    ]
-  },
   "pkg": {
     "name": "konsum",
     "groups": "home-automation",
@@ -136,5 +110,31 @@
       "systemd": ">=250.3",
       "nginx-mainline": ">=1.21.4"
     }
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      [
+        "@semantic-release/exec",
+        {
+          "publishCmd": "npx npm-pkgbuild --verbose"
+        }
+      ]
+    ]
+  },
+  "template": {
+    "inheritFrom": [
+      "arlac77/template-coveralls",
+      "arlac77/template-documentation",
+      "arlac77/template-nginx#next",
+      "arlac77/template-node-app",
+      "arlac77/template-openapi",
+      "arlac77/template-pacman#next",
+      "arlac77/template-systemd#next",
+      "konsumation/template"
+    ]
   }
 }
