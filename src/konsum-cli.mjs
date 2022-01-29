@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import program from "commander";
 import { readFileSync, createWriteStream, createReadStream } from "fs";
+import { program } from "commander";
 import { expand } from "config-expander";
 import { Category } from "@konsumation/db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
