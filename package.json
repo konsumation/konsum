@@ -81,12 +81,18 @@
     "base": "/services/${name}/api",
     "socket": "/run/${name}/http/socket"
   },
+  "pacman": {
+    "hooks": "pacman/hooks.sh",
+    "installdir": "/services/konsum/frontend",
+    "content": {
+      "/etc/nginx/sites/common/${name}.conf": "pacman/nginx.conf"
+    },
+    "depends": {
+      "nginx-mainline": ">=1.21.4",
+      "systemd": ">=250.3"
+    }
+  },
   "pkg": {
-    "name": "konsum",
-    "groups": "home-automation",
-    "backup": "etc/${name}/config.json",
-    "hooks": "pkg/hooks.sh",
-    "installdir": "/services/${name}",
     "content": {
       "/usr/lib/systemd/system/": {
         "base": "systemd"
@@ -106,10 +112,15 @@
     "output": {
       "arch": {}
     },
+    "hooks": "pkg/hooks.sh",
+    "backup": "etc/${name}/config.json",
+    "groups": "home-automation",
     "depends": {
       "systemd": ">=250.3",
       "nginx-mainline": ">=1.21.4"
-    }
+    },
+    "installdir": "/services/${name}",
+    "name": "konsum"
   },
   "release": {
     "plugins": [
