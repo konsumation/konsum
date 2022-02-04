@@ -51,7 +51,7 @@
     "execa": "^6.0.0",
     "got": "^12.0.1",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^7.25.1",
+    "npm-pkgbuild": "^7.25.5",
     "semantic-release": "^19.0.2",
     "swagger-jsdoc": "^6.1.0",
     "tmp": "^0.2.1"
@@ -82,11 +82,6 @@
     "socket": "/run/${name}/http/socket"
   },
   "pkg": {
-    "name": "konsum",
-    "groups": "home-automation",
-    "backup": "etc/${name}/config.json",
-    "hooks": "pkg/hooks.sh",
-    "installdir": "/services/${name}",
     "content": {
       "/usr/lib/systemd/system/": {
         "base": "systemd"
@@ -106,10 +101,15 @@
     "output": {
       "arch": {}
     },
+    "hooks": "pkg/hooks.sh",
+    "backup": "etc/${name}/config.json",
+    "groups": "home-automation",
     "depends": {
       "systemd": ">=250.3",
       "nginx-mainline": ">=1.21.4"
-    }
+    },
+    "installdir": "/services/${name}",
+    "name": "konsum"
   },
   "release": {
     "plugins": [
