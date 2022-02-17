@@ -1,6 +1,3 @@
-pre_install() {
-	useradd -U -l -M -r -s /usr/bin/nologin -d /var/lib/{{name}} -c "{{description}}" {{name}}
-}
 
 post_install() {
 	openssl genrsa -out /etc/{{name}}/{{name}}.rsa 1024
@@ -32,6 +29,4 @@ pre_remove() {
 post_remove() {
 	systemctl -q try-reload-or-restart nginx
 	systemctl daemon-reload
-	userdel {{name}}
-	groupdel {{name}}
 }
