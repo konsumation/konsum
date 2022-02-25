@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14.18.3
+          node-version: 16.14.0
       - run: npm install
       - run: node openapi/openapi.mjs
       - uses: gr2m/create-or-update-pull-request-action@v1.x
