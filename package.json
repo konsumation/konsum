@@ -51,7 +51,7 @@
     "execa": "^6.1.0",
     "got": "^12.0.1",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^7.27.0",
+    "npm-pkgbuild": "^7.29.0",
     "semantic-release": "^19.0.2",
     "swagger-jsdoc": "^6.1.0",
     "tmp": "^0.2.1"
@@ -105,7 +105,7 @@
     "backup": "etc/${name}/config.json",
     "groups": "home-automation",
     "depends": {
-      "systemd": ">=250.3",
+      "systemd": ">=250.4",
       "nginx-mainline": ">=1.21.4"
     },
     "installdir": "/services/${name}",
