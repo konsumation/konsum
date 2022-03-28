@@ -29,7 +29,7 @@
     "pkg": "npm-pkgbuild --verbose -D version=0.0.0 --publish dist"
   },
   "dependencies": {
-    "@konsumation/db": "^4.0.5",
+    "@konsumation/db": "^4.0.6",
     "commander": "^9.0.0",
     "config-expander": "^12.0.11",
     "jsonwebtoken": "^8.5.1",
