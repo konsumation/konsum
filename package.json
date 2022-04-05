@@ -26,7 +26,7 @@
     "docs": "documentation readme --section=API ./src/**/*.mjs",
     "lint": "npm run lint:docs",
     "lint:docs": "documentation lint ./src/**/*.mjs",
-    "pkg": "npm-pkgbuild --verbose -D version=0.0.0 --publish dist"
+    "pkg": "npm-pkgbuild --verbose"
   },
   "dependencies": {
     "@konsumation/db": "^4.0.6",
@@ -120,7 +120,7 @@
       [
         "@semantic-release/exec",
         {
-          "publishCmd": "npx npm-pkgbuild --verbose"
+          "publishCmd": "npm run pkg"
         }
       ]
     ]
