@@ -45,6 +45,12 @@ konsum --config=<<some dir>> restore [file]
 npm -g install konsum
 ```
 
+# create a linux package
+
+```shell
+npm run pkg
+```
+
 # how to configure
 
 # create self signed cert
