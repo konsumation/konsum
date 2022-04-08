@@ -21,6 +21,7 @@ konsum --config=<<some dir>> start
 ```
 
 ## list
+
 ```shell
 konsum --config=<<some dir>> list [category]
 ```
@@ -30,11 +31,13 @@ konsum --config=<<some dir>> insert category value [time]
 ```
 
 ## create backup
+
 ```shell
 konsum --config=<<some dir>> backup [file]
 ```
 
 ## restore backup
+
 ```shell
 konsum --config=<<some dir>> restore [file]
 ```
