@@ -22,7 +22,7 @@ jobs:
       - run: >-
           npx api2html -o build/index.html -l shell,javascript
           openapi/openapi.json
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: openapi
           path: ${{ github.workspace }}/build/**/*
