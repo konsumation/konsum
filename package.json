@@ -56,11 +56,9 @@
     "swagger-jsdoc": "^6.1.0",
     "tmp": "^0.2.1"
   },
-  "peerDependencies": {
-    "mf-hosting": "github:arlac77/mf-hosting"
-  },
   "optionalDependencies": {
-    "sd-daemon": "^1.0.2"
+    "sd-daemon": "^1.0.2",
+    "mf-hosting": "github:arlac77/mf-hosting"
   },
   "engines": {
     "node": ">=16.14.2"
