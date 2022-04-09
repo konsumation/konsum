@@ -96,13 +96,9 @@
         }
       ]
     },
-    "output": {
-      "arch": {}
-    },
     "hooks": "pkg/hooks.sh",
     "backup": "etc/${name}/config.json",
     "groups": "home-automation",
-    "installdir": "/services/${name}",
     "name": "konsum"
   },
   "release": {
