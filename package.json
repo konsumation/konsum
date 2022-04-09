@@ -87,7 +87,7 @@
       "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
       "/etc/${name}/config.json": "config/config.json",
       "${nginx.sites.dir}/${name}.conf": "pkg/nginx.conf",
-      "${installdir}/": [
+      "${installdir}": [
         {
           "type": "npm-pack"
         },
