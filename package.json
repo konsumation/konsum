@@ -86,7 +86,7 @@
       },
       "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
       "${config.dir}config.json": "config/config.json",
-      "${nginx.sites.dir}/${name}.conf": "pkg/nginx.conf",
+      "${nginx.sites.dir}${name}.conf": "pkg/nginx.conf",
       "${install.dir}": [
         {
           "type": "npm-pack"
@@ -97,7 +97,7 @@
       ]
     },
     "hooks": "pkg/hooks.sh",
-    "backup": "${config.dir}/config.json",
+    "backup": "${config.dir}config.json",
     "groups": "home-automation",
     "name": "konsum"
   },
