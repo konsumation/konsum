@@ -6,7 +6,7 @@ StopWhenUnneeded=true
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/node --unhandled-rejections=strict --trace-uncaught --trace-warnings --title {{name}} {{install.dir}}/src/{{name}}-cli.mjs start
+ExecStart=/usr/bin/node --unhandled-rejections=strict --trace-uncaught --trace-warnings --title {{name}} {{install.dir}}src/{{name}}-cli.mjs start
 ExecStop=/usr/bin/curl -s -XPOST --unix-socket {{socket.http}} http://localhost/admin/stop
 ExecReload=/usr/bin/curl -s -XPOST --unix-socket {{socket.http}} http://localhost/admin/reload
 TimeoutStartSec=20
