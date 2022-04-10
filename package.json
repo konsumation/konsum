@@ -75,10 +75,6 @@
     "url": "https://github.com/konsumation/konsum/issues"
   },
   "homepage": "https://github.com/konsumation/konsum#readme",
-  "config": {
-    "base": "/services/${name}/api",
-    "socket": "/run/${name}/http/socket"
-  },
   "pkg": {
     "content": {
       "${systemd.unit.dir}": {
@@ -99,6 +95,7 @@
     "hooks": "pkg/hooks.sh",
     "backup": "${config.dir}config.json",
     "groups": "home-automation",
+    "http.base.path": "/services/${name}/api",
     "name": "konsum"
   },
   "release": {
