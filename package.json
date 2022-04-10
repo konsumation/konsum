@@ -51,7 +51,7 @@
     "execa": "^6.1.0",
     "got": "^12.0.3",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^8.3.12",
+    "npm-pkgbuild": "^8.3.13",
     "semantic-release": "^19.0.2",
     "swagger-jsdoc": "^6.1.0",
     "tmp": "^0.2.1"
@@ -85,9 +85,9 @@
         "base": "systemd"
       },
       "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
-      "/etc/${name}/config.json": "config/config.json",
+      "${config.dir}config.json": "config/config.json",
       "${nginx.sites.dir}/${name}.conf": "pkg/nginx.conf",
-      "${installdir}": [
+      "${install.dir}": [
         {
           "type": "npm-pack"
         },
@@ -97,7 +97,7 @@
       ]
     },
     "hooks": "pkg/hooks.sh",
-    "backup": "etc/${name}/config.json",
+    "backup": "${config.dir}/config.json",
     "groups": "home-automation",
     "name": "konsum"
   },
