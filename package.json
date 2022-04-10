@@ -57,8 +57,8 @@
     "tmp": "^0.2.1"
   },
   "optionalDependencies": {
-    "sd-daemon": "^1.0.2",
-    "mf-hosting": "github:arlac77/mf-hosting"
+    "mf-hosting": "github:arlac77/mf-hosting",
+    "sd-daemon": "^1.0.2"
   },
   "engines": {
     "node": ">=16.14.2"
@@ -99,6 +99,10 @@
     "hooks": "pkg/hooks.sh",
     "backup": "${config.dir}config.json",
     "groups": "home-automation",
+    "depends": {
+      "nginx-mainline": ">=1.21.4",
+      "systemd": ">=250.4"
+    },
     "name": "konsum"
   },
   "release": {
