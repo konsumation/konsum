@@ -76,8 +76,8 @@
   "homepage": "https://github.com/konsumation/konsum#readme",
   "pkg": {
     "content": {
-      "${systemd.config.dir}${name}.service": "pkg/${name}.service",
-      "${systemd.config.dir}${name}.socket": "pkg/${name}.socket",
+      "${systemd.unit.dir}${name}.service": "pkg/${name}.service",
+      "${systemd.unit.dir}${name}.socket": "pkg/${name}.socket",
       "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
       "${config.dir}config.json": "config/config.json",
       "${nginx.sites.dir}${name}.conf": "pkg/nginx.conf",
