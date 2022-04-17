@@ -113,7 +113,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     tags:
    *       - admin
    *     operationId: backupDataOnServer
-   *     description: Create backup on server.
+   *     summary: Create backup on server.
    *     responses:
    *       '200':
    *         description: Success message.
@@ -151,7 +151,7 @@ export async function prepareHttpServer(config, sd, master) {
    *     tags:
    *       - admin
    *     operationId: backupData
-   *     description: Create backup.
+   *     summary: Create backup.
    *     responses:
    *       '200':
    *         description: Backup data as text.
