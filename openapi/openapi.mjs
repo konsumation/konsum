@@ -27,10 +27,17 @@ const options = {
 
 const fileName = pn("../openapi/openapi.json");
 
+const swagger = swaggerJsdoc(options);
+delete swagger.channels;
+
 writeFileSync(
   fileName,
-  JSON.stringify(swaggerJsdoc(options), undefined, 2),
+  JSON.stringify(swagger, undefined, 2),
   encodingOptions
 );
 
-await SwaggerParser.validate(fileName);
+try {
+  await SwaggerParser.validate(fileName);
+} catch (err) {
+  console.error(err);
+}
