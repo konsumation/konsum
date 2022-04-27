@@ -74,31 +74,15 @@
     "url": "https://github.com/konsumation/konsum/issues"
   },
   "homepage": "https://github.com/konsumation/konsum#readme",
-  "pkgbuild": {
-    "content": {
-      "${systemd.unit.dir}${name}.service": "pkg/${name}.service",
-      "${systemd.unit.dir}${name}.socket": "pkg/${name}.socket",
-      "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
-      "${config.dir}config.json": "config/config.json",
-      "${nginx.sites.dir}${name}.conf": "pkg/nginx.conf",
-      "${install.dir}": [
-        {
-          "type": "npm-pack"
-        },
-        {
-          "type": "node-modules"
-        }
-      ]
-    },
+  "pkg": {
     "hooks": "pkg/hooks.sh",
-    "backup": "${config.dir}config.json",
-    "groups": "home-automation",
+    "content": {
+      "${nginx.sites.dir}${name}.conf": "pkg/nginx.conf"
+    },
     "depends": {
       "nginx-mainline": ">=1.21.4",
       "systemd": ">=250.4"
-    },
-    "http.base.path": "/services/${name}/api",
-    "name": "konsum"
+    }
   },
   "release": {
     "plugins": [
@@ -125,5 +109,31 @@
       "arlac77/template-systemd",
       "konsumation/template"
     ]
+  },
+  "pkgbuild": {
+    "content": {
+      "${systemd.unit.dir}${name}.service": "pkg/${name}.service",
+      "${systemd.unit.dir}${name}.socket": "pkg/${name}.socket",
+      "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
+      "${config.dir}config.json": "config/config.json",
+      "${nginx.sites.dir}${name}.conf": "pkg/nginx.conf",
+      "${install.dir}": [
+        {
+          "type": "npm-pack"
+        },
+        {
+          "type": "node-modules"
+        }
+      ]
+    },
+    "hooks": "pkg/hooks.sh",
+    "backup": "${config.dir}config.json",
+    "groups": "home-automation",
+    "depends": {
+      "nginx-mainline": ">=1.21.4",
+      "systemd": ">=250.4"
+    },
+    "http.base.path": "/services/${name}/api",
+    "name": "konsum"
   }
 }
