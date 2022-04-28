@@ -112,7 +112,7 @@
         }
       ],
       "@semantic-release/github"
-    ],
+    ]},
   "template": {
     "inheritFrom": [
       "arlac77/template-coveralls",
