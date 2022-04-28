@@ -104,16 +104,15 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
-      "@semantic-release/github",
       "@semantic-release/npm",
       [
         "@semantic-release/exec",
         {
           "publishCmd": "npx npm-pkgbuild --verbose"
         }
-      ]
-    ]
-  },
+      ],
+      "@semantic-release/github"
+    ],
   "template": {
     "inheritFrom": [
       "arlac77/template-coveralls",
