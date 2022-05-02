@@ -2,11 +2,11 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![minified size](https://badgen.net/bundlephobia/min/@konsumation/konsum)](https://bundlephobia.com/result?p=@konsumation/konsum)
 [![downloads](http://img.shields.io/npm/dm/@konsumation/konsum.svg?style=flat-square)](https://npmjs.org/package/@konsumation/konsum)
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fkonsum%2Fkonsum%2Fbadge\&style=flat)](https://actions-badge.atrox.dev/konsum/konsum/goto)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fkonsumation%2Fkonsum%2Fbadge\&style=flat)](https://actions-badge.atrox.dev/konsumation/konsum/goto)
 [![Styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![Known Vulnerabilities](https://snyk.io/test/github/konsum/konsum/badge.svg)](https://snyk.io/test/github/konsum/konsum)
-[![Coverage Status](https://coveralls.io/repos/konsum/konsum/badge.svg)](https://coveralls.io/github/konsum/konsum)
+[![Known Vulnerabilities](https://snyk.io/test/github/konsumation/konsum/badge.svg)](https://snyk.io/test/github/konsumation/konsum)
+[![Coverage Status](https://coveralls.io/repos/konsumation/konsum/badge.svg)](https://coveralls.io/github/konsumation/konsum)
 
 # konsum
 
