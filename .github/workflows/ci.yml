@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
-      - run: npm install
+      - run: npm ci
       - run: >-
           node tests/helpers/ldapadd.mjs -h localhost:389 -D
           cn=admin,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif
@@ -59,7 +59,7 @@ jobs:
         with:
           node-version: 16.15.0
           cache: npm
-      - run: npm install
+      - run: npm ci
       - run: npx semantic-release
         env:
           CI: 'true'
