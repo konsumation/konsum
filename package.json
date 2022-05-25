@@ -48,7 +48,7 @@
     "c8": "^7.11.3",
     "documentation": "^13.2.5",
     "execa": "^6.1.0",
-    "got": "^12.0.4",
+    "got": "^12.1.0",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^10.7.6",
     "semantic-release": "^19.0.2",
