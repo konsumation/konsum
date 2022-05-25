@@ -93,10 +93,6 @@
     "hooks": "pkg/hooks.sh",
     "backup": "${config.dir}config.json",
     "groups": "home-automation",
-    "depends": {
-      "nginx-mainline": ">=1.21.4",
-      "systemd": ">=251.0"
-    },
     "http.base.path": "/services/${name}/api",
     "name": "konsum"
   },
