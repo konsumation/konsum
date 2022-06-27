@@ -60,7 +60,7 @@
     "sd-daemon": "^1.0.2"
   },
   "engines": {
-    "node": ">=16.15.1"
+    "node": ">=18.4.0"
   },
   "cpu": [
     "arm64",
@@ -93,7 +93,7 @@
     "hooks": "pkg/hooks.sh",
     "backup": "${config.dir}config.json",
     "groups": "home-automation",
-    "http.base.path": "/services/${name}/api",
+    "http.path": "${http.base.path}/${name}/api",
     "name": "konsum"
   },
   "release": {
