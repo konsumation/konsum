@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build / Test Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.3.0
+        uses: actions/setup-node@v3.4.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
@@ -33,10 +33,6 @@ jobs:
           flag-name: run-${{ matrix.test_number }}
           path-to-lcov: build/coverage/lcov.info
           parallel: true
-    strategy:
-      matrix:
-        node-version:
-          - -18
   release:
     needs:
       - test
@@ -53,9 +49,9 @@ jobs:
 
           sudo apt-get install -f ./pacman-utils_5.2.2-3_amd64.deb
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3.3.0
+      - uses: actions/setup-node@v3.4.0
         with:
-          node-version: 18.4.0
+          node-version: 18.5.0
           cache: npm
       - run: npm ci
       - run: npx semantic-release
