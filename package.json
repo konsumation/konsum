@@ -92,7 +92,6 @@
     },
     "hooks": "pkg/hooks.sh",
     "backup": "${config.dir}config.json",
-    "groups": "home-automation",
     "http.path": "${http.base.path}/${name}/api",
     "name": "konsum"
   },
