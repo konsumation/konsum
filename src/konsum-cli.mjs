@@ -7,13 +7,18 @@ import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
 
+import {fileURLToPath} from "url"
+
+function pn(path) {
+  return fileURLToPath(new URL(path, import.meta.url));
+}
 const encodingOptions = {
   endoding: "utf8"
 };
 
 const { version, description } = JSON.parse(
   readFileSync(
-    new URL("../package.json", import.meta.url).pathname,
+    pn("../package.json"),
     encodingOptions
   )
 );
@@ -94,10 +99,10 @@ program.parse(process.argv);
 
 async function prepareConfig() {
   const options = program.opts();
-  let sd = { notify: () => {}, listeners: () => [] };
+  let sd = { notify: () => { }, listeners: () => [] };
   try {
     sd = await import("sd-daemon");
-  } catch (e) {}
+  } catch (e) { }
   sd.notify("STATUS=starting");
 
   const configDir = process.env.CONFIGURATION_DIRECTORY || options.config;
@@ -105,7 +110,7 @@ async function prepareConfig() {
   // some constants used while loading the configuration
   const constants = {
     basedir: configDir || process.cwd(), // where is the config file located
-    installdir: new URL(".", import.meta.url).pathname, // make references to the installdir possible
+    installdir: pn("."), // make references to the installdir possible
     statedir: process.env.STATE_DIRECTORY || process.cwd()
   };
 

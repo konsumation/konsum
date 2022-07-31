@@ -1,12 +1,13 @@
 import test from "ava";
 import { startServer, stopServer } from "./helpers/server.mjs";
 import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
+import {fileURLToPath} from "url"
 
 test.before(async t => {
   await startServer(t, 3190);
   await loadOpenAPI(
     t,
-    new URL("../openapi/openapi.json", import.meta.url).pathname
+    fileURLToPath(new URL("../openapi/openapi.json", import.meta.url))
   );
 });
 

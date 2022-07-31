@@ -1,9 +1,10 @@
 import test from "ava";
 import { mkdir } from "fs/promises";
 import {execa} from "execa";
+import { fileURLToPath } from "url";
 
 function pn(path) {
-  return new URL(path, import.meta.url).pathname;
+  return fileURLToPath(new URL(path, import.meta.url));
 }
 
 async function wait(msecs = 1000) {

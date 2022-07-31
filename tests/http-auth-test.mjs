@@ -4,25 +4,30 @@ import { mkdir } from "fs/promises";
 import got from "got";
 
 import { prepareHttpServer } from "../src/http.mjs";
+import {fileURLToPath} from "url"
+
+function pn(path) {
+  return fileURLToPath(new URL(path, import.meta.url));
+}
 
 const sd = { notify: () => {}, listeners: () => [] };
 
 let port = 3169;
 
 test.before(async t => {
-  await mkdir(new URL("../build", import.meta.url).pathname, { recursive: true });
+  await mkdir(pn("../build"), { recursive: true });
 
   port++;
 
   const config = {
     version: "1.2.3",
     database: {
-      file: new URL(`../build/db-${port}`, import.meta.url).pathname
+      file: pn(`../build/db-${port}`)
     },
     auth: {
       jwt: {
-        public: readFileSync(new URL("../config/demo.rsa.pub", import.meta.url).pathname),
-        private: readFileSync(new URL("../config/demo.rsa", import.meta.url).pathname),
+        public: readFileSync(pn("../config/demo.rsa.pub")),
+        private: readFileSync(pn("../config/demo.rsa")),
         options: {
           algorithm: "RS256"
         }

@@ -4,6 +4,11 @@ import got from "got";
 
 import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
+import {fileURLToPath} from "url"
+
+function pn(path) {
+  return fileURLToPath(new URL(path, import.meta.url));
+}
 
 const sd = { notify: () => {}, listeners: () => [] };
 
@@ -29,11 +34,11 @@ const defaultUsers = {
 };
 
 export async function startServer(t, port = 3150, users = defaultUsers) {
-  await mkdir(new URL("../../build", import.meta.url).pathname, {
+  await mkdir(pn("../../build"), {
     recursive: true
   });
 
-  const file = new URL(`../../build/db-${port}`, import.meta.url).pathname;
+  const file = pn(`../../build/db-${port}`);
   const config = {
     version: "1.2.3",
     database: {
@@ -42,10 +47,10 @@ export async function startServer(t, port = 3150, users = defaultUsers) {
     auth: {
       jwt: {
         public: readFileSync(
-          new URL("../../config/demo.rsa.pub", import.meta.url).pathname
+          pn("../../config/demo.rsa.pub")
         ),
         private: readFileSync(
-          new URL("../../config/demo.rsa", import.meta.url).pathname
+          pn("../../config/demo.rsa")
         ),
         options: {
           algorithm: "RS256"

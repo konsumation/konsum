@@ -3,14 +3,16 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import { readFileSync, writeFileSync } from "fs";
 import SwaggerParser from "@apidevtools/swagger-parser";
+import { fileURLToPath } from "url";
+import utils from "koa-better-router/utils";
+
+function pn(path) {
+  return fileURLToPath(new URL(path, import.meta.url));
+}
 
 const encodingOptions = {
   encoding: "utf8"
 };
-
-function pn(path) {
-  return new URL(path, import.meta.url).pathname;
-}
 
 const pkg = JSON.parse(readFileSync(pn("../package.json"), encodingOptions));
 
