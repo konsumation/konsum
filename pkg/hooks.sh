@@ -13,17 +13,9 @@ pre_upgrade() {
 	systemctl stop {{name}}
 }
 
-post_upgrade() {
-	systemctl daemon-reload
-}
-
 pre_remove() {
 	systemctl stop {{name}}.socket
 	systemctl disable {{name}}.socket
 	systemctl stop {{name}}
 	systemctl disable {{name}}
-}
-
-post_remove() {
-	systemctl daemon-reload
 }
