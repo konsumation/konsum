@@ -7,8 +7,6 @@ pkg
 *.tgz
 *.log
 *.tmp
-.test
-.tmp
 .vscode
 config
 systemd
