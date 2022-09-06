@@ -273,7 +273,7 @@ export async function prepareHttpServer(config, sd, master) {
           access_token,
           refresh_token,
           token_type: "bearer",
-          expires_in: ms(config.auth.jwt.options.expiresIn || "1h") / 1000
+          expires_in: ms(config.auth.jwt.options?.expiresIn || "1h") / 1000
         };
 
         return next();
