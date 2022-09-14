@@ -112,6 +112,21 @@
         {
           "assets": []
         }
+      ],
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "path": "dist/*.deb",
+              "label": "Debian Package"
+            },
+            {
+              "path": "dist/*.pkg.*",
+              "label": "Arch Linux Package"
+            }
+          ]
+        }
       ]
     ]
   },
