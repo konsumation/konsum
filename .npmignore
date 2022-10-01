@@ -2,14 +2,11 @@ build
 tests
 doc
 db
-dist
 pkg
 *.tgz
 *.log
 *.tmp
 .vscode
 config
-systemd
-pacman
 .github
 openapi
