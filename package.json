@@ -36,7 +36,7 @@
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.3",
-    "ldapts": "^4.2.0",
+    "ldapts": "^4.2.1",
     "leveldown": "^6.1.1",
     "levelup": "^5.1.1"
   },
@@ -48,7 +48,7 @@
     "c8": "^7.12.0",
     "documentation": "^14.0.0",
     "execa": "^6.1.0",
-    "got": "^12.5.1",
+    "got": "^12.5.2",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^10.15.4",
     "semantic-release": "^19.0.5",
