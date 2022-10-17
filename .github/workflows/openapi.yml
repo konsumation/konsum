@@ -11,7 +11,7 @@ jobs:
       - run: npm ci
       - run: node openapi/openapi.mjs
       - run: npx @redocly/cli lint openapi/openapi.json
-      - uses: gr2m/create-or-update-pull-request-action@v1.x
+      - uses: gr2m/create-or-update-pull-request-action@v1.9.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
