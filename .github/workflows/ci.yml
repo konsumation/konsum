@@ -1,7 +1,7 @@
 name: CI
 'on': push
 jobs:
-  test:
+  test-node:
     runs-on: ubuntu-latest
     services:
       slapd:
@@ -34,7 +34,7 @@ jobs:
           parallel: true
   release:
     needs:
-      - test
+      - test-node
     runs-on: ubuntu-latest
     steps:
       - name: Dependencies
@@ -60,7 +60,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   finish:
-    needs: test
+    needs: test-node
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
