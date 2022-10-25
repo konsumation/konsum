@@ -19,6 +19,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
+      - uses: actions/setup-node@v3.5.1
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
       - run: npm ci
       - run: >-
           node tests/helpers/ldapadd.mjs -h localhost:389 -D
@@ -32,10 +36,6 @@ jobs:
           flag-name: run-${{ matrix.test_number }}
           path-to-lcov: build/coverage/lcov.info
           parallel: true
-    strategy:
-      matrix:
-        node-version:
-          - -18
   release:
     needs:
       - test-node
@@ -64,7 +64,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   finish:
-    needs: test-node
+    needs:
+      - test-node
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
