@@ -5,6 +5,7 @@ build
 .DS_Store
 *.node
 .test
+dist
 .tmp
 konsumdb
 db
