@@ -197,9 +197,16 @@ export async function prepareHttpServer(config, sd, master) {
   router.addRoute("GET", "/state", async (ctx, next) => {
     setNoCacheHeaders(ctx);
 
+    let numberOfCategories = 0;
+
+    for await (const c of Category.entries(master.db)) {
+      numberOfCategories++;
+    }
+
     ctx.body = {
       version: config.version,
       database: { schemaVersion: master.schemaVersion },
+      numberOfCategories,
       uptime: process.uptime(),
       memory: process.memoryUsage()
     };
