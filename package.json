@@ -23,9 +23,9 @@
     "test": "npm run test:ava",
     "test:ava": "ava --timeout 2m tests/*-ava.mjs tests/*-ava-node.mjs",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m tests/*-ava.mjs tests/*-ava-node.mjs && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme --section=API ./src/**/*.mjs && documentation readme --section=API {{javascript.source}}",
+    "docs": "documentation readme --section=API ./src/**/*.mjs",
     "lint": "npm run lint:docs",
-    "lint:docs": "documentation lint ./src/**/*.mjs && documentation lint {{javascript.source}}"
+    "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
     "@konsumation/db": "^5.1.9",
@@ -50,7 +50,7 @@
     "execa": "^6.1.0",
     "got": "^12.5.3",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^10.17.0",
+    "npm-pkgbuild": "^10.17.1",
     "semantic-release": "^19.0.5",
     "swagger-jsdoc": "^6.2.7",
     "tmp": "^0.2.1"
