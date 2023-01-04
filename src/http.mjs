@@ -53,23 +53,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Stop konsum server.
-   * @swagger
-   * /admin/stop:
-   *   post:
-   *     tags:
-   *       - admin
-   *     operationId: stopServer
-   *     description: Stop konsum server.
-   *     responses:
-   *       '200':
-   *         description: Progress message.
-   *         content:
-   *           application/text:
-   *             schema:
-   *               $ref: '#/components/schemas/TextOnlyMessage'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.admin.stop
    */
   router.addRoute("POST", "/admin/stop", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.stop");
@@ -80,23 +63,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Reload konsum systemd config.
-   * @swagger
-   * /admin/reload:
-   *   post:
-   *     tags:
-   *       - admin
-   *     operationId: reloadConfig
-   *     description: Reload konsum systemd config.
-   *     responses:
-   *       '200':
-   *         description: Progress message.
-   *         content:
-   *           application/text:
-   *             schema:
-   *               $ref: '#/components/schemas/TextOnlyMessage'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.admin.reload
    */
   router.addRoute("POST", "/admin/reload", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.reload");
@@ -107,23 +73,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Create backup on server.
-   * @swagger
-   * /admin/backup:
-   *   post:
-   *     tags:
-   *       - admin
-   *     operationId: backupDataOnServer
-   *     summary: Create backup on server.
-   *     responses:
-   *       '200':
-   *         description: Success message.
-   *         content:
-   *           application/text:
-   *             schema:
-   *               $ref: '#/components/schemas/TextOnlyMessage'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.admin.backup
    */
   router.addRoute(
     "POST",
@@ -145,23 +94,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Backup data as text.
-   * @swagger
-   * /admin/backup:
-   *   get:
-   *     tags:
-   *       - admin
-   *     operationId: backupData
-   *     summary: Create backup.
-   *     responses:
-   *       '200':
-   *         description: Backup data as text.
-   *         content:
-   *           application/text:
-   *             schema:
-   *               $ref: '#/components/schemas/TextOnlyMessage'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.admin.backup
    */
   router.addRoute("GET", "/admin/backup", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.backup");
@@ -180,19 +112,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Retrieve service state.
-   * @swagger
-   * /state:
-   *   get:
-   *     operationId: getServiceState
-   *     description: Retrieve service state.
-   *     responses:
-   *       '200':
-   *         description: Service state.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               items:
-   *                 $ref: '#/components/schemas/State'
    */
   router.addRoute("GET", "/state", async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -217,35 +136,6 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * Login to request api token.
    * At least one entitlement starting with "konsum" is required.
-   * @swagger
-   * /authenticate:
-   *   post:
-   *     tags:
-   *       - authenticate
-   *     operationId: authenticate
-   *     description: Login to request api token.
-   *     externalDocs:
-   *       description: OAuth response
-   *       url: https://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-4.2.2
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             $ref: '#/components/schemas/AuthRequest'
-   *     responses:
-   *       '200':
-   *         description: Token generated.
-   *         content:
-   *           'application/json':
-   *             schema:
-   *               $ref: '#/components/schemas/AuthResponse'
-   *       '401':
-   *         description: Authentication failed.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/TextOnlyMessage'
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
@@ -295,25 +185,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Retrieve list of categories.
-   * @swagger
-   * /category:
-   *   get:
-   *     tags:
-   *       - category
-   *     operationId: getCategories
-   *     summary: Retrieve list of categories.
-   *     responses:
-   *       '200':
-   *         description: A list of categories.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/Category'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.category
    */
   router.addRoute("GET", "/category", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -329,29 +200,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Add a new category.
-   * @swagger
-   * /category/{category}:
-   *   parameters:
-   *     - name: category
-   *       in: path
-   *       required: true
-   *       schema:
-   *         $ref: '#/components/schemas/CategoryID'
-   *   put:
-   *     tags:
-   *       - category
-   *     operationId: addCategory
-   *     description: Add a new category.
-   *     responses:
-   *       '200':
-   *         description: success message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.category.add
    */
   router.addRoute(
     "PUT",
@@ -383,35 +231,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Delete a category.
-   * @swagger
-   * /category/{category}:
-   *   parameters:
-   *     - name: category
-   *       in: path
-   *       required: true
-   *       schema:
-   *         $ref: '#/components/schemas/CategoryID'
-   *   delete:
-   *     tags:
-   *       - category
-   *     operationId: deleteCategory
-   *     description: Delete a category.
-   *     responses:
-   *       '200':
-   *         description: success message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *       '404':
-   *         description: No such category error message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.category.delete
    */
   router.addRoute(
     "DELETE",
@@ -431,55 +250,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * List values of a category.
-   * @swagger
-   * /category/{category}/value:
-   *   parameters:
-   *     - name: category
-   *       in: path
-   *       required: true
-   *       schema:
-   *         $ref: '#/components/schemas/CategoryID'
-   *     - name: limit
-   *       in: query
-   *       description: Limits the number of entries delivered.
-   *       required: false
-   *       schema:
-   *         type: integer
-   *     - name: reverse
-   *       in: query
-   *       description: Reverses the order in which the entries are delivered.
-   *       required: false
-   *       schema:
-   *         type: boolean
-   *   get:
-   *     tags:
-   *       - value
-   *     operationId: getCategoryValues
-   *     description: List values of a category.
-   *     responses:
-   *       '200':
-   *         description: Value list.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/Value'
-   *       '404':
-   *         description: No such category error message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *       '406':
-   *         description: Unsupported content-type.
-   *         content:
-   *           'text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.value
    */
   router.addRoute(
     "GET",
@@ -523,35 +293,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Insert a value into a category.
-   * @swagger
-   * /category/{category}/value:
-   *   parameters:
-   *     - name: category
-   *       in: path
-   *       required: true
-   *       schema:
-   *         $ref: '#/components/schemas/CategoryID'
-   *   post:
-   *     tags:
-   *       - value
-   *     operationId: insertCategoryValues
-   *     description: Insert a value into a category.
-   *     responses:
-   *       '200':
-   *         description: Success message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *       '404':
-   *         description: No such category error message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.value.add
    */
   router.addRoute(
     "POST",
@@ -578,35 +319,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Delete a value from a category.
-   * @swagger
-   * /category/{category}/value:
-   *   parameters:
-   *     - name: category
-   *       in: path
-   *       required: true
-   *       schema:
-   *         $ref: '#/components/schemas/CategoryID'
-   *   delete:
-   *     tags:
-   *       - value
-   *     operationId: deleteCategoryValues
-   *     description: Delete a value from a category.
-   *     responses:
-   *       '200':
-   *         description: Success message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *       '404':
-   *         description: No such category error message.
-   *         content:
-   *           'application/text':
-   *             schema:
-   *               $ref: '#/components/schemas/Message'
-   *     security:
-   *       - konsum_auth:
-   *         - konsum.value.delete
    */
   router.addRoute(
     "DELETE",
@@ -632,77 +344,6 @@ export async function prepareHttpServer(config, sd, master) {
   ]) {
     /**
      * List meters/notes of a category.
-     * @swagger
-     * /category/{category}/meter:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: note
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/NoteID'
-     *   get:
-     *     tags:
-     *       - meter
-     *     operationId: getCategoryMeters
-     *     description: List meters of a category.
-     *     responses:
-     *       '200':
-     *         description: List of meters.
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: array
-     *               items:
-     *                 $ref: '#/components/schemas/Meter'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.meter
-     * /category/{category}/note:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: note
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/NoteID'
-     *   get:
-     *     tags:
-     *       - note
-     *     operationId: getCategoryNotes
-     *     description: List notes of a category.
-     *     responses:
-     *       '200':
-     *         description: List of notes.
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: array
-     *               items:
-     *                 $ref: '#/components/schemas/Note'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.note
      */
     router.addRoute(
       "GET",
@@ -727,73 +368,6 @@ export async function prepareHttpServer(config, sd, master) {
 
     /**
      * Add a meter/note to a category.
-     * @swagger
-     * /category/{category}/meter:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: meter
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/MeterID'
-     *   put:
-     *     tags:
-     *       - meter
-     *     operationId: addCategoryMeter
-     *     description: Add a meter to a category.
-     *     responses:
-     *       '200':
-     *         description: Success message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.meter.add
-     * /category/{category}/note:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: note
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/NoteID'
-     *   put:
-     *     tags:
-     *       - note
-     *     operationId: addCategoryNote
-     *     description: add a note to a category.
-     *     responses:
-     *       '200':
-     *         description: Success message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.note.add
      */
     router.addRoute(
       "PUT",
@@ -820,73 +394,6 @@ export async function prepareHttpServer(config, sd, master) {
 
     /**
      * Update a meter/note.
-     * @swagger
-     * /category/{category}/meter:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: meter
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/MeterID'
-     *   post:
-     *     tags:
-     *       - meter
-     *     operationId: updateCategoryMeter
-     *     description: Update a meter.
-     *     responses:
-     *       '200':
-     *         description: Success message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.meter.modify
-     * /category/{category}/note:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: note
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/NoteID'
-     *   post:
-     *     tags:
-     *       - note
-     *     operationId: updateCategoryNote
-     *     description: Update a note.
-     *     responses:
-     *       '200':
-     *         description: Success message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.note.modify
      */
     router.addRoute(
       "POST",
@@ -910,73 +417,6 @@ export async function prepareHttpServer(config, sd, master) {
 
     /**
      * Delete a meter/note.
-     * @swagger
-     * /category/{category}/meter/{meter}:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: note
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/NoteID'
-     *   delete:
-     *     tags:
-     *       - meter
-     *     operationId: deleteCategoryMeter
-     *     description: Delete a meter.
-     *     responses:
-     *       '200':
-     *         description: Success message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.meter.delete
-     * /category/{category}/note/{note}:
-     *   parameters:
-     *     - name: category
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/CategoryID'
-     *     - name: note
-     *       in: path
-     *       required: true
-     *       schema:
-     *         $ref: '#/components/schemas/NoteID'
-     *   delete:
-     *     tags:
-     *       - note
-     *     operationId: deleteCategoryNote
-     *     description: Delete a note.
-     *     responses:
-     *       '200':
-     *         description: Success message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *       '404':
-     *         description: No such category error message.
-     *         content:
-     *           'application/text':
-     *             schema:
-     *               $ref: '#/components/schemas/Message'
-     *     security:
-     *       - konsum_auth:
-     *         - konsum.note.delete
      */
     router.addRoute(
       "DELETE",
@@ -1017,119 +457,3 @@ export async function prepareHttpServer(config, sd, master) {
     router
   };
 }
-
-/**
- * @swagger
- * components:
- *   securitySchemes:
- *     konsum_auth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *   schemas:
- *     CategoryID:
- *       description: Category identifier.
- *       type: string
- *     Category:
- *       type: object
- *       required:
- *         - id
- *       properties:
- *         id:
- *           type: string
- *           description: The id of the category.
- *         description:
- *           type: string
- *           description: The human readable description of your category.
- *         unit:
- *           type: string
- *           description: The physical measurment unit.
- *       example:
- *         id: EV
- *         description: "mains power"
- *         unit: "m3"
- *     MeterID:
- *       description: Meter identifier.
- *       type: string
- *     Meter:
- *       type: object
- *       required:
- *         - id
- *       properties:
- *         id:
- *           type: string
- *           description: The id of the meter.
- *         description:
- *           type: string
- *           description: The human readable description of your meter.
- *         unit:
- *           type: string
- *           description: The physical measurment unit.
- *         serial:
- *           type: string
- *           description: The serial number of the meter.
- *     NoteID:
- *       description: Note identifier.
- *       type: string
- *     Note:
- *       type: object
- *       required:
- *         - id
- *     Value:
- *       type: object
- *       required:
- *         - id
- *     State:
- *       type: object
- *       properties:
- *         version:
- *           type: string
- *           description: The software version of the server.
- *         database:
- *           type: object
- *           description: details of the database.
- *         uptime:
- *           type: number
- *           description: The duration the sever is up and running.
- *         memory:
- *           type: object
- *           description: The memory usage of the server.
- *     AuthRequest:
- *       type: object
- *       properties:
- *         username:
- *           type: string
- *         password:
- *           type: string
- *       required:
- *          - username
- *          - password
- *     AuthResponse:
- *       type: object
- *       properties:
- *         access_token:
- *           type: string
- *           description: The access token issued.
- *         token_type:
- *           type: string
- *           description: The type of the token issued. Value is case insensitive.
- *         refresh_token:
- *           type: string
- *         expires_in:
- *           type: integer
- *           description: The lifetime in seconds of the access token. For
- *                        example, the value "3600" denotes that the access token will
- *                        expire in one hour from the time the response was generated.
- *         scope:
- *           type: string
- *       required:
- *          - token_type
- *          - access_token
- *     Message:
- *       type: object
- *       properties:
- *         message:
- *           type: string
- *     TextOnlyMessage:
- *       type: string
- */
