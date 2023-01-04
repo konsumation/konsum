@@ -113,7 +113,6 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 
 ### Table of Contents
 
-*   [](#)
 *   [addRoute](#addroute)
 *   [addRoute](#addroute-1)
 *   [addRoute](#addroute-2)
@@ -130,8 +129,6 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 *   [addRoute](#addroute-13)
 *   [addRoute](#addroute-14)
 *   [addRoute](#addroute-15)
-
-##
 
 ## addRoute
 
