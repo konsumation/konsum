@@ -35,13 +35,13 @@
     "koa": "^2.14.1",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
-    "koa-jwt": "^4.0.3",
+    "koa-jwt": "^4.0.4",
     "ldapts": "^4.2.2",
     "leveldown": "^6.1.1",
     "levelup": "^5.1.1"
   },
   "devDependencies": {
-    "@konsumation/openapi": "^1.0.1",
+    "@konsumation/openapi": "^1.0.2",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/release-notes-generator": "^10.0.3",
