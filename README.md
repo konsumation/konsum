@@ -67,7 +67,7 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -node
 # token setup
 
 ```shell
-openssl genrsa -out demo.rsa 1024
+openssl genrsa -out demo.rsa 2048
 openssl rsa -in demo.rsa -pubout > demo.rsa.pub
 ```
 
@@ -113,22 +113,37 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 
 ### Table of Contents
 
-*   [addRoute](#addroute)
-*   [addRoute](#addroute-1)
-*   [addRoute](#addroute-2)
-*   [addRoute](#addroute-3)
-*   [addRoute](#addroute-4)
-*   [addRoute](#addroute-5)
-*   [addRoute](#addroute-6)
-*   [addRoute](#addroute-7)
-*   [addRoute](#addroute-8)
-*   [addRoute](#addroute-9)
-*   [addRoute](#addroute-10)
-*   [addRoute](#addroute-11)
-*   [addRoute](#addroute-12)
-*   [addRoute](#addroute-13)
-*   [addRoute](#addroute-14)
-*   [addRoute](#addroute-15)
+- [konsum](#konsum)
+- [run](#run)
+  - [start server](#start-server)
+  - [list](#list)
+  - [create backup](#create-backup)
+  - [restore backup](#restore-backup)
+- [install](#install)
+- [create a linux package](#create-a-linux-package)
+- [how to configure](#how-to-configure)
+- [create self signed cert](#create-self-signed-cert)
+- [JWT](#jwt)
+- [token setup](#token-setup)
+- [openapi](#openapi)
+- [API](#api)
+    - [Table of Contents](#table-of-contents)
+  - [addRoute](#addroute)
+  - [addRoute](#addroute-1)
+  - [addRoute](#addroute-2)
+  - [addRoute](#addroute-3)
+  - [addRoute](#addroute-4)
+  - [addRoute](#addroute-5)
+  - [addRoute](#addroute-6)
+  - [addRoute](#addroute-7)
+  - [addRoute](#addroute-8)
+  - [addRoute](#addroute-9)
+  - [addRoute](#addroute-10)
+  - [addRoute](#addroute-11)
+  - [addRoute](#addroute-12)
+  - [addRoute](#addroute-13)
+  - [addRoute](#addroute-14)
+  - [addRoute](#addroute-15)
 
 ## addRoute
 
