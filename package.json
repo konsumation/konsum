@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@konsumation/db": "^5.1.9",
-    "commander": "^9.5.0",
+    "commander": "^10.0.0",
     "config-expander": "^13.0.5",
     "jsonwebtoken": "^9.0.0",
     "koa": "^2.14.1",
@@ -51,7 +51,7 @@
     "execa": "^6.1.0",
     "got": "^12.5.3",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^10.18.2",
+    "npm-pkgbuild": "^11.0.0",
     "semantic-release": "^20.0.2",
     "tmp": "^0.2.1"
   },
@@ -118,6 +118,10 @@
             {
               "path": "dist/*.pkg.*",
               "label": "Arch Linux Package"
+            },
+            {
+              "path": "dist/*.rpm",
+              "label": "RPM"
             }
           ]
         }
