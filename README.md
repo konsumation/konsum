@@ -67,7 +67,7 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -node
 # token setup
 
 ```shell
-openssl genrsa -out demo.rsa 2048
+openssl genrsa -out demo.rsa 4096
 openssl rsa -in demo.rsa -pubout > demo.rsa.pub
 ```
 
