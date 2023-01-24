@@ -1,8 +1,8 @@
 
 post_install() {
-	openssl genrsa -out {{config.dir}}{{name}}.rsa 1024
+	openssl genrsa -out {{config.dir}}{{name}}.rsa 2048
 	openssl rsa -in {{config.dir}}{{name}}.rsa -pubout > {{config.dir}}{{name}}.rsa.pub
-	chown {{os.user}}:{{os.group}} {{confog.dir}}{{name}}.rsa*
+	chown {{os.user}}:{{os.group}} {{config.dir}}{{name}}.rsa*
 	
 	systemctl daemon-reload
 	systemctl enable {{name}}
