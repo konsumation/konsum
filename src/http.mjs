@@ -162,7 +162,7 @@ export async function prepareHttpServer(config, sd, master) {
         const refresh_token = jsonwebtoken.sign(
           { sequence: refreshTokenSequence },
           config.auth.jwt.private,
-          { expiresIn: "90d" }  
+          { ...config.auth.jwt.options, expiresIn: "90d" }  
         );
 
         ctx.status = 200;
