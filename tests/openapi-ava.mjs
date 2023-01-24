@@ -7,7 +7,7 @@ test.before(async t => {
   await startServer(t, 3190);
   await loadOpenAPI(
     t,
-    fileURLToPath(new URL("../openapi/openapi.json", import.meta.url))
+    fileURLToPath(new URL("../node_modules/@konsumation/openapi/openapi/openapi.json", import.meta.url))
   );
 });
 
