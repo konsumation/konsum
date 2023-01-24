@@ -1,7 +1,7 @@
 import test from "ava";
 import { startServer, stopServer } from "./helpers/server.mjs";
 import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
-import {fileURLToPath} from "url"
+import { fileURLToPath } from "url";
 
 test.before(async t => {
   await startServer(t, 3190);
@@ -44,16 +44,15 @@ test(openapiPathTest, "/category/{category}/value", {
 test.skip(openapiPathTest, "/admin/backup", {
   200: "backup to /tmp/konsum.txt..."
 
-/*    200: `schemaVersion=1
+  /*    200: `schemaVersion=1
 
 `*/
-/*
+  /*
   response: {
     200: "backup to /tmp/konsum.txt..."
   }
   */
 });
-
 
 test.skip(openapiPathTest, "/admin/backup", {
   get: {},
