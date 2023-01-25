@@ -7,11 +7,11 @@ export async function loadOpenAPI(t, path) {
 
 async function assertResponse(t, response, erc, er, expected) {
 
-  if(expected && expected.response) {
+  if(expected?.response) {
     expected = expected.response;
   }
 
-  if (er && er.content) {
+  if (er?.content) {
     for (const [ct, c] of Object.entries(er.content)) {
       switch (ct) {
         case "application/json":
