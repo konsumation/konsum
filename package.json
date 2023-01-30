@@ -78,7 +78,6 @@
   "pkgbuild": {
     "content": {
       "${systemd.unit.dir}${name}.service": "pkg/${name}.service",
-      "${systemd.unit.dir}${name}.socket": "pkg/${name}.socket",
       "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
       "${sysusers.config.dir}${name}.conf": "pkg/sysusers.conf",
       "${config.dir}config.json": "config/config.json",
