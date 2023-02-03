@@ -111,6 +111,30 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
+   * Create token.
+   */
+  router.addRoute("POST", "/admin/token", restricted,  BodyParser(), async (ctx, next) => {
+    enshureEntitlement(ctx, "konsum.admin.token");
+
+    console.log(ctx.request.body);
+
+    const token = jsonwebtoken.sign(
+      {
+        name: "admin",
+        entitlements: ["konsum.admin.backup"].join(",")
+      },
+      config.auth.jwt.private,
+      config.auth.jwt.options
+    );
+
+    ctx.body = {
+      token
+    };
+
+    return next();
+  });
+
+  /**
    * Retrieve service state.
    */
   router.addRoute("GET", "/state", async (ctx, next) => {
@@ -139,7 +163,7 @@ export async function prepareHttpServer(config, sd, master) {
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
-   
+
     let refreshTokenSequence = 1;
     const { entitlements } = await authenticate(config, q.username, q.password);
 
@@ -162,7 +186,7 @@ export async function prepareHttpServer(config, sd, master) {
         const refresh_token = jsonwebtoken.sign(
           { sequence: refreshTokenSequence },
           config.auth.jwt.private,
-          { ...config.auth.jwt.options, expiresIn: "90d" }  
+          { ...config.auth.jwt.options, expiresIn: "90d" }
         );
 
         ctx.status = 200;
@@ -308,7 +332,11 @@ export async function prepareHttpServer(config, sd, master) {
         for (const v of Array.isArray(values) ? values : [values]) {
           const time =
             v.time === undefined ? Date.now() : new Date(v.time).valueOf();
-          await category.writeValue(master.db, v.value, Math.round(time / 1000));
+          await category.writeValue(
+            master.db,
+            v.value,
+            Math.round(time / 1000)
+          );
         }
 
         ctx.body = { message: "inserted" };
