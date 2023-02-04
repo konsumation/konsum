@@ -129,6 +129,7 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 *   [addRoute](#addroute-13)
 *   [addRoute](#addroute-14)
 *   [addRoute](#addroute-15)
+*   [addRoute](#addroute-16)
 
 ## addRoute
 
@@ -145,6 +146,10 @@ Create backup on server.
 ## addRoute
 
 Backup data as text.
+
+## addRoute
+
+Create token.
 
 ## addRoute
 
