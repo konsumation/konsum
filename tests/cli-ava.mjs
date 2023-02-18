@@ -1,7 +1,7 @@
 import test from "ava";
-import { mkdir } from "fs/promises";
-import {execa} from "execa";
-import { fileURLToPath } from "url";
+import { mkdir } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { execa } from "execa";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -88,7 +88,6 @@ test.serial("cli backup database stdout", async t => {
   ]);
   t.regex(p.stdout, /77.34/);
 });
-
 
 test.serial("cli start", async t => {
   const p = execa(pn("../src/konsum-cli.mjs"), [

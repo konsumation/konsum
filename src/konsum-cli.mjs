@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-import { readFileSync, createWriteStream, createReadStream } from "fs";
+import { readFileSync, createWriteStream, createReadStream } from "node:fs";
 import { program } from "commander";
 import { expand } from "config-expander";
 import { Category } from "@konsumation/db";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
-
-import {fileURLToPath} from "url"
+import { fileURLToPath } from "node:url";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -17,10 +16,7 @@ const encodingOptions = {
 };
 
 const { version, description } = JSON.parse(
-  readFileSync(
-    pn("../package.json"),
-    encodingOptions
-  )
+  readFileSync(pn("../package.json"), encodingOptions)
 );
 
 program
@@ -99,10 +95,10 @@ program.parse(process.argv);
 
 async function prepareConfig() {
   const options = program.opts();
-  let sd = { notify: () => { }, listeners: () => [] };
+  let sd = { notify: () => {}, listeners: () => [] };
   try {
     sd = await import("sd-daemon");
-  } catch (e) { }
+  } catch (e) {}
   sd.notify("STATUS=starting");
 
   const configDir = process.env.CONFIGURATION_DIRECTORY || options.config;

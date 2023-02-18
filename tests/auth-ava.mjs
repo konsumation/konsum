@@ -1,5 +1,5 @@
 import test from "ava";
-import { Socket } from "net";
+import { Socket } from "node:net";
 
 import { authenticate } from "../src/auth.mjs";
 

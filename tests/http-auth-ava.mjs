@@ -1,6 +1,6 @@
 import test from "ava";
-import { readFileSync } from "fs";
-import { mkdir } from "fs/promises";
+import { readFileSync } from "node:fs";
+import { mkdir } from "node:fs/promises";
 import got from "got";
 
 import { prepareHttpServer } from "../src/http.mjs";

@@ -1,4 +1,4 @@
-import { createWriteStream } from "fs";
+import { createWriteStream } from "node:fs";
 import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
 import ms from "ms";

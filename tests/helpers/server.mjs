@@ -1,10 +1,10 @@
-import { readFileSync } from "fs";
-import { mkdir, rmdir } from "fs/promises";
+import { readFileSync } from "node:fs";
+import { mkdir, rmdir } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import got from "got";
 
 import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
-import {fileURLToPath} from "url"
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -46,12 +46,8 @@ export async function startServer(t, port = 3150, users = defaultUsers) {
     },
     auth: {
       jwt: {
-        public: readFileSync(
-          pn("../../config/demo.rsa.pub")
-        ),
-        private: readFileSync(
-          pn("../../config/demo.rsa")
-        ),
+        public: readFileSync(pn("../../config/demo.rsa.pub")),
+        private: readFileSync(pn("../../config/demo.rsa")),
         options: {
           algorithm: "RS256"
         }
