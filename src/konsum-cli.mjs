@@ -59,13 +59,13 @@ program.command("backup [file]").action(async output => {
 
 program.command("restore [file]").action(async input => {
   const { master } = await prepareConfig();
-  await master.restore(
+  const { numberOfValues, numberOfCategories } = await master.restore(
     input === undefined
       ? process.stdin
       : createReadStream(input, encodingOptions)
   );
   await master.close();
-  console.log(`${input} restored`);
+  console.log(`${input} restored (${numberOfCategories} categories, ${numberOfValues} values)`);
 });
 
 program
