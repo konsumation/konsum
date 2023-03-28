@@ -9,5 +9,4 @@ pkg
 .vscode
 config
 .github
-openapi
 dist
