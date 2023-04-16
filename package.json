@@ -52,7 +52,7 @@
     "execa": "^7.1.1",
     "got": "^12.6.0",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^11.7.12",
+    "npm-pkgbuild": "^11.7.13",
     "semantic-release": "^21.0.1",
     "tmp": "^0.2.1"
   },
