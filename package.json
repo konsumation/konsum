@@ -57,7 +57,7 @@
     "tmp": "^0.2.1"
   },
   "optionalDependencies": {
-    "mf-hosting": "^1.11.3",
+    "mf-hosting": "^1.11.4",
     "sd-daemon": "^1.0.2"
   },
   "engines": {
