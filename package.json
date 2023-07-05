@@ -31,7 +31,7 @@
     "@konsumation/db": "^5.2.2",
     "commander": "^11.0.0",
     "config-expander": "^13.0.8",
-    "jsonwebtoken": "^9.0.0",
+    "jsonwebtoken": "^9.0.1",
     "koa": "^2.14.2",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
