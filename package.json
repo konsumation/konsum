@@ -49,15 +49,15 @@
     "ava": "^5.3.1",
     "c8": "^8.0.1",
     "documentation": "^14.0.2",
-    "execa": "^7.2.0",
+    "execa": "^7.1.1",
     "got": "^13.0.0",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^11.10.5",
+    "npm-pkgbuild": "^11.10.7",
     "semantic-release": "^21.0.7",
     "tmp": "^0.2.1"
   },
   "optionalDependencies": {
-    "mf-hosting": "^1.12.2",
+    "mf-hosting": "^1.12.3",
     "sd-daemon": "^1.0.2"
   },
   "engines": {
