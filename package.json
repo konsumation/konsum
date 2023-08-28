@@ -43,7 +43,7 @@
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
     "@konsumation/openapi": "^1.1.0",
-    "@semantic-release/commit-analyzer": "^10.0.2",
+    "@semantic-release/commit-analyzer": "^10.0.3",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/release-notes-generator": "^11.0.5",
     "ava": "^5.3.1",
@@ -52,7 +52,7 @@
     "execa": "^8.0.1",
     "got": "^13.0.0",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^11.10.15",
+    "npm-pkgbuild": "^12.0.0",
     "semantic-release": "^21.1.1",
     "tmp": "^0.2.1"
   },
