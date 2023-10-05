@@ -36,7 +36,7 @@
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.4",
-    "ldapts": "^6.0.0",
+    "ldapts": "^7.0.1",
     "leveldown": "^6.1.1",
     "levelup": "^5.1.1"
   },
