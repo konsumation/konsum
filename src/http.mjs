@@ -21,10 +21,8 @@ function setNoCacheHeaders(ctx) {
 function enshureEntitlement(ctx, entitlement) {
   const user = ctx.state.user;
 
-  if (user) {
-    if (user.entitlements.indexOf(entitlement) >= 0) {
-      return true;
-    }
+  if (user?.entitlements.indexOf(entitlement) >= 0) {
+    return true;
   }
 
   ctx.throw(403, `missing ${entitlement}`);
@@ -113,26 +111,32 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * Create token.
    */
-  router.addRoute("POST", "/admin/token", restricted,  BodyParser(), async (ctx, next) => {
-    enshureEntitlement(ctx, "konsum.admin.token");
+  router.addRoute(
+    "POST",
+    "/admin/token",
+    restricted,
+    BodyParser(),
+    async (ctx, next) => {
+      enshureEntitlement(ctx, "konsum.admin.token");
 
-    console.log(ctx.request.body);
+      console.log(ctx.request.body);
 
-    const token = jsonwebtoken.sign(
-      {
-        name: "admin",
-        entitlements: ["konsum.admin.backup"].join(",")
-      },
-      config.auth.jwt.private,
-      config.auth.jwt.options
-    );
+      const token = jsonwebtoken.sign(
+        {
+          name: "admin",
+          entitlements: ["konsum.admin.backup"].join(",")
+        },
+        config.auth.jwt.private,
+        config.auth.jwt.options
+      );
 
-    ctx.body = {
-      token
-    };
+      ctx.body = {
+        token
+      };
 
-    return next();
-  });
+      return next();
+    }
+  );
 
   /**
    * Retrieve service state.
