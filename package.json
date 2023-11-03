@@ -16,7 +16,7 @@
   ],
   "license": "BSD-2-Clause",
   "bin": {
-    "konsum": "./src/konsum-cli.mjs"
+    "konsum": "src/konsum-cli.mjs"
   },
   "scripts": {
     "start": "node src/konsum-cli.mjs --config=config start",
@@ -69,7 +69,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/konsumation/konsum"
+    "url": "git+https://github.com/konsumation/konsum.git"
   },
   "bugs": {
     "url": "https://github.com/konsumation/konsum/issues"
