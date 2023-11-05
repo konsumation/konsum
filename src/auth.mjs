@@ -1,4 +1,4 @@
-import ldapts from "ldapts";
+import { Client } from "ldapts";
 
 export const defaultAuthConfig = {
   auth: {
@@ -19,7 +19,7 @@ export async function authenticate(config, username, password) {
 
   const ldap = auth.ldap;
   if (ldap !== undefined) {
-    const client = new ldapts.Client({
+    const client = new Client({
       url: ldap.url
     });
 

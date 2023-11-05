@@ -1,10 +1,10 @@
-import ldapts from "ldapts";
+import { Client } from "ldapts";
 import ldif from "ldif";
 
 async function importLDIF(file, options) {
   const data = ldif.parseFile(file);
 
-  const client = new ldapts.Client(options);
+  const client = new Client(options);
 
   console.log(options);
 
