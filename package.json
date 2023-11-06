@@ -28,7 +28,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@konsumation/db": "^5.2.5",
+    "@konsumation/db": "^5.2.6",
     "commander": "^11.1.0",
     "config-expander": "^13.0.8",
     "jsonwebtoken": "^9.0.2",
