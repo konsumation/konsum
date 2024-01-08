@@ -36,13 +36,13 @@
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.4",
-    "ldapts": "^7.0.7",
+    "ldapts": "^7.0.8",
     "leveldown": "^6.1.1",
     "levelup": "^5.1.1"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
-    "@konsumation/openapi": "^1.1.1",
+    "@konsumation/openapi": "^1.1.4",
     "@semantic-release/commit-analyzer": "^11.1.0",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/release-notes-generator": "^12.1.0",
