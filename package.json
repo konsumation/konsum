@@ -2,7 +2,8 @@
   "name": "@konsumation/konsum",
   "version": "0.0.0-semantic-release",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "Collect resource usage in a home environment",
   "contributors": [
