@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@konsumation/db": "^5.2.10",
-    "commander": "^11.1.0",
+    "commander": "^12.0.0",
     "config-expander": "^13.0.8",
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.14.2",
