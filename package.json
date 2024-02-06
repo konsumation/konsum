@@ -54,7 +54,7 @@
     "got": "^14.2.0",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^13.0.20",
-    "semantic-release": "^23.0.0",
+    "semantic-release": "^23.0.1",
     "tmp": "^0.2.1"
   },
   "optionalDependencies": {
