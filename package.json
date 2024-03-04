@@ -53,12 +53,12 @@
     "execa": "^8.0.1",
     "got": "^14.2.0",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^13.0.22",
+    "npm-pkgbuild": "^13.1.1",
     "semantic-release": "^23.0.2",
     "tmp": "^0.2.1"
   },
   "optionalDependencies": {
-    "mf-hosting": "^1.14.6",
+    "mf-hosting": "^1.15.0",
     "sd-daemon": "^1.0.2"
   },
   "engines": {
