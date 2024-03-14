@@ -1,6 +1,5 @@
 import test from "ava";
 import { Socket } from "node:net";
-
 import { authenticate } from "../src/auth.mjs";
 
 const ldapPort = 389;

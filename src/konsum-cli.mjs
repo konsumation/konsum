@@ -3,7 +3,7 @@ import { readFileSync, createWriteStream, createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
 import { expand } from "config-expander";
-import { Category } from "@konsumation/db";
+import { Category } from "@konsumation/db-level";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";

@@ -1,9 +1,9 @@
 import test from "ava";
 import { readFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
-import { prepareHttpServer } from "../src/http.mjs";
 import { fileURLToPath } from "net:url";
 import got from "got";
+import { prepareHttpServer } from "../src/http.mjs";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
