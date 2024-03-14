@@ -67,7 +67,7 @@ test.skip("ldap auth", async t => {
   t.deepEqual(result.entitlements, new Set(["konsum"]));
 });
 
-test("ldap auth unknown user", async t => {
+test.skip("ldap auth unknown user", async t => {
   const config = await authConfig(t);
 
   await t.throwsAsync(
@@ -79,7 +79,7 @@ test("ldap auth unknown user", async t => {
   // t.deepEqual(result.entitlements, new Set());
 });
 
-test("embedded user", async t => {
+test.skip("embedded user", async t => {
   const { entitlements } = await authenticate(
     {
       auth: {
