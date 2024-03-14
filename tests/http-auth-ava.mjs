@@ -1,7 +1,7 @@
 import test from "ava";
 import { readFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
-import { fileURLToPath } from "net:url";
+import { fileURLToPath } from "node:url";
 import got from "got";
 import { prepareHttpServer } from "../src/http.mjs";
 
