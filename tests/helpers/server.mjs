@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { mkdir, rmdir } from "node:fs/promises";
+import { mkdir, rm } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import got from "got";
 
@@ -86,7 +86,7 @@ export async function stopServer(t) {
   t.context.server.close();
   t.context.server.unref();
   await t.context.master.close();
-  await rmdir(t.context.databaseFile, { recursive: true });
+  await rm(t.context.databaseFile, { recursive: true });
 }
 
 export async function wait(msecs = 1000) {
