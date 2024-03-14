@@ -6,8 +6,7 @@ export async function loadOpenAPI(t, path) {
 }
 
 async function assertResponse(t, response, erc, er, expected) {
-
-  if(expected?.response) {
+  if (expected?.response) {
     expected = expected.response;
   }
 
@@ -44,7 +43,6 @@ async function assertResponse(t, response, erc, er, expected) {
 }
 
 export async function assertOpenapiPath(t, path, expected) {
-
   const p = t.context.api.paths[path];
   t.truthy(p, `Does not exists in api: ${path}`);
 
@@ -68,18 +66,22 @@ export async function assertOpenapiPath(t, path, expected) {
 
     switch (emn) {
       case "get":
-        for (const [erc, er] of Object.entries(em.responses)) {
+    //    for (const [erc, er] of Object.entries(em.responses)) {
           try {
             const response = await got.get(`${t.context.url}${path}`, {
               headers
             });
-            await assertResponse(t, response, erc, er, expected);
 
-            t.is(response.statusCode, parseInt(erc), "${path}");
+            const er = em.responses[response.statusCode];
+
+            t.truthy(er, `unexpected status code ${response.statusCode} ${path}`);
+
+            await assertResponse(t, response, response.statusCode, er, expected);
+
           } catch (e) {
             await handleError(e);
           }
-        }
+      //  }
         break;
       case "put":
         try {
