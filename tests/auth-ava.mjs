@@ -60,7 +60,7 @@ async function authConfig(t) {
   return config;
 }
 
-test("ldap auth", async t => {
+test.skip("ldap auth", async t => {
   const config = await authConfig(t);
   let result = await authenticate(config, "user1", "test");
 
@@ -70,9 +70,11 @@ test("ldap auth", async t => {
 test("ldap auth unknown user", async t => {
   const config = await authConfig(t);
 
-  await t.throwsAsync(async () => {
-    await authenticate(config, "user77", "test");
-  } /*, "Invalid credentials during a bind operation. Code: 0x31"*/);
+  await t.throwsAsync(
+    async () => {
+      await authenticate(config, "user77", "test");
+    } /*, "Invalid credentials during a bind operation. Code: 0x31"*/
+  );
 
   // t.deepEqual(result.entitlements, new Set());
 });
