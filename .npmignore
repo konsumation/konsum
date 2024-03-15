@@ -10,3 +10,4 @@ pkg
 config
 .github
 dist
+Dockerfile.sample
