@@ -31,7 +31,7 @@
   "dependencies": {
     "@konsumation/db-level": "^5.4.2",
     "commander": "^12.0.0",
-    "config-expander": "^13.0.9",
+    "config-expander": "^14.0.0",
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.1",
     "koa-better-router": "^2.1.1",
