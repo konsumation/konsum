@@ -17,8 +17,6 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        node-version:
-          - 20.11.1
     services:
       slapd:
         image: nickstenning/slapd
