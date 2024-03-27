@@ -29,7 +29,7 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@konsumation/db-level": "^5.4.7",
+    "@konsumation/db-level": "^5.4.9",
     "commander": "^12.0.0",
     "config-expander": "^14.0.0",
     "jsonwebtoken": "^9.0.2",
