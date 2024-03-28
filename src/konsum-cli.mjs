@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --title konsum
 import { readFileSync, createWriteStream, createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
