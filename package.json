@@ -52,7 +52,7 @@
     "got": "^14.2.1",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^15.2.0",
-    "semantic-release": "^23.0.6",
+    "semantic-release": "^23.0.7",
     "tmp": "^0.2.1"
   },
   "optionalDependencies": {
@@ -60,7 +60,7 @@
     "sd-daemon": "^2.0.1"
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": ">=20.12.1"
   },
   "cpu": [
     "arm64",
