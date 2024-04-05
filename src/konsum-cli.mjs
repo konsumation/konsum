@@ -10,9 +10,7 @@ import { defaultAuthConfig } from "./auth.mjs";
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
 }
-const encodingOptions = {
-  endoding: "utf8"
-};
+const encodingOptions = "utf8";
 
 const { version, description } = JSON.parse(
   readFileSync(pn("../package.json"), encodingOptions)
@@ -45,12 +43,13 @@ program.command("list <category>").action(async cName => {
 program.command("backup [file]").action(async output => {
   const { master } = await prepareConfig();
 
-  output = output === undefined
-  ? process.stdout
-  : createWriteStream(output, encodingOptions);
+  output =
+    output === undefined
+      ? process.stdout
+      : createWriteStream(output, encodingOptions);
 
-  for await(const line of master.text()) {
-      output.write(line + "\n"); 
+  for await (const line of master.text()) {
+    output.write(line + "\n");
   }
 
   await master.close();
@@ -58,33 +57,28 @@ program.command("backup [file]").action(async output => {
 
 program.command("restore [file]").action(async input => {
   const { master } = await prepareConfig();
-  const { numberOfValues, numberOfCategories } = await master.restore(
+  const statistics = await master.fromText(
     input === undefined
       ? process.stdin
       : createReadStream(input, encodingOptions)
   );
   await master.close();
-  console.log(`${input} restored (${numberOfCategories} categories, ${numberOfValues} values)`);
+  console.log(
+    `${input} restored (${statistics.category} categories, ${statistics.meter} meters, ${statistics.value} values)`
+  );
 });
 
 program
   .command("insert <category> <value> [time]")
-  .action(async (cName, value, time) => {
+  .action(async (cName, value, date) => {
     const { master } = await prepareConfig();
 
-    time = time === undefined ? Date.now() : new Date(time).valueOf();
+    date = new Date(date);
 
-    time = Math.round(time / 1000);
-
-    if (time < 941673600 || time > 2000000000) {
-      console.log("Time out of range");
-      return;
-    }
-
-    const c = await master.category( cName);
+    const c = await master.category(cName);
 
     if (c) {
-      await c.writeValue(master.context, value, time);
+      await c.writeValue(master.context, date, value);
     } else {
       console.log("No such category", cName);
     }
