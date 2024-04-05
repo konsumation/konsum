@@ -5,7 +5,7 @@ import ms from "ms";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
-import { Category, Meter, Note } from "@konsumation/db-level";
+import { LevelMaster } from "@konsumation/db-level";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
@@ -146,7 +146,7 @@ export async function prepareHttpServer(config, sd, master) {
 
     let numberOfCategories = 0;
 
-    for await (const c of Category.entries(master.db)) {
+    for await (const c of master.categories()) {
       numberOfCategories++;
     }
 
@@ -216,13 +216,13 @@ export async function prepareHttpServer(config, sd, master) {
    */
   router.addRoute("GET", "/category", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
-    const cs = [];
+    const categories = [];
 
-    for await (const c of Category.entries(master.db)) {
-      cs.push(c.toJSON());
+    for await (const category of master.categories()) {
+      categories.push(category.toJSON());
     }
 
-    ctx.body = cs;
+    ctx.body = categories;
     return next();
   });
 
@@ -236,22 +236,20 @@ export async function prepareHttpServer(config, sd, master) {
     BodyParser(),
     async (ctx, next) => {
       enshureEntitlement(ctx, "konsum.category.add");
-
-      const category = new Category(
-        ctx.params.category,
-        master,
-        ctx.request.body
+      const category = master.addCategory(
+        {name: ctx.params.category,
+        ...ctx.request.body}
       );
-      await category.write(master.db);
+      await category.write(master.context);
       ctx.body = { message: "updated" };
       return next();
     }
   );
 
   async function withCategory(ctx, cb) {
-    const c = await Category.entry(master.db, ctx.params.category);
-    if (c) {
-      await cb(c);
+    const category = await master.category(ctx.params.category);
+    if (category) {
+      await cb(category);
     } else {
       ctx.throw(404, "No such category");
     }
@@ -268,7 +266,7 @@ export async function prepareHttpServer(config, sd, master) {
       enshureEntitlement(ctx, "konsum.category.delete");
 
       await withCategory(ctx, async category => {
-        await category.delete(master.db);
+        await category.delete(master.context);
         ctx.body = { message: "deleted" };
       });
 
@@ -294,7 +292,7 @@ export async function prepareHttpServer(config, sd, master) {
 
         switch (ctx.accepts("json", "text")) {
           case "json":
-            const it = category.values(master.db, options);
+            const it = category.values(master.context, options);
 
             const values = [];
 
@@ -337,9 +335,9 @@ export async function prepareHttpServer(config, sd, master) {
           const time =
             v.time === undefined ? Date.now() : new Date(v.time).valueOf();
           await category.writeValue(
-            master.db,
-            v.value,
-            Math.round(time / 1000)
+            master.context,
+            Math.round(time / 1000),
+            v.value
           );
         }
 
@@ -362,7 +360,7 @@ export async function prepareHttpServer(config, sd, master) {
 
       await withCategory(ctx, async category => {
         const body = ctx.request.body;
-        await category.deleteValue(master.db, body.key);
+        await category.deleteValue(master.context, body.key);
         ctx.body = { message: "deleted" };
       });
 
@@ -371,8 +369,8 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   for (const type of [
-    { name: "meter", accessor: "meters", factory: Meter },
-    { name: "note", accessor: "notes", factory: Note }
+    { name: "meter", accessor: "meters", factory: LevelMaster.factories.category.factories.meter },
+    { name: "note", accessor: "notes", factory: LevelMaster.factories.category.factories.meter.factories.note }
   ]) {
     /**
      * List meters/notes of a category.
@@ -387,7 +385,7 @@ export async function prepareHttpServer(config, sd, master) {
 
           const details = [];
 
-          for await (const detail of category[type.accessor](master.db)) {
+          for await (const detail of category[type.accessor](master.context)) {
             details.push(detail.toJSON());
           }
 
@@ -412,10 +410,9 @@ export async function prepareHttpServer(config, sd, master) {
           setNoCacheHeaders(ctx);
 
           const body = ctx.request.body;
-          const name = body.name;
-          delete body.name;
-          const t = new type.factory(name, category, body);
-          await t.write(master.db);
+          body.category = category;
+          const t = new type.factory(body);
+          await t.write(master.context);
 
           ctx.body = { message: "inserted" };
         });

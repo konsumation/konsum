@@ -1,4 +1,4 @@
-import { Master } from "@konsumation/db-level";
+import Master from "@konsumation/db-level";
 
 export const defaultDatabaseConfig = {
   database: {

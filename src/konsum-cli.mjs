@@ -3,7 +3,6 @@ import { readFileSync, createWriteStream, createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
 import { expand } from "config-expander";
-import { Category } from "@konsumation/db-level";
 import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
 import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
 import { defaultAuthConfig } from "./auth.mjs";
@@ -34,9 +33,9 @@ program.command("start").action(async () => {
 program.command("list <category>").action(async cName => {
   const { master } = await prepareConfig();
 
-  for await (const c of Category.entries(master.db, cName, cName)) {
-    for await (const { value, time } of c.values(master.db)) {
-      console.log(c.name, new Date(time * 1000), value);
+  for await (const category of master.categories(cName, cName)) {
+    for await (const { value, date } of category.values(master.context)) {
+      console.log(category.name, date, value);
     }
   }
 
@@ -45,16 +44,16 @@ program.command("list <category>").action(async cName => {
 
 program.command("backup [file]").action(async output => {
   const { master } = await prepareConfig();
-  await master.backup(
-    output === undefined
-      ? process.stdout
-      : createWriteStream(output, encodingOptions)
-  );
-  await master.close();
 
-  if (output !== undefined) {
-    console.log(`${output} saved`);
+  output = output === undefined
+  ? process.stdout
+  : createWriteStream(output, encodingOptions);
+
+  for await(const line of master.text()) {
+      output.write(line + "\n"); 
   }
+
+  await master.close();
 });
 
 program.command("restore [file]").action(async input => {
@@ -82,10 +81,10 @@ program
       return;
     }
 
-    const c = await Category.entry(master.db, cName);
+    const c = await master.category( cName);
 
     if (c) {
-      await c.writeValue(master.db, value, time);
+      await c.writeValue(master.context, value, time);
     } else {
       console.log("No such category", cName);
     }
