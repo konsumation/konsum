@@ -1,6 +1,6 @@
 {
   "database": {
-    "file": "db"
+    "level": "db"
   },
   "auth": {
     "users": {
