@@ -1,6 +1,6 @@
 {
   "database": {
-    "level": "db"
+    "@konsumation/db-level": "db"
   },
   "auth": {
     "users": {
