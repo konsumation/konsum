@@ -150,8 +150,11 @@ test.serial("can insert + get values", async t => {
 
   const category = master.addCategory({ name: "CAT1", unit: "kWh" });
   await category.write(master.context);
+  const meter = category.addMeter({ name: "M1" });
+  await meter.write(master.context);
+
   const now = Date.now();
-  await c.writeValue(master.db, 77.34, Math.round(now / 1000) - 1);
+  await category.writeValue(master.context, 77.34, Math.round(now / 1000) - 1);
 
   let response = await got.post(`${t.context.url}/category/CAT1/value`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
@@ -214,5 +217,5 @@ test.serial("can insert + can delete", async t => {
       key: now
     }
   });
-  t.is(await c.getValue(master.db, now), undefined);
+  t.is(await c.getValue(master.context, now), undefined);
 });
