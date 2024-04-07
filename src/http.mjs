@@ -119,8 +119,6 @@ export async function prepareHttpServer(config, sd, master) {
     async (ctx, next) => {
       enshureEntitlement(ctx, "konsum.admin.token");
 
-      console.log(ctx.request.body);
-
       const token = jsonwebtoken.sign(
         {
           name: "admin",
@@ -386,7 +384,9 @@ export async function prepareHttpServer(config, sd, master) {
           const details = [];
 
           for await (const detail of category[type.accessor](master.context)) {
-            details.push(detail.toJSON());
+            const json = detail.toJSON();
+            delete json.category;
+            details.push(json);
           }
 
           ctx.body = details;
@@ -410,7 +410,7 @@ export async function prepareHttpServer(config, sd, master) {
           setNoCacheHeaders(ctx);
 
           const body = ctx.request.body;
-          body.category = category;
+          body.category = category; // TODO toJSON without full category
           const t = new type.factory(body);
           await t.write(master.context);
 

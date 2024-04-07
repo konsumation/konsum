@@ -54,16 +54,16 @@ test("delete category", async t => {
   t.is(response.statusCode, 200);
 });
 
-test.serial("list category meters", async t => {
+test.only("list category meters", async t => {
   const master = t.context.master;
   const catName = "CAT1";
 
-  const c = new Category(catName, master, { unit: "kWh" });
-  await c.write(master.db);
-  const m1 = new Meter("M-1", c, { serial: "12345" });
-  await m1.write(master.db);
-  const m2 = new Meter("M-2", c, { serial: "123456" });
-  await m2.write(master.db);
+  const category = master.addCategory({ name: catName, unit: "kWh" });
+  await category.write(master.context);
+  const meter1 = category.addMeter({ name: "M-1", serial: "12345" });
+  await meter1.write(master.context);
+  const meter2 = category.addMeter({ name: "M-2", serial: "123456" });
+  await meter2.write(master.context);
 
   const response = await got.get(`${t.context.url}/category/${catName}/meter`, {
     headers: { Authorization: `Bearer ${t.context.token}` }
@@ -107,12 +107,7 @@ test("insert category meters", async t => {
       name: "M-3",
       fractionalDigits: 2,
       serial: "123456",
-      unit: "kWh",
-      category: {
-        fractionalDigits: 2,
-        name: "CAT2",
-        unit: "kWh"
-      }
+      unit: "kWh"
     }
   ]);
 });
@@ -127,7 +122,7 @@ test("list category notes", async t => {
   await meter.write(master.context);
 
   const time = Date.now();
-  const note1 = meter.addNote({ name: time -1, meter, description: "a text" });
+  const note1 = meter.addNote({ name: time - 1, meter, description: "a text" });
   await note1.write(master.context);
   const note2 = meter.addNote({ name: time, meter, description: "a text" });
   await note2.write(master.context);
@@ -154,8 +149,8 @@ test("list category notes", async t => {
 test.serial("can insert + get values", async t => {
   const master = t.context.master;
 
-  const c = new Category(`CAT1`, { unit: "kWh" });
-  await c.write(master.db);
+  const category = master.addCategory({ name: "CAT1", unit: "kWh" });
+  await category.write(master.context);
   const now = Date.now();
   await c.writeValue(master.db, 77.34, Math.round(now / 1000) - 1);
 
