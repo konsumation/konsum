@@ -53,7 +53,7 @@ test("delete category", async t => {
   t.is(response.statusCode, 200);
 });
 
-test.only("list category meters", async t => {
+test("list category meters", async t => {
   const master = t.context.master;
   const catName = "CAT1";
 
@@ -145,7 +145,7 @@ test("list category notes", async t => {
   */
 });
 
-test.serial("can insert + get values", async t => {
+test("can insert + get values", async t => {
   const master = t.context.master;
 
   const category = master.addCategory({ name: "CAT1", unit: "kWh" });
@@ -153,8 +153,8 @@ test.serial("can insert + get values", async t => {
   const meter = category.addMeter({ name: "M1" });
   await meter.write(master.context);
 
-  const now = Date.now();
-  await category.writeValue(master.context, 77.34, Math.round(now / 1000) - 1);
+  const now = new Date();
+  await category.writeValue(master.context, now, 77.34);
 
   let response = await got.post(`${t.context.url}/category/CAT1/value`, {
     headers: { Authorization: `Bearer ${t.context.token}` },

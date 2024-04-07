@@ -1,4 +1,5 @@
 import { createWriteStream } from "node:fs";
+import { Readable } from "node:stream";
 import Koa from "koa";
 import jsonwebtoken from "jsonwebtoken";
 import ms from "ms";
@@ -26,6 +27,14 @@ function enshureEntitlement(ctx, entitlement) {
   }
 
   ctx.throw(403, `missing ${entitlement}`);
+}
+
+async function lineToStream(lines) {
+  const a = [];
+  for await (const line of lines) {
+    a.push(line);
+  }
+  return a.join("\n");
 }
 
 function isTrue(v) {
@@ -234,10 +243,10 @@ export async function prepareHttpServer(config, sd, master) {
     BodyParser(),
     async (ctx, next) => {
       enshureEntitlement(ctx, "konsum.category.add");
-      const category = master.addCategory(
-        {name: ctx.params.category,
-        ...ctx.request.body}
-      );
+      const category = master.addCategory({
+        name: ctx.params.category,
+        ...ctx.request.body
+      });
       await category.write(master.context);
       ctx.body = { message: "updated" };
       return next();
@@ -303,7 +312,7 @@ export async function prepareHttpServer(config, sd, master) {
 
           case "text":
             ctx.response.set("content-type", "text/plain");
-            ctx.body = category.readStream(master.db, options);
+            ctx.body = await lineToStream(category.text(master.context));
             break;
 
           default:
@@ -330,11 +339,9 @@ export async function prepareHttpServer(config, sd, master) {
         const values = ctx.request.body;
 
         for (const v of Array.isArray(values) ? values : [values]) {
-          const time =
-            v.time === undefined ? Date.now() : new Date(v.time).valueOf();
           await category.writeValue(
             master.context,
-            Math.round(time / 1000),
+            v.time === undefined ? new Date() : new Date(v.time),
             v.value
           );
         }
@@ -367,8 +374,16 @@ export async function prepareHttpServer(config, sd, master) {
   );
 
   for (const type of [
-    { name: "meter", accessor: "meters", factory: LevelMaster.factories.category.factories.meter },
-    { name: "note", accessor: "notes", factory: LevelMaster.factories.category.factories.meter.factories.note }
+    {
+      name: "meter",
+      accessor: "meters",
+      factory: LevelMaster.factories.category.factories.meter
+    },
+    {
+      name: "note",
+      accessor: "notes",
+      factory: LevelMaster.factories.category.factories.meter.factories.note
+    }
   ]) {
     /**
      * List meters/notes of a category.
@@ -385,7 +400,6 @@ export async function prepareHttpServer(config, sd, master) {
 
           for await (const detail of category[type.accessor](master.context)) {
             const json = detail.toJSON();
-            delete json.category;
             details.push(json);
           }
 
@@ -410,7 +424,7 @@ export async function prepareHttpServer(config, sd, master) {
           setNoCacheHeaders(ctx);
 
           const body = ctx.request.body;
-          body.category = category; // TODO toJSON without full category
+          body.category = category;
           const t = new type.factory(body);
           await t.write(master.context);
 
