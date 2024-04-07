@@ -77,12 +77,12 @@ test.serial("list category meters", async t => {
   ]);
 });
 
-test.serial("insert category meters", async t => {
+test("insert category meters", async t => {
   const master = t.context.master;
   const catName = "CAT2";
 
-  const c = new Category(catName, master, { unit: "kWh" });
-  await c.write(master.db);
+  const category = master.addCategory({ name: catName, unit: "kWh" });
+  await category.write(master.context);
 
   let response = await got.put(`${t.context.url}/category/${catName}/meter`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
@@ -103,7 +103,17 @@ test.serial("insert category meters", async t => {
   t.is(response.statusCode, 200);
 
   t.deepEqual(JSON.parse(response.body), [
-    { name: "M-3", fractionalDigits: 2, serial: "123456", unit: "kWh" }
+    {
+      name: "M-3",
+      fractionalDigits: 2,
+      serial: "123456",
+      unit: "kWh",
+      category: {
+        fractionalDigits: 2,
+        name: "CAT2",
+        unit: "kWh"
+      }
+    }
   ]);
 });
 
@@ -111,14 +121,16 @@ test("list category notes", async t => {
   const catName = "CAT1";
   const master = t.context.master;
 
-  const c = new Category(catName, master, { unit: "kWh" });
-  await c.write(master.db);
+  const category = master.addCategory({ name: catName, unit: "kWh" });
+  await category.write(master.context);
+  const meter = category.addMeter({ name: catName });
+  await meter.write(master.context);
 
   const time = Date.now();
-  const n1 = new Note(time - 1, c, { description: "a text" });
-  await n1.write(master.db);
-  const n2 = new Note(time, c, { description: "a text" });
-  await n2.write(master.db);
+  const note1 = meter.addNote({ name: time -1, meter, description: "a text" });
+  await note1.write(master.context);
+  const note2 = meter.addNote({ name: time, meter, description: "a text" });
+  await note2.write(master.context);
 
   const response = await got.get(`${t.context.url}/category/${catName}/note`, {
     headers: { Authorization: `Bearer ${t.context.token}` }
