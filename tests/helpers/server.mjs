@@ -42,7 +42,7 @@ export async function startServer(t, port = 3150, users = defaultUsers) {
   const config = {
     version: "1.2.3",
     database: {
-      file
+      "@konsumation/db-level": file
     },
     auth: {
       jwt: {
