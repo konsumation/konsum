@@ -1,6 +1,5 @@
 import test from "ava";
 import got from "got";
-import { Category, Meter, Note } from "@konsumation/model";
 import { startServer, stopServer } from "./helpers/server.mjs";
 
 let port = 3150;
@@ -186,10 +185,12 @@ test.serial("can insert + get values", async t => {
 test.serial("can insert + can delete", async t => {
   const master = t.context.master;
 
-  const c = new Category(`CAT2`, { unit: "kWh" });
-  await c.write(master.db);
-  const now = Date.now();
-  await c.writeValue(master.db, 77.34, now);
+  const category = master.addCategory({ name: "CAT2", unit: "kWh" });
+  await category.write(master.context);
+  const meter = category.addMeter({ name: "M-1" });
+  await meter.write(master.context);
+  const now = new Date();
+  await category.writeValue(master.context, now, 77.34);
 
   let response = await got.get(`${t.context.url}/category/CAT2/value`, {
     headers: {
