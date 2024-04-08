@@ -399,8 +399,7 @@ export async function prepareHttpServer(config, sd, master) {
           const details = [];
 
           for await (const detail of category[type.accessor](master.context)) {
-            const json = detail.toJSON();
-            details.push(json);
+            details.push(detail.toJSON());
           }
 
           ctx.body = details;

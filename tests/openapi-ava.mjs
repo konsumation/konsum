@@ -27,7 +27,7 @@ test(openapiPathTest, "/authenticate", {
 });
 
 test(openapiPathTest, "/state", {
-  200: { version: "1.2.3", database: { schemaVersion: "2" } }
+  200: { version: "1.2.3", database: { schemaVersion: "3" } }
 });
 
 test(openapiPathTest, "/category", {
@@ -38,11 +38,11 @@ test(openapiPathTest, "/category/{category}/meter", {
   404: "No such category"
 });
 
-test(openapiPathTest, "/category/{category}/note", {
+test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
   404: "No such category"
 });
 
-test(openapiPathTest, "/category/{category}/value", {
+test(openapiPathTest, "/category/{category}/meter/{mater}/value", {
   404: "No such category"
 });
 
