@@ -25,7 +25,7 @@ test.serial("cli insert category", async t => {
     "--config",
     pn("../config"),
     "restore",
-    pn("fixtures/database.txt")
+    pn("../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt")
   ]);
   await execa(pn("../src/konsum-cli.mjs"), [
     "--config",
@@ -48,7 +48,7 @@ test.serial("cli list category", async t => {
     "--config",
     pn("../config"),
     "restore",
-    pn("fixtures/database.txt")
+    pn("../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt")
   ]);
   const p = await execa(pn("../src/konsum-cli.mjs"), [
     "--config",
@@ -64,9 +64,9 @@ test.serial("cli restore database", async t => {
     "--config",
     pn("../config"),
     "restore",
-    pn("fixtures/database.txt")
+    pn("../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt")
   ]);
-  t.regex(p.stdout, /database.txt restored/);
+  t.regex(p.stdout, /database-version-3.txt restored/);
 });
 
 test.serial("cli backup database", async t => {
