@@ -42,7 +42,7 @@ test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
   404: "No such category"
 });
 
-test(openapiPathTest, "/category/{category}/meter/{mater}/value", {
+test(openapiPathTest, "/category/{category}/meter/{meter}/value", {
   404: "No such category"
 });
 
