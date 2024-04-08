@@ -130,6 +130,7 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 *   [addRoute](#addroute-14)
 *   [addRoute](#addroute-15)
 *   [addRoute](#addroute-16)
+*   [addRoute](#addroute-17)
 
 ## addRoute
 
@@ -175,6 +176,10 @@ Delete a category.
 ## addRoute
 
 List values of a category.
+
+## addRoute
+
+List values of a meter.
 
 ## addRoute
 
