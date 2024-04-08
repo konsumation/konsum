@@ -262,6 +262,16 @@ export async function prepareHttpServer(config, sd, master) {
     }
   }
 
+  async function withMeter(ctx, cb) {
+    const category = await master.category(ctx.params.category);
+    const meter = await category?.meter(master.context, ctx.params.meter);
+    if (meter) {
+      await cb(meter);
+    } else {
+      ctx.throw(404, "No such category or meter");
+    }
+  }
+
   /**
    * Delete a category.
    */
@@ -281,6 +291,36 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
+  async function listValues(ctx, master, object) {
+    setNoCacheHeaders(ctx);
+    const reverse = isTrue(ctx.query.reverse);
+    const limit =
+      ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
+    const options = { reverse, limit };
+
+    switch (ctx.accepts("json", "text")) {
+      case "json":
+        const it = object.values(master.context, options);
+
+        const values = [];
+
+        for await (const { value, time } of it) {
+          values.push({ value, time });
+        }
+
+        ctx.body = values;
+        break;
+
+      case "text":
+        ctx.response.set("content-type", "text/plain");
+        ctx.body = await lineToStream(object.text(master.context));
+        break;
+
+      default:
+        ctx.throw(406, "json, or text only");
+    }
+  }
+
   /**
    * List values of a category.
    */
@@ -289,37 +329,20 @@ export async function prepareHttpServer(config, sd, master) {
     "/category/:category/value",
     restricted,
     async (ctx, next) => {
-      await withCategory(ctx, async category => {
-        setNoCacheHeaders(ctx);
+      await withCategory(ctx, category => listValues(ctx, master, category));
+      return next();
+    }
+  );
 
-        const reverse = isTrue(ctx.query.reverse);
-        const limit =
-          ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
-        const options = { reverse, limit };
-
-        switch (ctx.accepts("json", "text")) {
-          case "json":
-            const it = category.values(master.context, options);
-
-            const values = [];
-
-            for await (const { value, time } of it) {
-              values.push({ value, time });
-            }
-
-            ctx.body = values;
-            break;
-
-          case "text":
-            ctx.response.set("content-type", "text/plain");
-            ctx.body = await lineToStream(category.text(master.context));
-            break;
-
-          default:
-            ctx.throw(406, "json, or text only");
-        }
-      });
-
+  /**
+   * List values of a meter.
+   */
+  router.addRoute(
+    "GET",
+    "/category/:category/meter/:meter/value",
+    restricted,
+    async (ctx, next) => {
+      await withMeter(ctx, meter => listValues(ctx, master, meter));
       return next();
     }
   );
