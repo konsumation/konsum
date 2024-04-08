@@ -509,7 +509,6 @@ export async function prepareHttpServer(config, sd, master) {
         sd.notify("READY=1\nERRNO=" + error);
         reject(error);
       } else {
-        console.log("listen on", server.address());
         sd.notify("READY=1\nSTATUS=running");
         resolve(server);
       }
