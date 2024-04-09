@@ -39,11 +39,11 @@ test(openapiPathTest, "/category/{category}/meter", {
 });
 
 test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
-  404: "No such category"
+  404: "No such category or meter"
 });
 
 test(openapiPathTest, "/category/{category}/meter/{meter}/value", {
-  404: "No such category"
+  404: "No such category or meter"
 });
 
 test.skip(openapiPathTest, "/admin/backup", {

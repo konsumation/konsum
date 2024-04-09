@@ -5,7 +5,7 @@ export async function loadOpenAPI(t, path) {
   t.context.api = await SwaggerParser.validate(path);
 }
 
-async function assertResponse(t, response, erc, er, expected) {
+async function assertResponse(t, response, erc, methodName, er, expected) {
   if (expected?.response) {
     expected = expected.response;
   }
@@ -16,19 +16,19 @@ async function assertResponse(t, response, erc, er, expected) {
         case "application/json":
           const body = JSON.parse(response.body);
           if (Array.isArray(body)) {
-            t.deepEqual(body, expected[erc], `${erc}`);
+            t.deepEqual(body, expected[erc], `${erc} ${methodName}`);
           } else {
-            t.like(body, expected[erc], `${erc}`);
+            t.like(body, expected[erc], `${erc} ${methodName}`);
           }
           break;
 
         case "text/plain":
         case "application/text":
-          t.is(response.body, expected[erc]);
+          t.is(response.body, expected[erc], methodName);
           break;
 
         default:
-          t.log(`Unknown content type ${ct}`);
+          t.log(`Unknown content type ${ct} ${methodName}`);
       }
     }
   } else {
@@ -48,40 +48,50 @@ export async function assertOpenapiPath(t, path, expected) {
 
   const headers = { Authorization: `Bearer ${t.context.token}` };
 
-  for (const [emn, em] of Object.entries(p)) {
-    async function handleError(e) {
+  for (const [methodName, em] of Object.entries(p)) {
+    async function handleError(e, methodName) {
       if (e.response) {
         const statusCode = e.response.statusCode;
         await assertResponse(
           t,
           e.response,
           statusCode,
+          methodName,
           em.responses[statusCode],
           expected.response ? expected.response : expected
         );
       } else {
-        t.log(`No response from ${path}`, e);
+        t.log(`No response from ${methodName} ${path}`, e);
       }
     }
 
-    switch (emn) {
+    switch (methodName) {
       case "get":
-    //    for (const [erc, er] of Object.entries(em.responses)) {
-          try {
-            const response = await got.get(`${t.context.url}${path}`, {
-              headers
-            });
+        //    for (const [erc, er] of Object.entries(em.responses)) {
+        try {
+          const response = await got.get(`${t.context.url}${path}`, {
+            headers
+          });
 
-            const er = em.responses[response.statusCode];
+          const er = em.responses[response.statusCode];
 
-            t.truthy(er, `unexpected status code ${response.statusCode} ${path}`);
+          t.truthy(
+            er,
+            `unexpected status code ${response.statusCode} ${methodName} ${path}`
+          );
 
-            await assertResponse(t, response, response.statusCode, er, expected);
-
-          } catch (e) {
-            await handleError(e);
-          }
-      //  }
+          await assertResponse(
+            t,
+            response,
+            response.statusCode,
+            methodName,
+            er,
+            expected
+          );
+        } catch (e) {
+          await handleError(e, methodName);
+        }
+        //  }
         break;
       case "put":
         try {
@@ -90,7 +100,7 @@ export async function assertOpenapiPath(t, path, expected) {
             json: expected.put
           });
         } catch (e) {
-          await handleError(e);
+          await handleError(e, methodName);
         }
         break;
       case "post":
@@ -101,9 +111,9 @@ export async function assertOpenapiPath(t, path, expected) {
               json: expected.post
             });
 
-            await assertResponse(t, response, erc, er, expected);
+            await assertResponse(t, response, erc, methodName, er, expected);
           } catch (e) {
-            await handleError(e);
+            await handleError(e, methodName);
           }
         }
         break;
@@ -113,14 +123,14 @@ export async function assertOpenapiPath(t, path, expected) {
             headers
           });
         } catch (e) {
-          await handleError(e);
+          await handleError(e, methodName);
         }
         break;
 
       case "parameters":
         break;
       default:
-        t.log(`Unknown method ${emn}`);
+        t.log(`Unknown method ${methodName}`);
     }
   }
 }
