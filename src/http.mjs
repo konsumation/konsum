@@ -94,7 +94,12 @@ export async function prepareHttpServer(config, sd, master) {
 
       ctx.body = `backup to ${name}...`;
 
-      master.backup(createWriteStream(name, { encoding: "utf8" }));
+      const out = createWriteStream(name, "utf8");
+
+      for await (const line of master.text()) {
+        out.write(line + "\n");
+      }
+
       return next();
     }
   );
@@ -112,7 +117,11 @@ export async function prepareHttpServer(config, sd, master) {
     );
     ctx.status = 200;
     ctx.respond = false;
-    await master.backup(ctx.res);
+
+    for await (const line of master.text()) {
+      ctx.res.write(line + "\n");
+    }
+
     ctx.res.end();
     return next();
   });

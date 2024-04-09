@@ -62,7 +62,7 @@ test.skip(openapiPathTest, "/admin/backup", {
 test.skip(openapiPathTest, "/admin/backup", {
   get: {},
   response: {
-    200: `schemaVersion=2
+    200: `schemaVersion=3
 
 `
   }
