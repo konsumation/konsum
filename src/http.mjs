@@ -294,6 +294,31 @@ export async function prepareHttpServer(config, sd, master) {
   for (const [method, config] of Object.entries({
     GET: {
       extra: [restricted],
+      exec: async (ctx, meter) => (ctx.body = meter.toJSON())
+    },
+    PUT: {
+      extra: [restricted, BodyParser()],
+      exec: async (ctx, meter) => (ctx.body = meter.toJSON()) // TODO
+    },
+    POST: {
+      extra: [restricted, BodyParser()],
+      exec: async (ctx, meter) => (ctx.body = meter.toJSON()) // TODO
+    }
+  })) {
+    router.addRoute(
+      method,
+      "/category/:category/meter/:meter/note",
+      ...config.extra,
+      async (ctx, next) => {
+        await withMeter(ctx, async meter => config.exec(ctx, meter));
+        return next();
+      }
+    );
+  }
+
+  for (const [method, config] of Object.entries({
+    GET: {
+      extra: [restricted],
       exec: async (ctx, master, object) => {
         setNoCacheHeaders(ctx);
         const reverse = isTrue(ctx.query.reverse);
