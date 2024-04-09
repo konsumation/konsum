@@ -304,8 +304,8 @@ export async function prepareHttpServer(config, sd, master) {
 
         const values = [];
 
-        for await (const { value, time } of it) {
-          values.push({ value, time });
+        for await (const { value, date } of it) {
+          values.push({ value, date });
         }
 
         ctx.body = values;
