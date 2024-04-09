@@ -56,7 +56,7 @@ export async function authenticate(config, username, password) {
 
   if (auth.users !== undefined) {
     const user = auth.users[username];
-    if (user?.password === password) {
+    if (user && user.password === password) {
       user.entitlements.forEach(e => entitlements.add(e));
     }
   }
