@@ -79,7 +79,7 @@ test.skip("ldap auth unknown user", async t => {
   // t.deepEqual(result.entitlements, new Set());
 });
 
-test.skip("embedded user", async t => {
+test("embedded user", async t => {
   const { entitlements } = await authenticate(
     {
       auth: {
