@@ -352,6 +352,7 @@ export async function prepareHttpServer(config, sd, master) {
       method,
       "/category/:category/value",
       restricted,
+      BodyParser(),
       async (ctx, next) => {
         await withCategory(ctx, category => exec(ctx, master, category));
         return next();
@@ -361,6 +362,7 @@ export async function prepareHttpServer(config, sd, master) {
       method,
       "/category/:category/meter/:meter/value",
       restricted,
+      BodyParser(),
       async (ctx, next) => {
         await withMeter(ctx, meter => exec(ctx, master, meter));
         return next();
