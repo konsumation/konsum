@@ -172,8 +172,8 @@ test.serial("can insert + get values", async t => {
   await meter.writeValue(master.context, new Date(now.getTime() - 1000), 77.34);
 
   let response;
-  
-   response = await got.post(`${t.context.url}/category/${catName}/value`, {
+
+  response = await got.post(`${t.context.url}/category/${catName}/value`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
       value: 78.0
@@ -192,35 +192,40 @@ test.serial("can insert + get values", async t => {
   t.regex(response.body, /\s+77.34/);
   t.regex(response.body, /\s+78/);
 
-  response = await got.get(`${t.context.url}/category/${catName}/meter/M1/value`, {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${t.context.token}`
+  response = await got.get(
+    `${t.context.url}/category/${catName}/meter/M1/value`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${t.context.token}`
+      }
     }
-  });
+  );
 
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
 test.serial("can insert + can delete", async t => {
   const master = t.context.master;
-
-  const category = master.addCategory({ name: "CAT2", unit: "kWh" });
-  await category.write(master.context);
-  const meter = category.addMeter({ name: "M-1" });
-  await meter.write(master.context);
+  const catName = "CAT1";
+  const meterName = "M1";
   const now = new Date();
+
+  const category = master.addCategory({ name: catName, unit: "kWh" });
+  await category.write(master.context);
+  const meter = category.addMeter({ name: meterName });
+  await meter.write(master.context);
   await category.writeValue(master.context, now, 77.34);
 
-  let response = await got.get(`${t.context.url}/category/CAT2/value`, {
+  let response = await got.get(`${t.context.url}/category/${catName}/value`, {
     headers: {
       Accept: "text/plain",
       Authorization: `Bearer ${t.context.token}`
     }
   });
   //t.log(response.body);
-  t.regex(response.body, /\d+ 77.34/);
-  response = await got.get(`${t.context.url}/category/CAT2/value`, {
+  t.regex(response.body, /\s+77.34/);
+  response = await got.get(`${t.context.url}/category/${catName}/value`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${t.context.token}`
@@ -228,11 +233,11 @@ test.serial("can insert + can delete", async t => {
   });
 
   t.is(JSON.parse(response.body)[0].value, 77.34);
-  response = await got.delete(`${t.context.url}/category/CAT2/value`, {
+  response = await got.delete(`${t.context.url}/category/${catName}/value`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
       key: now
     }
   });
-  t.is(await c.getValue(master.context, now), undefined);
+  t.is(await meter.getValue(master.context, now), undefined);
 });

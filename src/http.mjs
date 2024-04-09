@@ -388,7 +388,7 @@ export async function prepareHttpServer(config, sd, master) {
 
       await withCategory(ctx, async category => {
         const body = ctx.request.body;
-        await category.deleteValue(master.context, body.key);
+        await category.deleteValue(master.context, new Date(body.key));
         ctx.body = { message: "deleted" };
       });
 
