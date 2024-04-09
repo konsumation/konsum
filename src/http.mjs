@@ -291,7 +291,7 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
-  async function listValues(ctx, master, object) {
+  async function getValues(ctx, master, object) {
     setNoCacheHeaders(ctx);
     const reverse = isTrue(ctx.query.reverse);
     const limit =
@@ -321,80 +321,52 @@ export async function prepareHttpServer(config, sd, master) {
     }
   }
 
-  /**
-   * List values of a category.
-   */
-  router.addRoute(
-    "GET",
-    "/category/:category/value",
-    restricted,
-    async (ctx, next) => {
-      await withCategory(ctx, category => listValues(ctx, master, category));
-      return next();
+  async function postValues(ctx, master, object) {
+    enshureEntitlement(ctx, "konsum.value.add");
+    const values = ctx.request.body;
+
+    for (const v of Array.isArray(values) ? values : [values]) {
+      await object.writeValue(
+        master.context,
+        v.time === undefined ? new Date() : new Date(v.time),
+        v.value
+      );
     }
-  );
 
-  /**
-   * List values of a meter.
-   */
-  router.addRoute(
-    "GET",
-    "/category/:category/meter/:meter/value",
-    restricted,
-    async (ctx, next) => {
-      await withMeter(ctx, meter => listValues(ctx, master, meter));
-      return next();
-    }
-  );
+    ctx.body = { message: "inserted" };
+  }
 
-  /**
-   * Insert a value into a category.
-   */
-  router.addRoute(
-    "POST",
-    "/category/:category/value",
-    restricted,
-    BodyParser(),
-    async (ctx, next) => {
-      enshureEntitlement(ctx, "konsum.value.add");
+  async function deleteValues(ctx, master, object) {
+    enshureEntitlement(ctx, "konsum.value.delete");
+    const body = ctx.request.body;
+    await object.deleteValue(master.context, new Date(body.key));
+    ctx.body = { message: "deleted" };
+  }
 
-      await withCategory(ctx, async category => {
-        const values = ctx.request.body;
-
-        for (const v of Array.isArray(values) ? values : [values]) {
-          await category.writeValue(
-            master.context,
-            v.time === undefined ? new Date() : new Date(v.time),
-            v.value
-          );
-        }
-
-        ctx.body = { message: "inserted" };
-      });
-      return next();
-    }
-  );
-
-  /**
-   * Delete a value from a category.
-   */
-  router.addRoute(
-    "DELETE",
-    "/category/:category/value",
-    restricted,
-    BodyParser(),
-    async (ctx, next) => {
-      enshureEntitlement(ctx, "konsum.value.delete");
-
-      await withCategory(ctx, async category => {
-        const body = ctx.request.body;
-        await category.deleteValue(master.context, new Date(body.key));
-        ctx.body = { message: "deleted" };
-      });
-
-      return next();
-    }
-  );
+  for (const [method, exec] of Object.entries({
+    GET: getValues,
+    POST: postValues,
+    DELETE: deleteValues
+  })) {
+    router.addRoute(
+      method,
+      "/category/:category/value",
+      restricted,
+      async (ctx, next) => {
+        await withCategory(ctx, category => exec(ctx, master, category));
+        return next();
+      }
+    );
+    router.addRoute(
+      method,
+      "/category/:category/meter/:meter/value",
+      restricted,
+      async (ctx, next) => {
+        await withMeter(ctx, meter => exec(ctx, master, meter));
+        return next();
+      }
+    );
+  }
 
   for (const type of [
     {
