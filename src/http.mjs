@@ -291,83 +291,75 @@ export async function prepareHttpServer(config, sd, master) {
     }
   );
 
-  async function getValues(ctx, master, object) {
-    setNoCacheHeaders(ctx);
-    const reverse = isTrue(ctx.query.reverse);
-    const limit =
-      ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
-    const options = { reverse, limit };
+  for (const [method, config] of Object.entries({
+    GET: {
+      extra: [restricted],
+      exec: async (ctx, master, object) => {
+        setNoCacheHeaders(ctx);
+        const reverse = isTrue(ctx.query.reverse);
+        const limit =
+          ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
+        const options = { reverse, limit };
 
-    switch (ctx.accepts("json", "text")) {
-      case "json":
-        const it = object.values(master.context, options);
+        switch (ctx.accepts("json", "text")) {
+          case "json":
+            const it = object.values(master.context, options);
 
-        const values = [];
+            const values = [];
 
-        for await (const { value, date } of it) {
-          values.push({ value, date });
+            for await (const { value, date } of it) {
+              values.push({ value, date });
+            }
+
+            ctx.body = values;
+            break;
+
+          case "text":
+            ctx.response.set("content-type", "text/plain");
+            ctx.body = await lineToStream(object.text(master.context));
+            break;
+
+          default:
+            ctx.throw(406, "json, or text only");
+        }
+      }
+    },
+    POST: {
+      extra: [restricted, BodyParser()],
+      exec: async (ctx, master, object) => {
+        enshureEntitlement(ctx, "konsum.value.add");
+        const values = ctx.request.body;
+
+        for (const v of Array.isArray(values) ? values : [values]) {
+          await object.writeValue(
+            master.context,
+            v.time === undefined ? new Date() : new Date(v.time),
+            v.value
+          );
         }
 
-        ctx.body = values;
-        break;
-
-      case "text":
-        ctx.response.set("content-type", "text/plain");
-        ctx.body = await lineToStream(object.text(master.context));
-        break;
-
-      default:
-        ctx.throw(406, "json, or text only");
+        ctx.body = { message: "inserted" };
+      }
+    },
+    DELETE: {
+      extra: [restricted, BodyParser()],
+      exec: async (ctx, master, object) => {
+        enshureEntitlement(ctx, "konsum.value.delete");
+        const body = ctx.request.body;
+        await object.deleteValue(master.context, new Date(body.key));
+        ctx.body = { message: "deleted" };
+      }
     }
-  }
-
-  async function postValues(ctx, master, object) {
-    enshureEntitlement(ctx, "konsum.value.add");
-    const values = ctx.request.body;
-
-    for (const v of Array.isArray(values) ? values : [values]) {
-      await object.writeValue(
-        master.context,
-        v.time === undefined ? new Date() : new Date(v.time),
-        v.value
-      );
-    }
-
-    ctx.body = { message: "inserted" };
-  }
-
-  async function deleteValues(ctx, master, object) {
-    enshureEntitlement(ctx, "konsum.value.delete");
-    const body = ctx.request.body;
-    await object.deleteValue(master.context, new Date(body.key));
-    ctx.body = { message: "deleted" };
-  }
-
-  for (const [method, exec] of Object.entries({
-    GET: getValues,
-    POST: postValues,
-    DELETE: deleteValues
   })) {
-    router.addRoute(
-      method,
-      "/category/:category/value",
-      restricted,
-      BodyParser(),
-      async (ctx, next) => {
-        await withCategory(ctx, category => exec(ctx, master, category));
+    for (const [path, access] of Object.entries({
+      "/category/:category/value": withCategory,
+      "/category/:category/meter/:meter/value": withMeter
+    })) {
+      router.addRoute(method, path, ...config.extra, async (ctx, next) => {
+        await access(ctx, object => config.exec(ctx, master, object));
         return next();
-      }
-    );
-    router.addRoute(
-      method,
-      "/category/:category/meter/:meter/value",
-      restricted,
-      BodyParser(),
-      async (ctx, next) => {
-        await withMeter(ctx, meter => exec(ctx, master, meter));
-        return next();
-      }
-    );
+      });
+    }
   }
 
   for (const type of [
