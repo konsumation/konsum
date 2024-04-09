@@ -1,5 +1,5 @@
 import test from "ava";
-import { mkdir } from "node:fs/promises";
+import { mkdir, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { execa } from "execa";
 
@@ -25,7 +25,9 @@ test.serial("cli insert category", async t => {
     "--config",
     pn("../config"),
     "restore",
-    pn("../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt")
+    pn(
+      "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
+    )
   ]);
   await execa(pn("../src/konsum-cli.mjs"), [
     "--config",
@@ -48,7 +50,9 @@ test.serial("cli list category", async t => {
     "--config",
     pn("../config"),
     "restore",
-    pn("../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt")
+    pn(
+      "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
+    )
   ]);
   const p = await execa(pn("../src/konsum-cli.mjs"), [
     "--config",
@@ -64,20 +68,27 @@ test.serial("cli restore database", async t => {
     "--config",
     pn("../config"),
     "restore",
-    pn("../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt")
+    pn(
+      "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
+    )
   ]);
+
   t.regex(p.stdout, /database-version-3.txt restored/);
 });
 
 test.serial("cli backup database", async t => {
+  const dumpFile = pn("../build/database.txt");
   await mkdir(pn("../build"), { recursive: true });
   const p = await execa(pn("../src/konsum-cli.mjs"), [
     "--config",
     pn("../config"),
     "backup",
-    pn("../build/database.txt")
+    dumpFile
   ]);
-  t.regex(p.stdout, /database.txt saved/);
+
+  const s = await stat(dumpFile);
+
+  t.true(s.size > 700);
 });
 
 test.serial("cli backup database stdout", async t => {
