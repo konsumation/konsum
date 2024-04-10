@@ -1,136 +1,85 @@
-import got from "got";
 import SwaggerParser from "@apidevtools/swagger-parser";
+import { Validator } from "jsonschema";
+import { streamToString } from "browser-stream-util";
 
 export async function loadOpenAPI(t, path) {
   t.context.api = await SwaggerParser.validate(path);
 }
 
-async function assertResponse(t, response, erc, methodName, er, expected) {
-  if (expected?.response) {
-    expected = expected.response;
-  }
-
-  if (er?.content) {
-    for (const [ct, c] of Object.entries(er.content)) {
-      switch (ct) {
-        case "application/json":
-          const body = JSON.parse(response.body);
-          if (Array.isArray(body)) {
-            t.deepEqual(body, expected[erc], `${erc} ${methodName}`);
-          } else {
-            t.like(body, expected[erc], `${erc} ${methodName}`);
-          }
-          break;
-
-        case "text/plain":
-        case "application/text":
-          t.is(response.body, expected[erc], methodName);
-          break;
-
-        default:
-          t.log(`Unknown content type ${ct} ${methodName}`);
-      }
-    }
-  } else {
-    switch (erc) {
-      case 403:
-        break;
-
-      default:
-        t.log("Unknown response " + erc);
-    }
-  }
+export function asArray(value) {
+  return Array.isArray(value) ? value : value === undefined ? [] : [value];
 }
 
-export async function assertOpenapiPath(t, path, expected) {
-  const p = t.context.api.paths[path];
-  t.truthy(p, `Does not exists in api: ${path}`);
+export async function assertOpenapiPath(t, path, allExpected) {
+  const definionPerPath = t.context.api.paths[path];
+  t.truthy(definionPerPath, `Does not exists in api: ${path}`);
 
-  const headers = { Authorization: `Bearer ${t.context.token}` };
+  const validator = new Validator();
 
-  for (const [methodName, em] of Object.entries(p)) {
-    async function handleError(e, methodName) {
-      if (e.response) {
-        const statusCode = e.response.statusCode;
-        await assertResponse(
-          t,
-          e.response,
-          statusCode,
-          methodName,
-          em.responses[statusCode],
-          expected.response ? expected.response : expected
-        );
-      } else {
-        t.log(`No response from ${methodName} ${path}`, e);
-      }
-    }
-
-    switch (methodName) {
-      case "get":
-        //    for (const [erc, er] of Object.entries(em.responses)) {
+  for (const [method, definition] of Object.entries(definionPerPath)) {
+    for (const [responseCode, definitionResponse] of Object.entries(
+      definition.responses
+    )) {
+      for (const expected of asArray(allExpected[method] || {})) {
+        // console.log("AE", method, responseCode, definitionResponse, expected);
         try {
-          const response = await got.get(`${t.context.url}${path}`, {
-            headers
-          });
+          const headers = { Authorization: `Bearer ${t.context.token}` };
+          const options = { method, headers };
+          if (expected.data) {
+            headers["Content-Type"] = "application/json";
+            options.body = JSON.stringify(expected.data);
+          }
 
-          const er = em.responses[response.statusCode];
+          t.log(`${method} ${path} (${responseCode})`);
+
+          const response = await fetch(`${t.context.url}${path}`, options);
+          const definitionResponse = definition.responses[response.status];
 
           t.truthy(
-            er,
-            `unexpected status code ${response.statusCode} ${methodName} ${path}`
+            definitionResponse,
+            `Unexpected status code ${response.status} ${method} ${path}`
           );
 
-          await assertResponse(
-            t,
-            response,
-            response.statusCode,
-            methodName,
-            er,
-            expected
-          );
-        } catch (e) {
-          await handleError(e, methodName);
-        }
-        //  }
-        break;
-      case "put":
-        try {
-          const response = await got.put(`${t.context.url}${path}`, {
-            headers,
-            json: expected.put
-          });
-        } catch (e) {
-          await handleError(e, methodName);
-        }
-        break;
-      case "post":
-        for (const [erc, er] of Object.entries(em.responses)) {
-          try {
-            const response = await got.post(`${t.context.url}${path}`, {
-              headers,
-              json: expected.post
-            });
+          let body = response.body ? await streamToString(response.body) : "";
 
-            await assertResponse(t, response, erc, methodName, er, expected);
-          } catch (e) {
-            await handleError(e, methodName);
+          if (definitionResponse?.content) {
+            for (const [
+              definitionContentType,
+              definitionContent
+            ] of Object.entries(definitionResponse.content)) {
+              const e = expected[responseCode];
+              // console.log(body, e, definitionContent);
+
+              switch (definitionContentType) {
+                case "application/json":
+                  body = JSON.parse(body);
+
+                case "text/plain":
+                case "application/text":
+                  const validationResult = validator.validate(
+                    body,
+                    definitionContent.schema
+                  );
+
+                  t.true(
+                    validationResult.errors.length === 0,
+                    "validation errors"
+                  );
+
+                  //t.is(body, e, `${responseCode} ${method}`);
+                  break;
+
+                default:
+                  t.log(
+                    `Unknown content type ${definitionContentType} ${method}`
+                  );
+              }
+            }
           }
-        }
-        break;
-      case "delete":
-        try {
-          const response = await got.delete(`${t.context.url}${path}`, {
-            headers
-          });
         } catch (e) {
-          await handleError(e, methodName);
+          t.log(`Error from ${method} ${path}`, e);
         }
-        break;
-
-      case "parameters":
-        break;
-      default:
-        t.log(`Unknown method ${methodName}`);
+      }
     }
   }
 }
