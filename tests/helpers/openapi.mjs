@@ -17,6 +17,7 @@ export async function assertOpenapiPath(t, path, allExpected) {
   const validator = new Validator();
 
   for (const [method, definition] of Object.entries(definionPerPath)) {
+    if(method === 'parameters') { continue; }
     for (const [responseCode, definitionResponse] of Object.entries(
       definition.responses
     )) {
