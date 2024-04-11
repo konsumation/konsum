@@ -123,8 +123,6 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 *   [addRoute](#addroute-9)
 *   [addRoute](#addroute-10)
 *   [addRoute](#addroute-11)
-*   [addRoute](#addroute-12)
-*   [addRoute](#addroute-13)
 
 ## addRoute
 
@@ -158,14 +156,6 @@ At least one entitlement starting with "konsum" is required.
 ## addRoute
 
 Retrieve list of categories.
-
-## addRoute
-
-Add a new category.
-
-## addRoute
-
-Delete a category.
 
 ## addRoute
 
