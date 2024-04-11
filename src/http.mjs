@@ -226,41 +226,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   app.use(router.middleware());
 
-  /**
-   * Retrieve list of categories.
-   */
-  router.addRoute("GET", "/category", restricted, async (ctx, next) => {
-    setNoCacheHeaders(ctx);
-    const categories = [];
-
-    for await (const category of master.categories()) {
-      categories.push(category.toJSON());
-    }
-
-    ctx.body = categories;
-    return next();
-  });
-
-  /**
-   * Add a new category.
-   */
-  router.addRoute(
-    "PUT",
-    "/category/:category",
-    restricted,
-    BodyParser(),
-    async (ctx, next) => {
-      enshureEntitlement(ctx, "konsum.category.add");
-      const category = master.addCategory({
-        name: ctx.params.category,
-        ...ctx.request.body
-      });
-      await category.write(master.context);
-      ctx.body = { message: "updated" };
-      return next();
-    }
-  );
-
   async function withCategory(ctx, cb) {
     const category = await master.category(ctx.params.category);
     if (category) {
@@ -281,23 +246,91 @@ export async function prepareHttpServer(config, sd, master) {
   }
 
   /**
-   * Delete a category.
+   * Retrieve list of categories.
    */
-  router.addRoute(
-    "DELETE",
-    "/category/:category",
-    restricted,
-    async (ctx, next) => {
-      enshureEntitlement(ctx, "konsum.category.delete");
+  router.addRoute("GET", "/category", restricted, async (ctx, next) => {
+    setNoCacheHeaders(ctx);
+    const categories = [];
 
-      await withCategory(ctx, async category => {
-        await category.delete(master.context);
-        ctx.body = { message: "deleted" };
-      });
-
-      return next();
+    for await (const category of master.categories()) {
+      categories.push(category.toJSON());
     }
-  );
+
+    ctx.body = categories;
+    return next();
+  });
+
+  for (const [type, typeDefinition] of Object.entries({
+    category: {
+      factory: LevelMaster.factories.category,
+      select: (ctx, master) => master.category(ctx.params.category)
+    }
+  }))
+  {
+    for (const [method, config] of Object.entries({
+      GET: {
+        entitlement: "get",
+        extra: [restricted],
+        exec: async (ctx, master) => {
+          const object = await typeDefinition.select(ctx, master);
+          if (object) {
+            ctx.body = object.toJSON();
+          } else {
+            ctx.throw(404, `No such ${type}`);
+          }
+        }
+      },
+      PUT: {
+        entitlement: "add",
+        extra: [restricted, BodyParser()],
+        exec: async (ctx, master) => {
+          const object = new typeDefinition.factory({
+            name: ctx.params[type],
+            ...ctx.request.body
+          });
+          await object.write(master.context);
+          ctx.body = { message: "added" };
+        }
+      },
+      POST: {
+        entitlement: "modify",
+        extra: [restricted, BodyParser()],
+        exec: async (ctx, master) => {
+          const object = await typeDefinition.select(ctx, master);
+          if (object) {
+            await object.write(master.context);
+            ctx.body = { message: "modified" };
+          } else {
+            ctx.throw(404, `No such ${type}`);
+          }
+        }
+      },
+      DELETE: {
+        entitlement: "delete",
+        extra: [restricted, BodyParser()],
+        exec: async (ctx, master) => {
+          const object = await typeDefinition.select(ctx, master);
+          if (object) {
+            await object.delete(master.context);
+            ctx.body = { message: "deleted" };
+          } else {
+            ctx.throw(404, `No such ${type}`);
+          }
+        }
+      }
+    })) {
+      router.addRoute(
+        method,
+        `/category/:${type}`,
+        ...config.extra,
+        async (ctx, next) => {
+          enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);
+          await config.exec(ctx, master);
+          return next();
+        }
+      );
+    }
+  }
 
   for (const [method, config] of Object.entries({
     GET: {
