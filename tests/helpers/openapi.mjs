@@ -37,7 +37,7 @@ export async function assertOpenapiPath(t, path, allExpected) {
 
           for (const parameter of parameters) {
             if (parameter.in === "path") {
-              pathParameters[parameter.name] = allExpected?.[method]?.[200]?.parameters?.[parameter.name];
+              pathParameters[parameter.name] = allExpected?.[method]?.parameters?.[parameter.name];
             }
           }
 
@@ -46,6 +46,7 @@ export async function assertOpenapiPath(t, path, allExpected) {
             (match, a) => pathParameters[a]
           );
 
+          
           t.log(`${method} ${url} (${responseCode})`);
 
           const response = await fetch(`${t.context.url}${url}`, options);
