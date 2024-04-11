@@ -40,6 +40,7 @@ test(openapiPathTest, "/category", {});
 
 test.skip(openapiPathTest, "/category/{category}/meter", {
   get: {
+    200: { parameters: { category: "CAT-1" }},
     404: "No such category"
   }
 });

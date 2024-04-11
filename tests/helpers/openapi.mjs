@@ -14,15 +14,17 @@ export async function assertOpenapiPath(t, path, allExpected) {
   const definionPerPath = t.context.api.paths[path];
   t.truthy(definionPerPath, `Does not exists in api: ${path}`);
 
+  const parameters = definionPerPath.parameters || [];
   const validator = new Validator();
 
   for (const [method, definition] of Object.entries(definionPerPath)) {
-    if(method === 'parameters') { continue; }
+    if (method === "parameters") {
+      continue;
+    }
     for (const [responseCode, definitionResponse] of Object.entries(
       definition.responses
     )) {
       for (const expected of asArray(allExpected[method] || {})) {
-        // console.log("AE", method, responseCode, definitionResponse, expected);
         try {
           const headers = { Authorization: `Bearer ${t.context.token}` };
           const options = { method, headers };
@@ -31,9 +33,22 @@ export async function assertOpenapiPath(t, path, allExpected) {
             options.body = JSON.stringify(expected.data);
           }
 
-          t.log(`${method} ${path} (${responseCode})`);
+          const pathParameters = {};
 
-          const response = await fetch(`${t.context.url}${path}`, options);
+          for (const parameter of parameters) {
+            if (parameter.in === "path") {
+              pathParameters[parameter.name] = allExpected?.[method]?.[200]?.parameters?.[parameter.name];
+            }
+          }
+
+          const url = path.replaceAll(
+            /\{(\w+)\}/g,
+            (match, a) => pathParameters[a]
+          );
+
+          t.log(`${method} ${url} (${responseCode})`);
+
+          const response = await fetch(`${t.context.url}${url}`, options);
           const definitionResponse = definition.responses[response.status];
 
           t.truthy(
@@ -49,7 +64,6 @@ export async function assertOpenapiPath(t, path, allExpected) {
               definitionContent
             ] of Object.entries(definitionResponse.content)) {
               const e = expected[responseCode];
-              // console.log(body, e, definitionContent);
 
               switch (definitionContentType) {
                 case "application/json":
@@ -62,12 +76,13 @@ export async function assertOpenapiPath(t, path, allExpected) {
                     definitionContent.schema
                   );
 
-                  t.true(
-                    validationResult.errors.length === 0,
+                  //console.log(validationResult);
+                  t.log(validationResult.errors.join(','));
+
+                  t.is(
+                    validationResult.errors.length, 0,
                     "validation errors"
                   );
-
-                  //t.is(body, e, `${responseCode} ${method}`);
                   break;
 
                 default:
