@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, createReadStream } from "node:fs";
 import { mkdir, rm } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import got from "got";
@@ -33,7 +33,12 @@ const defaultUsers = {
   }
 };
 
-export async function startServer(t, port = 3150, users = defaultUsers) {
+export async function startServer(
+  t,
+  port = 3150,
+  users = defaultUsers,
+  dataFile
+) {
   await mkdir(pn("../../build"), {
     recursive: true
   });
@@ -64,7 +69,11 @@ export async function startServer(t, port = 3150, users = defaultUsers) {
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
-  await wait(50);
+  if (dataFile) {
+    await master.fromText(createReadStream(dataFile, "utf8"));
+  } else {
+    await wait(50);
+  }
 
   const response = await got.post(`http://localhost:${port}/authenticate`, {
     json: {

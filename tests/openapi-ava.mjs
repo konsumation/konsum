@@ -4,7 +4,17 @@ import { startServer, stopServer } from "./helpers/server.mjs";
 import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
 
 test.before(async t => {
-  await startServer(t, 3190);
+  await startServer(
+    t,
+    3190,
+    undefined,
+    fileURLToPath(
+      new URL(
+        "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt",
+        import.meta.url
+      )
+    )
+  );
   await loadOpenAPI(
     t,
     fileURLToPath(
@@ -40,7 +50,7 @@ test(openapiPathTest, "/category", {});
 
 test.skip(openapiPathTest, "/category/{category}/meter", {
   get: {
-    200: { parameters: { category: "CAT-1" }},
+    200: { parameters: { category: "CAT-1" } },
     404: "No such category"
   }
 });
