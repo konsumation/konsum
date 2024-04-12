@@ -122,7 +122,6 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 *   [addRoute](#addroute-8)
 *   [addRoute](#addroute-9)
 *   [addRoute](#addroute-10)
-*   [addRoute](#addroute-11)
 
 ## addRoute
 
@@ -152,10 +151,6 @@ Retrieve service state.
 
 Login to request api token.
 At least one entitlement starting with "konsum" is required.
-
-## addRoute
-
-Retrieve list of categories.
 
 ## addRoute
 
