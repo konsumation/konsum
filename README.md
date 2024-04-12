@@ -118,10 +118,6 @@ see [openapi](https://konsumation.github.io/openapi/index.html)
 *   [addRoute](#addroute-4)
 *   [addRoute](#addroute-5)
 *   [addRoute](#addroute-6)
-*   [addRoute](#addroute-7)
-*   [addRoute](#addroute-8)
-*   [addRoute](#addroute-9)
-*   [addRoute](#addroute-10)
 
 ## addRoute
 
@@ -151,19 +147,3 @@ Retrieve service state.
 
 Login to request api token.
 At least one entitlement starting with "konsum" is required.
-
-## addRoute
-
-List meters/notes of a category.
-
-## addRoute
-
-Add a meter/note to a category.
-
-## addRoute
-
-Update a meter/note.
-
-## addRoute
-
-Delete a meter/note.
