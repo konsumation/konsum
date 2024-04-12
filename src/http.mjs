@@ -249,7 +249,6 @@ export async function prepareHttpServer(config, sd, master) {
   const typeDefinitions = {
     category: {
       path: "/category",
-      one: (ctx, master) => master.category(ctx.params.category),
       all: async (ctx, master) => {
         const objects = [];
 
@@ -262,10 +261,6 @@ export async function prepareHttpServer(config, sd, master) {
     /*
     meter: {
       path: "/category/:category/meter",
-      one: async (ctx, master) => {
-        const parent = typeDefinitions.category.one(ctx, master);
-        return parent.meter(master.context, ctx.params.meter);
-      },
       all: async (ctx, master) => {
         const category = await master.category(ctx.params.category);
         const meter = await category.meters(master.context);
@@ -273,11 +268,6 @@ export async function prepareHttpServer(config, sd, master) {
     },
     note: {
       path: "/category/:category/meter/:meter/note",
-      one: async (ctx, master) => {
-        const category = await master.category(ctx.params.category);
-        const meter = await category.meter(master.context, ctx.params.meter);
-        return meter.note(master.context, ctx.param.note);
-      },
       all: async (ctx, master) => {
         const category = await master.category(ctx.params.category);
         const meter = await category.meter(master.context, ctx.params.meter);
@@ -310,7 +300,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "get",
         extra: [restricted],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.one(ctx, master);
+          const object = await master.one(ctx.params);
           if (object) {
             ctx.body = object.toJSON();
           } else {
@@ -334,7 +324,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "modify",
         extra: [restricted, BodyParser()],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.one(ctx, master);
+          const object = await master.one(ctx.params);
           if (object) {
             await object.write(master.context);
             ctx.body = { message: "modified" };
@@ -347,7 +337,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "delete",
         extra: [restricted],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.one(ctx, master);
+          const object = await master.one(ctx.params);
           if (object) {
             await object.delete(master.context);
             ctx.body = { message: "deleted" };
