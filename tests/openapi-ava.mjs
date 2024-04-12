@@ -31,10 +31,10 @@ test.after(t => stopServer(t));
 test(openapiPathTest, "/authenticate", {
   post: [
     {
-      data: { username: "admin", password: "start123" }
+      request: { body: { username: "admin", password: "start123" } }
     }
     /* {
-      data: { username: "admin", password: "wrong" },
+      request: { body: { username: "admin", password: "wrong" }},
       401: "Authentication failed"
     }*/
   ]
@@ -60,7 +60,7 @@ test.skip(openapiPathTest, "/category/{category}", {
   },
   delete: {
     parameters: { category: "CAT-0" }
-  },
+  }
 });
 
 test.skip(openapiPathTest, "/category/{category}/meter", {

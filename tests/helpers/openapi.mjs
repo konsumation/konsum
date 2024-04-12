@@ -28,16 +28,17 @@ export async function assertOpenapiPath(t, path, allExpected) {
         try {
           const headers = { Authorization: `Bearer ${t.context.token}` };
           const options = { method, headers };
-          if (expected.data) {
+          if (expected?.request?.body) {
             headers["Content-Type"] = "application/json";
-            options.body = JSON.stringify(expected.data);
+            options.body = JSON.stringify(expected.request.body);
           }
 
           const pathParameters = {};
 
           for (const parameter of parameters) {
             if (parameter.in === "path") {
-              pathParameters[parameter.name] = allExpected?.[method]?.parameters?.[parameter.name];
+              pathParameters[parameter.name] =
+                allExpected?.[method]?.parameters?.[parameter.name];
             }
           }
 
@@ -46,7 +47,6 @@ export async function assertOpenapiPath(t, path, allExpected) {
             (match, a) => pathParameters[a]
           );
 
-          
           t.log(`${method} ${url} (${responseCode})`);
 
           const response = await fetch(`${t.context.url}${url}`, options);
@@ -78,12 +78,9 @@ export async function assertOpenapiPath(t, path, allExpected) {
                   );
 
                   //console.log(validationResult);
-                  t.log(validationResult.errors.join(','));
+                  t.log(validationResult.errors.join(","));
 
-                  t.is(
-                    validationResult.errors.length, 0,
-                    "validation errors"
-                  );
+                  t.is(validationResult.errors.length, 0, "validation errors");
                   break;
 
                 default:
