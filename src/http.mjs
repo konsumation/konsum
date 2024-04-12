@@ -225,25 +225,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   app.use(router.middleware());
 
-  async function withCategory(ctx, cb) {
-    const category = await master.category(ctx.params.category);
-    if (category) {
-      await cb(category);
-    } else {
-      ctx.throw(404, "No such category");
-    }
-  }
-
-  async function withMeter(ctx, cb) {
-    const category = await master.category(ctx.params.category);
-    const meter = await category?.meter(master.context, ctx.params.meter);
-    if (meter) {
-      await cb(meter);
-    } else {
-      ctx.throw(404, "No such category or meter");
-    }
-  }
-
   const typeDefinitions = {
     category: {
       paths: ["/category"]
@@ -292,18 +273,12 @@ export async function prepareHttpServer(config, sd, master) {
           selector: "",
           extra: [BodyParser()],
           exec: async (ctx, master) => {
-
-            const attributes = {
-              name: ctx.params[type],
-              ...ctx.request.body
-            };
-
             const parent = await master.one(ctx.params);
-            if(parent) {
-              attributes[parent.type] = parent;
-            }
-
-            const object = new master.factories[type](attributes);
+            const object = new master.factories[type]({
+              name: ctx.params[type],
+              ...ctx.request.body,
+              [parent?.type]: parent
+            });
             await object.write(master.context);
             ctx.body = { message: "added" };
           }
@@ -341,8 +316,6 @@ export async function prepareHttpServer(config, sd, master) {
         if (config.extra) {
           extra.push(...config.extra);
         }
-
-        //console.log(method, `${path}${config.selector}`);
 
         router.addRoute(
           method,
@@ -410,7 +383,7 @@ export async function prepareHttpServer(config, sd, master) {
       }
     },
     DELETE: {
-      extra: [restricted, BodyParser()],
+      extra: [restricted],
       exec: async (ctx, master, object) => {
         enshureEntitlement(ctx, "konsum.value.delete");
         const body = ctx.request.body;
@@ -419,12 +392,13 @@ export async function prepareHttpServer(config, sd, master) {
       }
     }
   })) {
-    for (const [path, access] of Object.entries({
-      "/category/:category/value": withCategory,
-      "/category/:category/meter/:meter/value": withMeter
-    })) {
+    for (const path of [
+      "/category/:category/value",
+      "/category/:category/meter/:meter/value"
+    ]) {
       router.addRoute(method, path, ...config.extra, async (ctx, next) => {
-        await access(ctx, object => config.exec(ctx, master, object));
+        const object = await master.one(ctx.params);
+        await config.exec(ctx, master, object);
         return next();
       });
     }
