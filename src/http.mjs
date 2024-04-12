@@ -5,7 +5,6 @@ import ms from "ms";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
-import { LevelMaster } from "@konsumation/db-level";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
@@ -245,34 +244,42 @@ export async function prepareHttpServer(config, sd, master) {
     }
   }
 
-  /**
-   * Retrieve list of categories.
-   */
-  router.addRoute("GET", "/category", restricted, async (ctx, next) => {
-    setNoCacheHeaders(ctx);
-    const categories = [];
-
-    for await (const category of master.categories()) {
-      categories.push(category.toJSON());
-    }
-
-    ctx.body = categories;
-    return next();
-  });
+  const factories = master.factories;
 
   for (const [type, typeDefinition] of Object.entries({
     category: {
-      factory: LevelMaster.factories.category,
-      select: (ctx, master) => master.category(ctx.params.category)
-    }
-  }))
-  {
+      path: "/category",
+      getOne: (ctx, master) => master.category(ctx.params.category),
+      getAll: async (ctx, master) => {
+        const objects = [];
+
+        for await (const object of master.categories()) {
+          objects.push(object.toJSON());
+        }
+        return objects;
+      }
+    },
+    /*meter: {
+      path: "/category/:category/meter"
+    }*/
+  })) {
+    router.addRoute(
+      "GET",
+      typeDefinition.path,
+      restricted,
+      async (ctx, next) => {
+        setNoCacheHeaders(ctx);
+        ctx.body = await typeDefinition.getAll(ctx, master);
+        return next();
+      }
+    );
+
     for (const [method, config] of Object.entries({
       GET: {
         entitlement: "get",
         extra: [restricted],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.select(ctx, master);
+          const object = await typeDefinition.getOne(ctx, master);
           if (object) {
             ctx.body = object.toJSON();
           } else {
@@ -284,7 +291,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "add",
         extra: [restricted, BodyParser()],
         exec: async (ctx, master) => {
-          const object = new typeDefinition.factory({
+          const object = new factories[type]({
             name: ctx.params[type],
             ...ctx.request.body
           });
@@ -296,7 +303,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "modify",
         extra: [restricted, BodyParser()],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.select(ctx, master);
+          const object = await typeDefinition.getOne(ctx, master);
           if (object) {
             await object.write(master.context);
             ctx.body = { message: "modified" };
@@ -309,7 +316,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "delete",
         extra: [restricted, BodyParser()],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.select(ctx, master);
+          const object = await typeDefinition.getOne(ctx, master);
           if (object) {
             await object.delete(master.context);
             ctx.body = { message: "deleted" };
@@ -321,7 +328,7 @@ export async function prepareHttpServer(config, sd, master) {
     })) {
       router.addRoute(
         method,
-        `/category/:${type}`,
+        `/${type}/:${type}`,
         ...config.extra,
         async (ctx, next) => {
           enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);
@@ -432,12 +439,12 @@ export async function prepareHttpServer(config, sd, master) {
     {
       name: "meter",
       accessor: "meters",
-      factory: LevelMaster.factories.category.factories.meter
+      factory: factories.meter
     },
     {
       name: "note",
       accessor: "notes",
-      factory: LevelMaster.factories.category.factories.meter.factories.note
+      factory: factories.note
     }
   ]) {
     /**
