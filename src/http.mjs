@@ -246,11 +246,11 @@ export async function prepareHttpServer(config, sd, master) {
 
   const factories = master.factories;
 
-  for (const [type, typeDefinition] of Object.entries({
+  const typeDefinitions = {
     category: {
       path: "/category",
-      getOne: (ctx, master) => master.category(ctx.params.category),
-      getAll: async (ctx, master) => {
+      one: (ctx, master) => master.category(ctx.params.category),
+      all: async (ctx, master) => {
         const objects = [];
 
         for await (const object of master.categories()) {
@@ -259,17 +259,48 @@ export async function prepareHttpServer(config, sd, master) {
         return objects;
       }
     },
-    /*meter: {
-      path: "/category/:category/meter"
-    }*/
-  })) {
+    /*
+    meter: {
+      path: "/category/:category/meter",
+      one: async (ctx, master) => {
+        const parent = typeDefinitions.category.one(ctx, master);
+        return parent.meter(master.context, ctx.params.meter);
+      },
+      all: async (ctx, master) => {
+        const category = await master.category(ctx.params.category);
+        const meter = await category.meters(master.context);
+      }
+    },
+    note: {
+      path: "/category/:category/meter/:meter/note",
+      one: async (ctx, master) => {
+        const category = await master.category(ctx.params.category);
+        const meter = await category.meter(master.context, ctx.params.meter);
+        return meter.note(master.context, ctx.param.note);
+      },
+      all: async (ctx, master) => {
+        const category = await master.category(ctx.params.category);
+        const meter = await category.meter(master.context, ctx.params.meter);
+        return meter.notes(master.context);
+      }
+    }
+    */
+  };
+
+  /*
+  typeDefinitions.note.parent = typeDefinitions.meter;
+  typeDefinitions.meter.parent = typeDefinitions.category;
+  typeDefinitions.category.parent = typeDefinitions.master;
+  */
+
+  for (const [type, typeDefinition] of Object.entries(typeDefinitions)) {
     router.addRoute(
       "GET",
       typeDefinition.path,
       restricted,
       async (ctx, next) => {
         setNoCacheHeaders(ctx);
-        ctx.body = await typeDefinition.getAll(ctx, master);
+        ctx.body = await typeDefinition.all(ctx, master);
         return next();
       }
     );
@@ -279,7 +310,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "get",
         extra: [restricted],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.getOne(ctx, master);
+          const object = await typeDefinition.one(ctx, master);
           if (object) {
             ctx.body = object.toJSON();
           } else {
@@ -303,7 +334,7 @@ export async function prepareHttpServer(config, sd, master) {
         entitlement: "modify",
         extra: [restricted, BodyParser()],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.getOne(ctx, master);
+          const object = await typeDefinition.one(ctx, master);
           if (object) {
             await object.write(master.context);
             ctx.body = { message: "modified" };
@@ -314,9 +345,9 @@ export async function prepareHttpServer(config, sd, master) {
       },
       DELETE: {
         entitlement: "delete",
-        extra: [restricted, BodyParser()],
+        extra: [restricted],
         exec: async (ctx, master) => {
-          const object = await typeDefinition.getOne(ctx, master);
+          const object = await typeDefinition.one(ctx, master);
           if (object) {
             await object.delete(master.context);
             ctx.body = { message: "deleted" };
@@ -337,31 +368,6 @@ export async function prepareHttpServer(config, sd, master) {
         }
       );
     }
-  }
-
-  for (const [method, config] of Object.entries({
-    GET: {
-      extra: [restricted],
-      exec: async (ctx, meter) => (ctx.body = meter.toJSON())
-    },
-    PUT: {
-      extra: [restricted, BodyParser()],
-      exec: async (ctx, meter) => (ctx.body = meter.toJSON()) // TODO
-    },
-    POST: {
-      extra: [restricted, BodyParser()],
-      exec: async (ctx, meter) => (ctx.body = meter.toJSON()) // TODO
-    }
-  })) {
-    router.addRoute(
-      method,
-      "/category/:category/meter/:meter/note",
-      ...config.extra,
-      async (ctx, next) => {
-        await withMeter(ctx, async meter => config.exec(ctx, meter));
-        return next();
-      }
-    );
   }
 
   for (const [method, config] of Object.entries({
@@ -541,6 +547,7 @@ export async function prepareHttpServer(config, sd, master) {
       }
     );
   }
+
 
   const server = await new Promise((resolve, reject) => {
     const server = app.listen(config.http.port, error => {
