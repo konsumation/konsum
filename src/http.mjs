@@ -244,119 +244,118 @@ export async function prepareHttpServer(config, sd, master) {
     }
   }
 
-  const factories = master.factories;
-
   const typeDefinitions = {
     category: {
-      path: "/category",
-      all: async (ctx, master) => {
-        const objects = [];
-
-        for await (const object of master.categories()) {
-          objects.push(object.toJSON());
-        }
-        return objects;
-      }
+      paths: ["/category"]
     },
-    /*
     meter: {
-      path: "/category/:category/meter",
-      all: async (ctx, master) => {
-        const category = await master.category(ctx.params.category);
-        const meter = await category.meters(master.context);
-      }
+      paths: ["/category/:category/meter"]
     },
     note: {
-      path: "/category/:category/meter/:meter/note",
-      all: async (ctx, master) => {
-        const category = await master.category(ctx.params.category);
-        const meter = await category.meter(master.context, ctx.params.meter);
-        return meter.notes(master.context);
-      }
+      paths: [
+        "/category/:category/note",
+        "/category/:category/meter/:meter/note"
+      ]
     }
-    */
   };
 
-  /*
-  typeDefinitions.note.parent = typeDefinitions.meter;
-  typeDefinitions.meter.parent = typeDefinitions.category;
-  typeDefinitions.category.parent = typeDefinitions.master;
-  */
-
   for (const [type, typeDefinition] of Object.entries(typeDefinitions)) {
-    router.addRoute(
-      "GET",
-      typeDefinition.path,
-      restricted,
-      async (ctx, next) => {
+    for (const path of typeDefinition.paths) {
+      router.addRoute("GET", path, restricted, async (ctx, next) => {
         setNoCacheHeaders(ctx);
-        ctx.body = await typeDefinition.all(ctx, master);
-        return next();
-      }
-    );
 
-    for (const [method, config] of Object.entries({
-      GET: {
-        entitlement: "get",
-        extra: [restricted],
-        exec: async (ctx, master) => {
-          const object = await master.one(ctx.params);
-          if (object) {
-            ctx.body = object.toJSON();
-          } else {
-            ctx.throw(404, `No such ${type}`);
+        const objects = [];
+
+        for await (const object of master.all(ctx.params)) {
+          objects.push(object.toJSON());
+        }
+
+        ctx.body = objects;
+        return next();
+      });
+
+      for (const [method, config] of Object.entries({
+        GET: {
+          entitlement: "get",
+          selector: `/:${type}`,
+          exec: async (ctx, master) => {
+            const object = await master.one(ctx.params);
+            if (object) {
+              ctx.body = object.toJSON();
+            } else {
+              ctx.throw(404, `No such ${type}`);
+            }
           }
-        }
-      },
-      PUT: {
-        entitlement: "add",
-        extra: [restricted, BodyParser()],
-        exec: async (ctx, master) => {
-          const object = new factories[type]({
-            name: ctx.params[type],
-            ...ctx.request.body
-          });
-          await object.write(master.context);
-          ctx.body = { message: "added" };
-        }
-      },
-      POST: {
-        entitlement: "modify",
-        extra: [restricted, BodyParser()],
-        exec: async (ctx, master) => {
-          const object = await master.one(ctx.params);
-          if (object) {
+        },
+        PUT: {
+          entitlement: "add",
+          selector: "",
+          extra: [BodyParser()],
+          exec: async (ctx, master) => {
+
+            const attributes = {
+              name: ctx.params[type],
+              ...ctx.request.body
+            };
+
+            const parent = await master.one(ctx.params);
+            if(parent) {
+              attributes[parent.type] = parent;
+            }
+
+            const object = new master.factories[type](attributes);
             await object.write(master.context);
-            ctx.body = { message: "modified" };
-          } else {
-            ctx.throw(404, `No such ${type}`);
+            ctx.body = { message: "added" };
+          }
+        },
+        POST: {
+          entitlement: "modify",
+          selector: `/:${type}`,
+          extra: [BodyParser()],
+          exec: async (ctx, master) => {
+            const object = await master.one(ctx.params);
+            if (object) {
+              await object.write(master.context);
+              ctx.body = { message: "modified" };
+            } else {
+              ctx.throw(404, `No such ${type}`);
+            }
+          }
+        },
+        DELETE: {
+          entitlement: "delete",
+          selector: `/:${type}`,
+          exec: async (ctx, master) => {
+            const object = await master.one(ctx.params);
+
+            if (object) {
+              await object.delete(master.context);
+              ctx.body = { message: "deleted" };
+            } else {
+              ctx.throw(404, `No such ${type}`);
+            }
           }
         }
-      },
-      DELETE: {
-        entitlement: "delete",
-        extra: [restricted],
-        exec: async (ctx, master) => {
-          const object = await master.one(ctx.params);
-          if (object) {
-            await object.delete(master.context);
-            ctx.body = { message: "deleted" };
-          } else {
-            ctx.throw(404, `No such ${type}`);
-          }
+      })) {
+        const extra = [restricted];
+        if (config.extra) {
+          extra.push(...config.extra);
         }
+
+        //console.log(method, `${path}${config.selector}`);
+
+        router.addRoute(
+          method,
+          `${path}${config.selector}`,
+          extra,
+          async (ctx, next) => {
+            enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);
+            setNoCacheHeaders(ctx);
+            await config.exec(ctx, master);
+            return next();
+          }
+        );
       }
-    })) {
-      router.addRoute(
-        method,
-        `/${type}/:${type}`,
-        ...config.extra,
-        async (ctx, next) => {
-          enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);
-          await config.exec(ctx, master);
-          return next();
-        }
-      );
     }
   }
 
@@ -430,114 +429,6 @@ export async function prepareHttpServer(config, sd, master) {
       });
     }
   }
-
-  for (const type of [
-    {
-      name: "meter",
-      accessor: "meters",
-      factory: factories.meter
-    },
-    {
-      name: "note",
-      accessor: "notes",
-      factory: factories.note
-    }
-  ]) {
-    /**
-     * List meters/notes of a category.
-     */
-    router.addRoute(
-      "GET",
-      `/category/:category/${type.name}`,
-      restricted,
-      async (ctx, next) => {
-        await withCategory(ctx, async category => {
-          setNoCacheHeaders(ctx);
-
-          const details = [];
-
-          for await (const detail of category[type.accessor](master.context)) {
-            details.push(detail.toJSON());
-          }
-
-          ctx.body = details;
-        });
-
-        return next();
-      }
-    );
-
-    /**
-     * Add a meter/note to a category.
-     */
-    router.addRoute(
-      "PUT",
-      `/category/:category/${type.name}`,
-      restricted,
-      BodyParser(),
-      async (ctx, next) => {
-        enshureEntitlement(ctx, `konsum.${type.name}.add`);
-        await withCategory(ctx, async category => {
-          setNoCacheHeaders(ctx);
-
-          const body = ctx.request.body;
-          body.category = category;
-          const t = new type.factory(body);
-          await t.write(master.context);
-
-          ctx.body = { message: "inserted" };
-        });
-
-        return next();
-      }
-    );
-
-    /**
-     * Update a meter/note.
-     */
-    router.addRoute(
-      "POST",
-      `/category/:category/${type.name}`,
-      restricted,
-      BodyParser(),
-      async (ctx, next) => {
-        enshureEntitlement(ctx, `konsum.${type.name}.modify`);
-        await withCategory(ctx, async category => {
-          setNoCacheHeaders(ctx);
-
-          // TODO update type
-          //category[type](database);
-
-          ctx.body = {};
-        });
-
-        return next();
-      }
-    );
-
-    /**
-     * Delete a meter/note.
-     */
-    router.addRoute(
-      "DELETE",
-      `/category/:category/${type.name}`,
-      restricted,
-      async (ctx, next) => {
-        enshureEntitlement(ctx, `konsum.${type.name}.delete`);
-        await withCategory(ctx, async category => {
-          setNoCacheHeaders(ctx);
-
-          // TODO delete type
-          //category[type](database);
-
-          ctx.body = {};
-        });
-
-        return next();
-      }
-    );
-  }
-
 
   const server = await new Promise((resolve, reject) => {
     const server = app.listen(config.http.port, error => {

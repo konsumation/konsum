@@ -15,8 +15,17 @@ test("list categories", async t => {
   t.is(response.statusCode, 200);
 });
 
-test("update category", async t => {
-  const response = await got.put(`${t.context.url}/category/CAT7`, {
+test.only("update category", async t => {
+  let response = await got.put(`${t.context.url}/category`, {
+    headers: { Authorization: `Bearer ${t.context.token}` },
+    json: {
+      name: "CAT7",
+      description: "a new Unit",
+      unit: "m3"
+    }
+  });
+
+  response = await got.post(`${t.context.url}/category/CAT7`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
       description: "a new Unit",
@@ -38,10 +47,23 @@ test("delete category unknown", async t => {
   }
 });
 
-test("delete category", async t => {
-  let response = await got.put(`${t.context.url}/category/CAT7`, {
+test("add category", async t => {
+  let response = await got.put(`${t.context.url}/category`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
+      name: "CAT8",
+      description: "a new Unit",
+      unit: "m3"
+    }
+  });
+  t.is(response.statusCode, 200);
+});
+
+test("delete category", async t => {
+  let response = await got.put(`${t.context.url}/category`, {
+    headers: { Authorization: `Bearer ${t.context.token}` },
+    json: {
+      name: "CAT7",
       description: "a new Unit",
       unit: "m3"
     }
