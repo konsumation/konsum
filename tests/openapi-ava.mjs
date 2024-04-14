@@ -63,21 +63,33 @@ test.skip(openapiPathTest, "/category/{category}", {
   }
 });
 
+test(openapiPathTest, "/category/{category}/value", {
+  get: {
+    parameters: { category: "CAT-0" }
+  }
+});
+
 test(openapiPathTest, "/category/{category}/meter", {
   get: {
     parameters: { category: "CAT-0" }
   }
 });
 
-test.skip(openapiPathTest, "/category/{category}/meter/{meter}/note", {
+test(openapiPathTest, "/category/{category}/note", {
   get: {
-    parameters: { category: "CAT-0", meter: "M1" }
+    parameters: { category: "CAT-0" }
   }
 });
 
-test.skip(openapiPathTest, "/category/{category}/meter/{meter}/value", {
+test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
   get: {
-    404: "No such category or meter"
+    parameters: { category: "CAT-0", meter: "M-1" }
+  }
+});
+
+test(openapiPathTest, "/category/{category}/meter/{meter}/value", {
+  get: {
+    parameters: { category: "CAT-0", meter: "M-1" }
   }
 });
 
@@ -92,14 +104,6 @@ test(openapiPathTest, "/admin/backup", {
   }
 });
 
-test.skip(openapiPathTest, "/admin/reload", {
-  get: {
-    403: "missing konsum.admin.reload"
-  }
-});
+test.skip(openapiPathTest, "/admin/reload", {});
 
-test.skip(openapiPathTest, "/admin/stop", {
-  get: {
-    403: "missing konsum.admin.stop"
-  }
-});
+test.skip(openapiPathTest, "/admin/stop", {});
