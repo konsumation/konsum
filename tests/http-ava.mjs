@@ -15,11 +15,10 @@ test("list categories", async t => {
   t.is(response.statusCode, 200);
 });
 
-test.only("update category", async t => {
-  let response = await got.put(`${t.context.url}/category`, {
+test("update category", async t => {
+  let response = await got.put(`${t.context.url}/category/CAT7`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
-      name: "CAT7",
       description: "a new Unit",
       unit: "m3"
     }
@@ -48,10 +47,9 @@ test("delete category unknown", async t => {
 });
 
 test("add category", async t => {
-  let response = await got.put(`${t.context.url}/category`, {
+  let response = await got.put(`${t.context.url}/category/CAT8`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
-      name: "CAT8",
       description: "a new Unit",
       unit: "m3"
     }
@@ -60,10 +58,9 @@ test("add category", async t => {
 });
 
 test("delete category", async t => {
-  let response = await got.put(`${t.context.url}/category`, {
+  let response = await got.put(`${t.context.url}/category/CAT7`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
-      name: "CAT7",
       description: "a new Unit",
       unit: "m3"
     }
@@ -113,20 +110,23 @@ test("list category meters", async t => {
 test("insert category meters", async t => {
   const master = t.context.master;
   const catName = "CAT2";
+  const meterName = "M-3";
 
   const category = master.addCategory({ name: catName, unit: "kWh" });
   await category.write(master.context);
 
-  let response = await got.put(`${t.context.url}/category/${catName}/meter`, {
-    headers: { Authorization: `Bearer ${t.context.token}` },
-    json: {
-      name: "M-3",
-      fractionalDigits: 2,
-      serial: "123456",
-      unit: "kWh",
-      validFrom: "1970-01-01T00:00:00.000Z"
+  let response = await got.put(
+    `${t.context.url}/category/${catName}/meter/${meterName}`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` },
+      json: {
+        fractionalDigits: 2,
+        serial: "123456",
+        unit: "kWh",
+        validFrom: "1970-01-01T00:00:00.000Z"
+      }
     }
-  });
+  );
 
   t.is(response.statusCode, 200);
 
@@ -138,7 +138,7 @@ test("insert category meters", async t => {
 
   t.deepEqual(JSON.parse(response.body), [
     {
-      name: "M-3",
+      name: meterName,
       fractionalDigits: 2,
       serial: "123456",
       unit: "kWh",
@@ -227,7 +227,7 @@ test.serial("can insert + get values", async t => {
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
-test.serial("can insert + can delete", async t => {
+test("can insert + can delete", async t => {
   const master = t.context.master;
   const catName = "CAT1";
   const meterName = "M1";
