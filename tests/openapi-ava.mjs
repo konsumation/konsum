@@ -48,15 +48,17 @@ test(openapiPathTest, "/state", {
 
 test(openapiPathTest, "/category", {});
 
-test.skip(openapiPathTest, "/category/{category}", {
+test(openapiPathTest, "/category/{category}", {
   get: {
     parameters: { category: "CAT-0" }
   },
   put: {
-    parameters: { category: "CAT-0" }
+    parameters: { category: "CAT-0" },
+    body: { unit: "m3" }
   },
   post: {
-    parameters: { category: "CAT-0" }
+    parameters: { category: "CAT-0" },
+    body: { description: "post" }
   },
   delete: {
     parameters: { category: "CAT-0" }
