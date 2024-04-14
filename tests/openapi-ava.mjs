@@ -63,21 +63,15 @@ test.skip(openapiPathTest, "/category/{category}", {
   }
 });
 
-test.skip(openapiPathTest, "/category/{category}/meter", {
+test(openapiPathTest, "/category/{category}/meter", {
   get: {
-    parameters: { category: "CAT-0" }
-  },
-  post: {
-    parameters: { category: "CAT-0" }
-  },
-  put: {
     parameters: { category: "CAT-0" }
   }
 });
 
 test.skip(openapiPathTest, "/category/{category}/meter/{meter}/note", {
   get: {
-    404: "No such category or meter"
+    parameters: { category: "CAT-0", meter: "M1" }
   }
 });
 
