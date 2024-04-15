@@ -18,6 +18,8 @@ const defaultUsers = {
     entitlements: [
       "konsum",
       "konsum.admin.backup",
+      "konsum.admin.reload",
+      "konsum.admin.stop",
       "konsum.category.add",
       "konsum.category.modify",
       "konsum.category.delete",

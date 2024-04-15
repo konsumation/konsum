@@ -108,4 +108,4 @@ test(openapiPathTest, "/admin/backup", {
 
 test.skip(openapiPathTest, "/admin/reload", {});
 
-test.skip(openapiPathTest, "/admin/stop", {});
+test(openapiPathTest, "/admin/stop", {});
