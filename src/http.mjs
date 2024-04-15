@@ -242,10 +242,14 @@ export async function prepareHttpServer(config, sd, master) {
 
   for (const [type, typeDefinition] of Object.entries(typeDefinitions)) {
     for (const path of typeDefinition.paths) {
+      const parts = path.split("/");
+
       router.addRoute("GET", path, restricted, async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
         const objects = [];
+
+        ctx.params[parts[parts.length - 1]] = "*";
 
         for await (const object of master.all(ctx.params)) {
           objects.push(object.toJSON());
@@ -270,12 +274,15 @@ export async function prepareHttpServer(config, sd, master) {
         },
         PUT: {
           entitlement: "add",
-          selector: "",
+          selector: `/:${type}`,
           extra: [BodyParser()],
           exec: async (ctx, master) => {
+            const name = ctx.params[type];
+            delete ctx.params[type];
             const parent = await master.one(ctx.params);
+
             const object = new master.factories[type]({
-              name: ctx.params[type],
+              name,
               ...ctx.request.body,
               [parent?.type]: parent
             });
@@ -371,12 +378,12 @@ export async function prepareHttpServer(config, sd, master) {
         enshureEntitlement(ctx, "konsum.value.add");
         const values = ctx.request.body;
 
-        for (const v of Array.isArray(values) ? values : [values]) {
-          await object.writeValue(
-            master.context,
-            v.time === undefined ? new Date() : new Date(v.time),
-            v.value
-          );
+        for (const attributes of Array.isArray(values) ? values : [values]) {
+          attributes.date =
+            attributes.date === undefined
+              ? new Date()
+              : new Date(attributes.date);
+          await object.addValue(master.context, attributes);
         }
 
         ctx.body = { message: "inserted" };
@@ -387,7 +394,7 @@ export async function prepareHttpServer(config, sd, master) {
       exec: async (ctx, master, object) => {
         enshureEntitlement(ctx, "konsum.value.delete");
         const body = ctx.request.body;
-        await object.deleteValue(master.context, new Date(body.key));
+        await object.deleteValue(master.context, new Date(ctx.params.date));
         ctx.body = { message: "deleted" };
       }
     }

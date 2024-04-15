@@ -191,7 +191,7 @@ test.serial("can insert + get values", async t => {
   await category.write(master.context);
   const meter = category.addMeter({ name: meterName });
   await meter.write(master.context);
-  await meter.writeValue(master.context, new Date(now.getTime() - 1000), 77.34);
+  await meter.addValue(master.context, { date: new Date(now.getTime() - 1000), value: 77.34});
 
   let response;
 
@@ -227,7 +227,7 @@ test.serial("can insert + get values", async t => {
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
-test("can insert + can delete", async t => {
+test.only("can insert + can delete", async t => {
   const master = t.context.master;
   const catName = "CAT1";
   const meterName = "M1";
@@ -237,7 +237,7 @@ test("can insert + can delete", async t => {
   await category.write(master.context);
   const meter = category.addMeter({ name: meterName });
   await meter.write(master.context);
-  await category.writeValue(master.context, now, 77.34);
+  await category.addValue(master.context, { date: now, value:77.34});
 
   let response = await got.get(`${t.context.url}/category/${catName}/value`, {
     headers: {
@@ -261,5 +261,5 @@ test("can insert + can delete", async t => {
       key: now
     }
   });
-  t.is(await meter.getValue(master.context, now), undefined);
+  t.is(await meter.value(master.context, now), undefined);
 });

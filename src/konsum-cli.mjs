@@ -75,10 +75,10 @@ program
 
     date = new Date(date);
 
-    const c = await master.category(cName);
+    const category = await master.category(cName);
 
-    if (c) {
-      await c.writeValue(master.context, date, value);
+    if (category) {
+      await category.addValue(master.context, {date, value});
     } else {
       console.log("No such category", cName);
     }
