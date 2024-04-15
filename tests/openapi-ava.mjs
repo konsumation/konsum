@@ -106,6 +106,6 @@ test(openapiPathTest, "/admin/backup", {
   }
 });
 
-test.skip(openapiPathTest, "/admin/reload", {});
+test(openapiPathTest, "/admin/reload", {});
 
 test(openapiPathTest, "/admin/stop", {});

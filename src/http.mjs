@@ -72,6 +72,7 @@ export async function prepareHttpServer(config, sd, master) {
   router.addRoute("POST", "/admin/reload", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.reload");
     sd.notify("RELOADING=1");
+    ctx.body = "reload...";
     // TODO
     return next();
   });
