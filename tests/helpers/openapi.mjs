@@ -47,9 +47,14 @@ export async function assertOpenapiPath(t, path, allExpected) {
             (match, a) => pathParameters[a]
           );
 
-          t.log(`${method} ${url} (${responseCode})`);
-
           const response = await fetch(`${t.context.url}${url}`, options);
+
+          t.log(
+            `${method} ${url} ${options.body || ""} (${responseCode}) ${
+              response.status
+            }`
+          );
+
           const definitionResponse = definition.responses[response.status];
 
           t.truthy(

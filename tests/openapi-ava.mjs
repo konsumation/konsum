@@ -28,15 +28,17 @@ test.before(async t => {
 
 test.after(t => stopServer(t));
 
+const parameters = { category: "CAT-0", meter: "M-1" };
+
 test(openapiPathTest, "/authenticate", {
   post: [
     {
       request: { body: { username: "admin", password: "start123" } }
-    }
-    /* {
-      request: { body: { username: "admin", password: "wrong" }},
+    },
+    {
+      request: { body: { username: "admin", password: "wrong" } },
       401: "Authentication failed"
-    }*/
+    }
   ]
 });
 
@@ -50,48 +52,48 @@ test(openapiPathTest, "/category", {});
 
 test(openapiPathTest, "/category/{category}", {
   get: {
-    parameters: { category: "CAT-0" }
+    parameters
   },
   put: {
-    parameters: { category: "CAT-0" },
-    body: { unit: "m3" }
+    parameters,
+    request: { body: { unit: "m3" } }
   },
   post: {
-    parameters: { category: "CAT-0" },
-    body: { description: "post" }
+    parameters,
+    request: { body: { description: "post" } }
   },
   delete: {
-    parameters: { category: "CAT-0" }
+    parameters
   }
 });
 
 test(openapiPathTest, "/category/{category}/value", {
   get: {
-    parameters: { category: "CAT-0" }
+    parameters
   }
 });
 
 test(openapiPathTest, "/category/{category}/meter", {
   get: {
-    parameters: { category: "CAT-0" }
+    parameters
   }
 });
 
 test(openapiPathTest, "/category/{category}/note", {
   get: {
-    parameters: { category: "CAT-0" }
+    parameters
   }
 });
 
 test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
   get: {
-    parameters: { category: "CAT-0", meter: "M-1" }
+    parameters
   }
 });
 
 test(openapiPathTest, "/category/{category}/meter/{meter}/value", {
   get: {
-    parameters: { category: "CAT-0", meter: "M-1" }
+    parameters
   }
 });
 
