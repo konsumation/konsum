@@ -281,7 +281,6 @@ export async function prepareHttpServer(config, sd, master) {
             const name = ctx.params[type];
             delete ctx.params[type];
             const parent = await master.one(ctx.params);
-
             const object = new master.factories[type]({
               name,
               ...ctx.request.body,
