@@ -238,8 +238,16 @@ export async function prepareHttpServer(config, sd, master) {
         "/category/:category/note",
         "/category/:category/meter/:meter/note"
       ]
+    },
+    value: {
+      paths: [
+        "/category/:category/value",
+        "/category/:category/meter/:meter/value"
+      ]
     }
   };
+
+  const context = master.context;
 
   for (const [type, typeDefinition] of Object.entries(typeDefinitions)) {
     for (const path of typeDefinition.paths) {
@@ -248,15 +256,30 @@ export async function prepareHttpServer(config, sd, master) {
       router.addRoute("GET", path, restricted, async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
+        const options = {
+          reverse: isTrue(ctx.query.reverse),
+          limit: parseInt(ctx.query.limit, 10) || -1
+        };
+
         const objects = [];
 
-        ctx.params[parts[parts.length - 1]] = "*";
+        switch (ctx.accepts("json", "text")) {
+          case "json":
+            for await (const object of master.all(
+              { ...ctx.params, [parts[parts.length - 1]]: "*" },
+              options
+            )) {
+              objects.push(object.toJSON());
+            }
 
-        for await (const object of master.all(ctx.params)) {
-          objects.push(object.toJSON());
+            ctx.body = objects;
+            break;
+          case "text":
+            ctx.response.set("content-type", "text/plain");
+            //  ctx.body = await lineToStream(object.text(context));
+            break;
         }
 
-        ctx.body = objects;
         return next();
       });
 
@@ -286,7 +309,7 @@ export async function prepareHttpServer(config, sd, master) {
               ...ctx.request.body,
               [parent?.type]: parent
             });
-            await object.write(master.context);
+            await object.write(context);
             ctx.body = { message: "added" };
           }
         },
@@ -297,7 +320,7 @@ export async function prepareHttpServer(config, sd, master) {
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
             if (object) {
-              await object.write(master.context);
+              await object.write(context);
               ctx.body = { message: "modified" };
             } else {
               ctx.throw(404, `No such ${type}`);
@@ -311,7 +334,7 @@ export async function prepareHttpServer(config, sd, master) {
             const object = await master.one(ctx.params);
 
             if (object) {
-              await object.delete(master.context);
+              await object.delete(context);
               ctx.body = { message: "deleted" };
             } else {
               ctx.throw(404, `No such ${type}`);
@@ -336,78 +359,6 @@ export async function prepareHttpServer(config, sd, master) {
           }
         );
       }
-    }
-  }
-
-  for (const [method, config] of Object.entries({
-    GET: {
-      extra: [restricted],
-      exec: async (ctx, master, object) => {
-        setNoCacheHeaders(ctx);
-        const reverse = isTrue(ctx.query.reverse);
-        const limit =
-          ctx.query.limit === undefined ? -1 : parseInt(ctx.query.limit, 10);
-        const options = { reverse, limit };
-
-        switch (ctx.accepts("json", "text")) {
-          case "json":
-            const it = object.values(master.context, options);
-
-            const values = [];
-
-            for await (const { value, date } of it) {
-              values.push({ value, date });
-            }
-
-            ctx.body = values;
-            break;
-
-          case "text":
-            ctx.response.set("content-type", "text/plain");
-            ctx.body = await lineToStream(object.text(master.context));
-            break;
-
-          default:
-            ctx.throw(406, "json, or text only");
-        }
-      }
-    },
-    POST: {
-      extra: [restricted, BodyParser()],
-      exec: async (ctx, master, object) => {
-        enshureEntitlement(ctx, "konsum.value.add");
-        const values = ctx.request.body;
-
-        for (const attributes of Array.isArray(values) ? values : [values]) {
-          attributes.date =
-            attributes.date === undefined
-              ? new Date()
-              : new Date(attributes.date);
-          await object.addValue(master.context, attributes);
-        }
-
-        ctx.body = { message: "inserted" };
-      }
-    },
-    DELETE: {
-      extra: [restricted],
-      exec: async (ctx, master, object) => {
-        enshureEntitlement(ctx, "konsum.value.delete");
-        const body = ctx.request.body;
-        await object.deleteValue(master.context, new Date(ctx.params.date));
-        ctx.body = { message: "deleted" };
-      }
-    }
-  })) {
-    for (const path of [
-      "/category/:category/value",
-      "/category/:category/meter/:meter/value"
-    ]) {
-      router.addRoute(method, path, ...config.extra, async (ctx, next) => {
-        const object = await master.one(ctx.params);
-        await config.exec(ctx, master, object);
-        return next();
-      });
     }
   }
 
