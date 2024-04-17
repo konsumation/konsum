@@ -73,15 +73,19 @@ program
   .action(async (cName, value, date) => {
     const { master } = await prepareConfig();
 
+    const context = master.context;
     date = new Date(date);
 
-    const category = await master.category(cName);
+    const category = await master.category(context, cName);
 
     if (category) {
-      await category.addValue(master.context, {date, value});
+      const v = await category.addValue(context, { date, value });
+      await v.write(context);
     } else {
       console.error("No such category", cName);
     }
+
+    await master.close();
   });
 
 program.parse(process.argv);
