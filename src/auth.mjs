@@ -46,7 +46,7 @@ export async function authenticate(config, username, password) {
         case 49: // invalid credentials
           break;
         default:
-          console.log(ex);
+          console.error(ex);
       }
       throw ex;
     } finally {

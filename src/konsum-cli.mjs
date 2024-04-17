@@ -80,7 +80,7 @@ program
     if (category) {
       await category.addValue(master.context, {date, value});
     } else {
-      console.log("No such category", cName);
+      console.error("No such category", cName);
     }
   });
 
