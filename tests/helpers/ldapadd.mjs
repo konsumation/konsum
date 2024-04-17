@@ -22,7 +22,7 @@ async function importLDIF(file, options) {
     try {
       await client.add(entry.dn, entry.attributes);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
