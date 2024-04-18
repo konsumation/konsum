@@ -78,11 +78,11 @@ test("list category meters", async t => {
 
   const catName = "CAT1";
 
-  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  const category = master.addCategory(context, { name: catName, unit: "kWh" });
   await category.write(context);
-  const meter1 = category.addMeter(context,{ name: "M-1", serial: "12345" });
+  const meter1 = category.addMeter(context, { name: "M-1", serial: "12345" });
   await meter1.write(context);
-  const meter2 = category.addMeter(context,{ name: "M-2", serial: "123456" });
+  const meter2 = category.addMeter(context, { name: "M-2", serial: "123456" });
   await meter2.write(context);
 
   const response = await got.get(`${t.context.url}/category/${catName}/meter`, {
@@ -116,7 +116,7 @@ test("insert category meters", async t => {
   const catName = "CAT2";
   const meterName = "M-3";
 
-  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  const category = master.addCategory(context, { name: catName, unit: "kWh" });
   await category.write(context);
 
   let response = await got.put(
@@ -156,15 +156,23 @@ test("list category notes", async t => {
   const master = t.context.master;
   const context = master.context;
 
-  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  const category = master.addCategory(context, { name: catName, unit: "kWh" });
   await category.write(context);
-  const meter = category.addMeter(context,{ name: catName });
+  const meter = category.addMeter(context, { name: catName });
   await meter.write(context);
 
   const time = Date.now();
-  const note1 = meter.addNote(context,{ name: time - 1, meter, description: "a text" });
+  const note1 = meter.addNote(context, {
+    name: time - 1,
+    meter,
+    description: "a text"
+  });
   await note1.write(context);
-  const note2 = meter.addNote(context,{ name: time, meter, description: "a text" });
+  const note2 = meter.addNote(context, {
+    name: time,
+    meter,
+    description: "a text"
+  });
   await note2.write(context);
 
   const response = await got.get(`${t.context.url}/category/${catName}/note`, {
@@ -186,16 +194,16 @@ test("list category notes", async t => {
   */
 });
 
-test.serial("can insert + get values", async t => {
+test("can insert + get values", async t => {
   const master = t.context.master;
   const context = master.context;
   const catName = "CAT1";
   const meterName = "M1";
   const now = new Date();
 
-  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  const category = master.addCategory(context, { name: catName, unit: "kWh" });
   await category.write(context);
-  const meter = category.addMeter(context,{ name: meterName });
+  const meter = category.addMeter(context, { name: meterName });
   await meter.write(context);
   await meter.addValue(context, {
     date: new Date(now.getTime() - 1000),
@@ -257,7 +265,7 @@ test("can insert + can delete", async t => {
   });
 
   await value.write(context);
-
+  
   let response = await got.get(`${t.context.url}/category/${catName}/value`, {
     headers: {
       Accept: "text/plain",

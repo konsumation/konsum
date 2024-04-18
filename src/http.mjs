@@ -27,14 +27,6 @@ function enshureEntitlement(ctx, entitlement) {
   ctx.throw(403, `missing ${entitlement}`);
 }
 
-async function lineToStream(lines) {
-  const a = [];
-  for await (const line of lines) {
-    a.push(line);
-  }
-  return a.join("\n");
-}
-
 function isTrue(v) {
   return v && v !== "false" && v != "0";
 }
@@ -261,22 +253,28 @@ export async function prepareHttpServer(config, sd, master) {
           limit: parseInt(ctx.query.limit, 10) || -1
         };
 
-        const objects = [];
+        const query = { ...ctx.params, [parts[parts.length - 1]]: "*" };
 
         switch (ctx.accepts("json", "text")) {
           case "json":
-            for await (const object of master.all(
-              { ...ctx.params, [parts[parts.length - 1]]: "*" },
-              options
-            )) {
+            const objects = [];
+            for await (const object of master.all(query, options)) {
               objects.push(object.toJSON());
             }
-
             ctx.body = objects;
             break;
+
+          default:
           case "text":
             ctx.response.set("content-type", "text/plain");
-            //  ctx.body = await lineToStream(object.text(context));
+            const lines = [];
+
+            for await (const object of master.all(query, options)) {
+              for await (const line of object.text(context)) {
+                lines.push(line);
+              }
+            }
+            ctx.body = lines.join("\n");
             break;
         }
 
@@ -352,7 +350,7 @@ export async function prepareHttpServer(config, sd, master) {
           `${path}${config.selector}`,
           extra,
           async (ctx, next) => {
-            enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);
+            //  enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);
             setNoCacheHeaders(ctx);
             await config.exec(ctx, master);
             return next();
