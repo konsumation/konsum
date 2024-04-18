@@ -194,7 +194,7 @@ test("list category notes", async t => {
   */
 });
 
-test("can insert + get values", async t => {
+test("insert + get values", async t => {
   const master = t.context.master;
   const context = master.context;
   const catName = "CAT1";
@@ -205,21 +205,33 @@ test("can insert + get values", async t => {
   await category.write(context);
   const meter = category.addMeter(context, { name: meterName });
   await meter.write(context);
-  await meter.addValue(context, {
+  const value = await meter.addValue(context, {
     date: new Date(now.getTime() - 1000),
     value: 77.34
   });
 
+  await value.write(context);
+
   let response;
 
-  response = await got.post(`${t.context.url}/category/${catName}/value`, {
-    headers: { Authorization: `Bearer ${t.context.token}` },
-    json: {
-      value: 78.0
+  response = await got.put(
+    `${
+      t.context.url
+    }/category/${catName}/meter/${meterName}/value/${new Date().toISOString()}`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` },
+      json: {
+        value: 78.0
+      }
     }
-  });
+  );
 
-  t.deepEqual(JSON.parse(response.body), { message: "inserted" });
+  t.deepEqual(JSON.parse(response.body), { message: "added" });
+
+
+  /*for await (const v of meter.values(context)) {
+    console.log(v.toJSON());
+  }*/
 
   response = await got.get(`${t.context.url}/category/${catName}/value`, {
     headers: {
@@ -228,6 +240,7 @@ test("can insert + get values", async t => {
     }
   });
 
+  //t.log(response.body);
   t.regex(response.body, /\s+77.34/);
   t.regex(response.body, /\s+78/);
 
@@ -240,11 +253,12 @@ test("can insert + get values", async t => {
       }
     }
   );
+  t.log(response.body);
 
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
-test("can insert + can delete", async t => {
+test("insert + can delete", async t => {
   const master = t.context.master;
   const context = master.context;
 
@@ -265,14 +279,14 @@ test("can insert + can delete", async t => {
   });
 
   await value.write(context);
-  
+
   let response = await got.get(`${t.context.url}/category/${catName}/value`, {
     headers: {
       Accept: "text/plain",
       Authorization: `Bearer ${t.context.token}`
     }
   });
-  t.log(response.body);
+ // t.log(response.body);
   t.regex(response.body, /\s+77.34/);
 
   response = await got.get(`${t.context.url}/category/${catName}/value`, {
@@ -281,9 +295,13 @@ test("can insert + can delete", async t => {
       Authorization: `Bearer ${t.context.token}`
     }
   });
-  t.is(JSON.parse(response.body)[0].value, 77.34);
 
-  response = await got.delete(`${t.context.url}/category/${catName}/value`, {
+  let result = JSON.parse(response.body)[0];
+ // console.log(result);
+
+  t.is(result.value, 77.34);
+
+  response = await got.delete(`${t.context.url}/category/${catName}/value/${result.date}`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
       key: now
