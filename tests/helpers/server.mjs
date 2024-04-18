@@ -1,5 +1,5 @@
 import { readFileSync, createReadStream } from "node:fs";
-import { mkdir, rm } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import got from "got";
 
@@ -39,21 +39,19 @@ const defaultUsers = {
   }
 };
 
-export async function startServer(
-  t,
-  port = 3150,
-  users = defaultUsers,
-  dataFile
-) {
-  await mkdir(pn("../../build"), {
+export async function createConfig(t, port = 3150, users = defaultUsers) {
+  const configDir = pn(`../../build/config-${port}`);
+
+  await mkdir(configDir, {
     recursive: true
   });
 
-  const file = pn(`../../build/db-${port}`);
+  const databaseFile = pn(`../../build/db-${port}`);
+  const configFile = `${configDir}/config.json`;
   const config = {
     version: "1.2.3",
     database: {
-      "@konsumation/db-level": file
+      "@konsumation/db-level": databaseFile
     },
     auth: {
       jwt: {
@@ -72,6 +70,20 @@ export async function startServer(
     }
   };
 
+  t.context.config = config;
+  t.context.port = config.http.port;
+  t.context.url = `http://localhost:${config.http.port}`;
+  t.context.databaseFile = databaseFile;
+  t.context.configDir = configDir;
+  t.context.configFile = configFile;
+
+  await writeFile(configFile, JSON.stringify(config, undefined, 2), "utf8");
+
+  return config;
+}
+
+export async function startServer(t, port, users, dataFile) {
+  const config = await createConfig(t, port, users);
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
@@ -84,17 +96,13 @@ export async function startServer(
   const response = await got.post(`http://localhost:${port}/authenticate`, {
     json: {
       username: "admin",
-      password: users.admin.password
+      password: config.auth.users.admin.password
     }
   });
 
   t.context.token = JSON.parse(response.body).access_token;
   t.context.master = master;
-  t.context.databaseFile = file;
   t.context.server = server;
-  t.context.config = config;
-  t.context.port = port;
-  t.context.url = `http://localhost:${port}`;
 }
 
 export async function stopServer(t) {

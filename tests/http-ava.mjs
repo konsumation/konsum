@@ -2,7 +2,7 @@ import test from "ava";
 import got from "got";
 import { startServer, stopServer } from "./helpers/server.mjs";
 
-let port = 3150;
+let port = 3151;
 
 test.beforeEach(t => startServer(t, port++));
 test.afterEach(t => stopServer(t));
@@ -74,14 +74,16 @@ test("delete category", async t => {
 
 test("list category meters", async t => {
   const master = t.context.master;
+  const context = master.context;
+
   const catName = "CAT1";
 
-  const category = master.addCategory({ name: catName, unit: "kWh" });
-  await category.write(master.context);
-  const meter1 = category.addMeter({ name: "M-1", serial: "12345" });
-  await meter1.write(master.context);
-  const meter2 = category.addMeter({ name: "M-2", serial: "123456" });
-  await meter2.write(master.context);
+  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  await category.write(context);
+  const meter1 = category.addMeter(context,{ name: "M-1", serial: "12345" });
+  await meter1.write(context);
+  const meter2 = category.addMeter(context,{ name: "M-2", serial: "123456" });
+  await meter2.write(context);
 
   const response = await got.get(`${t.context.url}/category/${catName}/meter`, {
     headers: { Authorization: `Bearer ${t.context.token}` }
@@ -109,11 +111,13 @@ test("list category meters", async t => {
 
 test("insert category meters", async t => {
   const master = t.context.master;
+  const context = master.context;
+
   const catName = "CAT2";
   const meterName = "M-3";
 
-  const category = master.addCategory({ name: catName, unit: "kWh" });
-  await category.write(master.context);
+  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  await category.write(context);
 
   let response = await got.put(
     `${t.context.url}/category/${catName}/meter/${meterName}`,
@@ -150,17 +154,18 @@ test("insert category meters", async t => {
 test("list category notes", async t => {
   const catName = "CAT1";
   const master = t.context.master;
+  const context = master.context;
 
-  const category = master.addCategory({ name: catName, unit: "kWh" });
-  await category.write(master.context);
-  const meter = category.addMeter({ name: catName });
-  await meter.write(master.context);
+  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  await category.write(context);
+  const meter = category.addMeter(context,{ name: catName });
+  await meter.write(context);
 
   const time = Date.now();
-  const note1 = meter.addNote({ name: time - 1, meter, description: "a text" });
-  await note1.write(master.context);
-  const note2 = meter.addNote({ name: time, meter, description: "a text" });
-  await note2.write(master.context);
+  const note1 = meter.addNote(context,{ name: time - 1, meter, description: "a text" });
+  await note1.write(context);
+  const note2 = meter.addNote(context,{ name: time, meter, description: "a text" });
+  await note2.write(context);
 
   const response = await got.get(`${t.context.url}/category/${catName}/note`, {
     headers: { Authorization: `Bearer ${t.context.token}` }
@@ -183,15 +188,16 @@ test("list category notes", async t => {
 
 test.serial("can insert + get values", async t => {
   const master = t.context.master;
+  const context = master.context;
   const catName = "CAT1";
   const meterName = "M1";
   const now = new Date();
 
-  const category = master.addCategory({ name: catName, unit: "kWh" });
-  await category.write(master.context);
-  const meter = category.addMeter({ name: meterName });
-  await meter.write(master.context);
-  await meter.addValue(master.context, {
+  const category = master.addCategory(context,{ name: catName, unit: "kWh" });
+  await category.write(context);
+  const meter = category.addMeter(context,{ name: meterName });
+  await meter.write(context);
+  await meter.addValue(context, {
     date: new Date(now.getTime() - 1000),
     value: 77.34
   });
@@ -230,13 +236,14 @@ test.serial("can insert + get values", async t => {
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
-test.only("can insert + can delete", async t => {
+test("can insert + can delete", async t => {
   const master = t.context.master;
+  const context = master.context;
+
   const catName = "CAT1";
   const meterName = "M1";
   const now = new Date();
 
-  const context = master.context;
   const category = master.addCategory(context, {
     name: catName,
     unit: "kWh"
@@ -257,16 +264,17 @@ test.only("can insert + can delete", async t => {
       Authorization: `Bearer ${t.context.token}`
     }
   });
-  //t.log(response.body);
+  t.log(response.body);
   t.regex(response.body, /\s+77.34/);
+
   response = await got.get(`${t.context.url}/category/${catName}/value`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${t.context.token}`
     }
   });
-
   t.is(JSON.parse(response.body)[0].value, 77.34);
+
   response = await got.delete(`${t.context.url}/category/${catName}/value`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
