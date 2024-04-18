@@ -5,7 +5,7 @@ import { startServer, stopServer } from "./helpers/server.mjs";
 let port = 3151;
 
 test.beforeEach(t => startServer(t, port++));
-test.afterEach(t => stopServer(t));
+test.afterEach.always(t => stopServer(t));
 
 test("list categories", async t => {
   const response = await got.get(`${t.context.url}/category`, {

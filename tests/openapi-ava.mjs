@@ -26,7 +26,7 @@ test.before(async t => {
   );
 });
 
-test.after(t => stopServer(t));
+test.after.always(t => stopServer(t));
 
 const parameters = { category: "CAT-0", meter: "M-1" };
 

@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { execa } from "execa";
 import { createConfig } from "./helpers/server.mjs";
 
-
 test.before(t => createConfig(t));
 
 function pn(path) {
