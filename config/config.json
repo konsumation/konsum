@@ -8,14 +8,18 @@
         "password": "start123",
         "entitlements": [
           "konsum",
+          "konsum.category.get",
           "konsum.category.add",
           "konsum.category.modify",
           "konsum.category.delete",
+          "konsum.value.get",
           "konsum.value.add",
           "konsum.value.delete",
+          "konsum.meter.get",
           "konsum.meter.add",
           "konsum.meter.modify",
           "konsum.meter.delete",
+          "konsum.note.get",
           "konsum.note.add",
           "konsum.note.modify",
           "konsum.note.delete"
