@@ -3,9 +3,7 @@ import { readFileSync, createWriteStream, createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
 import { expand } from "config-expander";
-import { prepareDatabase, defaultDatabaseConfig } from "./database.mjs";
-import { prepareHttpServer, defaultHttpServerConfig } from "./http.mjs";
-import { defaultAuthConfig } from "./auth.mjs";
+import { prepareDatabase, defaultDatabaseConfig,prepareHttpServer, defaultHttpServerConfig,defaultAuthConfig } from "@konsumation/konsum";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));

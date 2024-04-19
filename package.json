@@ -19,6 +19,13 @@
   "bin": {
     "konsum": "src/konsum-cli.mjs"
   },
+  "types": "./types/server.d.mts",
+  "exports": {
+    ".": {
+      "default": "./src/server.mjs",
+      "types": "./types/server.d.mts"
+    }
+  },
   "scripts": {
     "start": "node src/konsum-cli.mjs --config=config start",
     "test": "npm run test:ava",
