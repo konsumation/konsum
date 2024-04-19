@@ -1,8 +1,6 @@
 import { readFileSync, createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import got from "got";
-
 import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
 
@@ -93,14 +91,18 @@ export async function startServer(t, port, users, dataFile) {
     await wait(50);
   }
 
-  const response = await got.post(`http://localhost:${port}/authenticate`, {
-    json: {
+  const response = await fetch(`http://localhost:${port}/authenticate`, {
+    method: "POST",
+    headers: { 'content-type': 'application/json', accept: "application/json" },
+    body: JSON.stringify({
       username: "admin",
       password: config.auth.users.admin.password
-    }
+    })
   });
 
-  t.context.token = JSON.parse(response.body).access_token;
+  console.log(response);
+
+  t.context.token = (await response.json()).access_token;
   t.context.master = master;
   t.context.server = server;
 }
