@@ -103,9 +103,9 @@ export async function assertOpenapiPath(t, path, allExpected) {
   }
 }
 
-export async function openapiPathTest(t, path, expected) {
+export async function openapiPathTest(t, path, expected={}) {
   await assertOpenapiPath(t, path, expected);
 }
 
-openapiPathTest.title = (providedTitle = "openapi", path, expected) =>
+openapiPathTest.title = (providedTitle = "openapi", path, expected={}) =>
   `${providedTitle} ${path} ${Object.keys(expected)}`.trim();

@@ -48,7 +48,7 @@ test(openapiPathTest, "/state", {
   }
 });
 
-test(openapiPathTest, "/category", {});
+test(openapiPathTest, "/category");
 
 test(openapiPathTest, "/category/{category}", {
   get: {
@@ -108,6 +108,5 @@ test(openapiPathTest, "/admin/backup", {
   }
 });
 
-test(openapiPathTest, "/admin/reload", {});
-
-test(openapiPathTest, "/admin/stop", {});
+test(openapiPathTest, "/admin/reload");
+test(openapiPathTest, "/admin/stop");
