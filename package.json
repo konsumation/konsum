@@ -29,8 +29,8 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@konsumation/db-level": "^9.0.6",
-    "@konsumation/db-postgresql": "^4.0.5",
+    "@konsumation/db-level": "^9.0.7",
+    "@konsumation/db-postgresql": "^4.0.6",
     "commander": "^12.0.0",
     "config-expander": "^14.0.0",
     "jsonwebtoken": "^9.0.2",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
-    "@konsumation/db-test": "^4.1.5",
+    "@konsumation/db-test": "^4.1.6",
     "@konsumation/openapi": "^2.2.9",
     "@semantic-release/commit-analyzer": "^12.0.0",
     "@semantic-release/exec": "^6.0.3",
