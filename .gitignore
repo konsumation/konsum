@@ -1,5 +1,6 @@
 build
 bun.lockb
+types
 /node_modules/**
 *.log
 *.dump
