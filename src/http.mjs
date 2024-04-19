@@ -180,24 +180,26 @@ export async function prepareHttpServer(config, sd, master) {
 
     for (const e of entitlements) {
       if (e.startsWith("konsum")) {
+        const jwt = config.auth.jwt;
+
         const claims = {
           name: q.username,
           entitlements: [...entitlements].join(",")
         };
-        if (config.auth.jwt.audience) {
-          claims.audience = config.auth.jwt.audience;
+        if (jwt.audience) {
+          claims.audience = jwt.audience;
         }
 
         const access_token = jsonwebtoken.sign(
           claims,
-          config.auth.jwt.private,
-          config.auth.jwt.options
+          jwt.private,
+          jwt.options
         );
 
         const refresh_token = jsonwebtoken.sign(
           { sequence: refreshTokenSequence },
-          config.auth.jwt.private,
-          { ...config.auth.jwt.options, expiresIn: "90d" }
+          jwt.private,
+          { ...jwt.options, expiresIn: "90d" }
         );
 
         ctx.status = 200;
@@ -205,7 +207,7 @@ export async function prepareHttpServer(config, sd, master) {
           access_token,
           refresh_token,
           token_type: "bearer",
-          expires_in: ms(config.auth.jwt.options?.expiresIn || "1h") / 1000
+          expires_in: ms(jwt.options?.expiresIn || "1h") / 1000
         };
 
         return next();
