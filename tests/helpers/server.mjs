@@ -100,8 +100,6 @@ export async function startServer(t, port, users, dataFile) {
     })
   });
 
-  console.log(response);
-
   t.context.token = (await response.json()).access_token;
   t.context.master = master;
   t.context.server = server;
