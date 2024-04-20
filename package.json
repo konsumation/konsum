@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@konsumation/db-level": "^9.0.7",
-    "@konsumation/db-postgresql": "^4.0.6",
+    "@konsumation/db-postgresql": "^4.1.0",
     "commander": "^12.0.0",
     "config-expander": "^14.0.2",
     "jsonwebtoken": "^9.0.2",
@@ -53,7 +53,7 @@
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
     "@konsumation/db-test": "^4.1.6",
-    "@konsumation/openapi": "^2.2.9",
+    "@konsumation/openapi": "^2.3.0",
     "@semantic-release/commit-analyzer": "^12.0.0",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/release-notes-generator": "^13.0.0",
