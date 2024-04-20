@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
-    "@konsumation/db-test": "^4.1.6",
+    "@konsumation/db-test": "^4.1.7",
     "@konsumation/openapi": "^2.3.0",
     "@semantic-release/commit-analyzer": "^12.0.0",
     "@semantic-release/exec": "^6.0.3",
