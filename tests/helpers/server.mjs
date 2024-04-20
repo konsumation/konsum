@@ -93,7 +93,7 @@ export async function startServer(t, port, users, dataFile) {
 
   const response = await fetch(`http://localhost:${port}/authenticate`, {
     method: "POST",
-    headers: { 'content-type': 'application/json', accept: "application/json" },
+    headers: { "content-type": "application/json", accept: "application/json" },
     body: JSON.stringify({
       username: "admin",
       password: config.auth.users.admin.password
@@ -106,10 +106,12 @@ export async function startServer(t, port, users, dataFile) {
 }
 
 export async function stopServer(t) {
-  t.context.server.close();
-  t.context.server.unref();
-  await t.context.master.close();
-  await rm(t.context.databaseFile, { recursive: true });
+  t.context.server?.close();
+  t.context.server?.unref();
+  await t.context.master?.close();
+  if (t.context.databaseFile) {
+    await rm(t.context.databaseFile, { recursive: true });
+  }
 }
 
 export async function wait(msecs = 1000) {
