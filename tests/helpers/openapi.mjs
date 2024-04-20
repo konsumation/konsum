@@ -21,7 +21,7 @@ export async function assertOpenapiPath(t, path, allExpected) {
     if (method === "parameters") {
       continue;
     }
-    for (const [responseCode, definitionResponse] of Object.entries(
+    for (const [definitionResponseCode, definitionResponse] of Object.entries(
       definition.responses
     )) {
       for (const expected of asArray(allExpected[method] || {})) {
@@ -47,12 +47,12 @@ export async function assertOpenapiPath(t, path, allExpected) {
             (match, a) => pathParameters[a]
           );
 
-          const response = await fetch(`${t.context.url}${url}`, options);
+          const response = await fetch(t.context.url + url, options);
 
           t.log(
-            `${method} ${url} ${options.body || ""} (${responseCode}) ${
+            `${method} ${url} ${options.body || ""} (${definitionResponseCode}) ${
               response.status
-            }`
+            } ${JSON.stringify(expected)}`
           );
 
           const definitionResponse = definition.responses[response.status];
@@ -69,7 +69,7 @@ export async function assertOpenapiPath(t, path, allExpected) {
               definitionContentType,
               definitionContent
             ] of Object.entries(definitionResponse.content)) {
-              const e = expected[responseCode];
+              const e = expected[definitionResponseCode];
 
               switch (definitionContentType) {
                 case "application/json":
