@@ -41,6 +41,11 @@ objectclass: groupOfUniqueNames
 uniqueMember: uid=user1,ou=accounts,dc=example,dc=com
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
+dn: cn=konsum.category.get,ou=groups,dc=example,dc=com
+cn: konsum.category.get
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
 dn: cn=konsum.category.add,ou=groups,dc=example,dc=com
 cn: konsum.category.add
 objectclass: groupOfUniqueNames
@@ -56,6 +61,11 @@ cn: konsum.category.delete
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
+dn: cn=konsum.value.get,ou=groups,dc=example,dc=com
+cn: konsum.value.get
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
 dn: cn=konsum.value.add,ou=groups,dc=example,dc=com
 cn: konsum.value.add
 objectclass: groupOfUniqueNames
@@ -63,6 +73,11 @@ uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
 dn: cn=konsum.value.delete,ou=groups,dc=example,dc=com
 cn: konsum.value.delete
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.meter.get,ou=groups,dc=example,dc=com
+cn: konsum.meter.get
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
@@ -78,6 +93,11 @@ uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
 dn: cn=konsum.meter.delete,ou=groups,dc=example,dc=com
 cn: konsum.meter.delete
+objectclass: groupOfUniqueNames
+uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
+
+dn: cn=konsum.note.get,ou=groups,dc=example,dc=com
+cn: konsum.note.get
 objectclass: groupOfUniqueNames
 uniqueMember: uid=user2,ou=accounts,dc=example,dc=com
 
