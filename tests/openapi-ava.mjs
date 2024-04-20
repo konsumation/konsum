@@ -33,7 +33,8 @@ const parameters = { category: "CAT-0", meter: "M-1" };
 test(openapiPathTest, "/authenticate", {
   post: [
     {
-      request: { body: { username: "admin", password: "start123" } }
+      request: { body: { username: "admin", password: "start123" } },
+      200: {}
     },
     {
       request: { body: { username: "admin", password: "wrong" } },
@@ -69,7 +70,8 @@ test(openapiPathTest, "/category/{category}", {
 
 test(openapiPathTest, "/category/{category}/value", {
   get: {
-    parameters
+    parameters,
+    200: {}
   }
 });
 
@@ -93,7 +95,8 @@ test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
 
 test(openapiPathTest, "/category/{category}/meter/{meter}/value", {
   get: {
-    parameters
+    parameters,
+    200: {}
   }
 });
 

@@ -259,14 +259,19 @@ export async function prepareHttpServer(config, sd, master) {
 
         switch (ctx.accepts("json", "text")) {
           case "json":
-            const objects = [];
-            for await (const object of master.all(query, options)) {
-              objects.push(object.toJSON());
+            try {
+              const objects = [];
+              for await (const object of master.all(query, options)) {
+                objects.push(object.toJSON());
+              }
+              ctx.body = objects;
+            } catch (e) {
+              if (e.category || e.meter) {
+                ctx.throw(404, `No such ${type} ${e.category || e.meter}`);
+              }
             }
-            ctx.body = objects;
             break;
 
-          default:
           case "text":
             ctx.response.set("content-type", "text/plain");
             const lines = [];
@@ -278,6 +283,9 @@ export async function prepareHttpServer(config, sd, master) {
             }
             ctx.body = lines.join("\n");
             break;
+
+            case false:
+              ctx.throw(406, "only json and text");
         }
 
         return next();
