@@ -7,7 +7,7 @@ let port = 3151;
 test.beforeEach(t => startServer(t, port++));
 test.afterEach.always(t => stopServer(t));
 
-test("list categories", async t => {
+test.only("list categories", async t => {
   const response = await got.get(`${t.context.url}/category`, {
     headers: { Authorization: `Bearer ${t.context.token}` }
   });

@@ -3,6 +3,7 @@ import { mkdir, rm, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
+import { setSchema } from "@konsumation/db-postgresql";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -44,12 +45,14 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
     recursive: true
   });
 
-  const databaseFile = pn(`../../build/db-${port}`);
+  //const databaseFile = pn(`../../build/db-${port}`);
   const configFile = `${configDir}/config.json`;
+  const urli=setSchema(process.env.POSTGRES_URL,"temp");
+  console.log(urli,typeof(urli))
   const config = {
     version: "1.2.3",
     database: {
-      "@konsumation/db-level": databaseFile
+      "@konsumation/db-postgresql": urli
     },
     auth: {
       jwt: {
@@ -71,7 +74,7 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
   t.context.config = config;
   t.context.port = config.http.port;
   t.context.url = `http://localhost:${config.http.port}`;
-  t.context.databaseFile = databaseFile;
+ // t.context.databaseFile = databaseFile;
   t.context.configDir = configDir;
   t.context.configFile = configFile;
 
@@ -82,6 +85,7 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
 
 export async function startServer(t, port, users, dataFile) {
   const config = await createConfig(t, port, users);
+  console.log(config)
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
