@@ -1,7 +1,7 @@
 import test from "ava";
 import { fileURLToPath } from "node:url";
 import { startServer, stopServer } from "./helpers/server.mjs";
-import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
+import { loadOpenAPI, openapiPathTest } from "ava-openapi";
 
 test.before(async t => {
   await startServer(
