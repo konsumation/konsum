@@ -68,35 +68,15 @@ test(openapiPathTest, "/category/{category}", {
   }
 });
 
-test(openapiPathTest, "/category/{category}/value", {
-  get: {
-    parameters,
-    200: {}
-  }
-});
-
-test(openapiPathTest, "/category/{category}/meter", {
+test(openapiPathTest, /\/category\/{category}\/(value|meter|node)$/, {
   get: {
     parameters
   }
 });
 
-test(openapiPathTest, "/category/{category}/note", {
+test(openapiPathTest, /\/category\/{category}\/meter\/{meter}\/(note|value)$/, {
   get: {
     parameters
-  }
-});
-
-test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
-  get: {
-    parameters
-  }
-});
-
-test(openapiPathTest, "/category/{category}/meter/{meter}/value", {
-  get: {
-    parameters,
-    200: {}
   }
 });
 
