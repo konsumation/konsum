@@ -68,7 +68,7 @@ test(openapiPathTest, "/category/{category}", {
   }
 });
 
-test(openapiPathTest, /\/category\/{category}\/(value|meter|node)$/, {
+test(openapiPathTest, /\/category\/{category}\/(value|meter|note)$/, {
   get: {
     parameters
   }
