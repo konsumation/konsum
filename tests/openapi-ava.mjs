@@ -74,7 +74,7 @@ test(openapiPathTest, /\/category\/{category}\/(value|meter|note)$/, {
   }
 });
 
-test.skip(openapiPathTest, "/category/{category}/meter/{meter}", {
+test(openapiPathTest, "/category/{category}/meter/{meter}", {
   get: {
     parameters
   },
