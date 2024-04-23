@@ -74,6 +74,23 @@ test(openapiPathTest, /\/category\/{category}\/(value|meter|note)$/, {
   }
 });
 
+test.skip(openapiPathTest, "/category/{category}/meter/{meter}", {
+  get: {
+    parameters
+  },
+  put: {
+    parameters,
+    request: { body: { unit: "m3" } }
+  },
+  post: {
+    parameters,
+    request: { body: { description: "post" } }
+  },
+  delete: {
+    parameters
+  }
+});
+
 test(openapiPathTest, /\/category\/{category}\/meter\/{meter}\/(note|value)$/, {
   get: {
     parameters
