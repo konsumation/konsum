@@ -28,7 +28,11 @@ test.before(async t => {
 
 test.after.always(t => stopServer(t));
 
-const parameters = { category: "CAT-0", meter: "M-1" };
+const parameters = {
+  category: "CAT-0",
+  meter: "M-0",
+  date: "2020-07-31T07:49:58.000Z"
+};
 
 test(openapiPathTest, "/authenticate", {
   post: [
@@ -80,11 +84,24 @@ test(openapiPathTest, "/category/{category}/meter/{meter}", {
   },
   put: {
     parameters,
-    request: { body: { unit: "m3" } }
+    200: { request: { body: { unit: "m3" } } }
   },
   post: {
     parameters,
-    request: { body: { description: "post" } }
+    200: { request: { body: { description: "post" } } }
+  },
+  delete: {
+    parameters
+  }
+});
+
+test(openapiPathTest, "/category/{category}/meter/{meter}/value/{date}", {
+  get: {
+    parameters
+  },
+  put: {
+    parameters,
+    200: { request: { body: { value: 1.23 } } }
   },
   delete: {
     parameters
