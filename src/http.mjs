@@ -222,18 +222,22 @@ export async function prepareHttpServer(config, sd, master) {
 
   const typeDefinitions = {
     category: {
+      parameter: "category",
       paths: ["/category"]
     },
     meter: {
+      parameter: "meter",
       paths: ["/category/:category/meter"]
     },
     note: {
+      parameter: "note",
       paths: [
         "/category/:category/note",
         "/category/:category/meter/:meter/note"
       ]
     },
     value: {
+      parameter: "date",
       paths: [
         "/category/:category/value",
         "/category/:category/meter/:meter/value"
@@ -294,7 +298,6 @@ export async function prepareHttpServer(config, sd, master) {
       for (const [method, config] of Object.entries({
         GET: {
           entitlement: "get",
-          selector: `/:${type}`,
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
             if (object) {
@@ -306,10 +309,9 @@ export async function prepareHttpServer(config, sd, master) {
         },
         PUT: {
           entitlement: "add",
-          selector: `/:${type}`,
           extra: [BodyParser()],
           exec: async (ctx, master) => {
-            const name = ctx.params[type];
+            const name = ctx.params[typeDefinition.parameter];
             delete ctx.params[type];
 
             const factory = master.factories[type];
@@ -317,6 +319,7 @@ export async function prepareHttpServer(config, sd, master) {
             let parent;
             if (factory.parentType) {
               parent = await master.one(ctx.params);
+
               if (!parent) {
                 ctx.throw(404, `No such ${factory.parentType}`);
               }
@@ -333,7 +336,6 @@ export async function prepareHttpServer(config, sd, master) {
         },
         POST: {
           entitlement: "modify",
-          selector: `/:${type}`,
           extra: [BodyParser()],
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
@@ -347,7 +349,6 @@ export async function prepareHttpServer(config, sd, master) {
         },
         DELETE: {
           entitlement: "delete",
-          selector: `/:${type}`,
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
 
@@ -367,7 +368,7 @@ export async function prepareHttpServer(config, sd, master) {
 
         router.addRoute(
           method,
-          `${path}${config.selector}`,
+          `${path}/:${typeDefinition.parameter}`,
           extra,
           async (ctx, next) => {
             //  enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);
