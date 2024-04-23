@@ -284,8 +284,8 @@ export async function prepareHttpServer(config, sd, master) {
             ctx.body = lines.join("\n");
             break;
 
-            case false:
-              ctx.throw(406, "only json and text");
+          case false:
+            ctx.throw(406, "only json and text");
         }
 
         return next();
@@ -311,8 +311,18 @@ export async function prepareHttpServer(config, sd, master) {
           exec: async (ctx, master) => {
             const name = ctx.params[type];
             delete ctx.params[type];
-            const parent = await master.one(ctx.params);
-            const object = new master.factories[type]({
+
+            const factory = master.factories[type];
+
+            let parent;
+            if (factory.parentType) {
+              parent = await master.one(ctx.params);
+              if (!parent) {
+                ctx.throw(404, `No such ${factory.parentType}`);
+              }
+            }
+
+            const object = new factory({
               name,
               ...ctx.request.body,
               [parent?.type]: parent
