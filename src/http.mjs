@@ -220,6 +220,16 @@ export async function prepareHttpServer(config, sd, master) {
 
   app.use(router.middleware());
 
+  function reportAction(ctx, object, verb) {
+    switch (ctx.accepts("json", "text")) {
+      case "json":
+        ctx.body = { message: verb };
+        break;
+      default:
+        ctx.body = verb;
+    }
+  }
+
   const typeDefinitions = {
     category: {
       parameter: "category",
@@ -299,6 +309,7 @@ export async function prepareHttpServer(config, sd, master) {
           entitlement: "get",
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
+
             if (object) {
               switch (ctx.accepts("json", "text")) {
                 case "json":
@@ -331,6 +342,9 @@ export async function prepareHttpServer(config, sd, master) {
             let parent;
             if (factory.parentType) {
               parent = await master.one(ctx.params);
+              if (parent && parent.type !== factory.parentType) {
+                parent = await parent.activeMeter(context); // TODO move into Value write
+              }
 
               if (!parent) {
                 ctx.throw(404, `No such ${factory.parentType}`);
@@ -344,7 +358,7 @@ export async function prepareHttpServer(config, sd, master) {
             });
 
             await object.write(context);
-            ctx.body = { message: "added" };
+            reportAction(ctx, object, "added");
           }
         },
         POST: {
@@ -354,7 +368,7 @@ export async function prepareHttpServer(config, sd, master) {
             const object = await master.one(ctx.params);
             if (object) {
               await object.write(context);
-              ctx.body = { message: "modified" };
+              reportAction(ctx, object, "modified");
             } else {
               ctx.throw(404, `No such ${type}`);
             }
@@ -367,7 +381,7 @@ export async function prepareHttpServer(config, sd, master) {
 
             if (object) {
               await object.delete(context);
-              ctx.body = { message: "deleted" };
+              reportAction(ctx, object, "deleted");
             } else {
               ctx.throw(404, `No such ${type}`);
             }
