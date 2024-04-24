@@ -95,7 +95,7 @@ test(openapiPathTest, "/category/{category}/meter/{meter}", {
   }
 });
 
-test(openapiPathTest, "/category/{category}/meter/{meter}/value/{date}", {
+test(openapiPathTest, /\/category\/{category}(\/meter\/{meter})?\/value\/{date}/, {
   get: {
     parameters
   },
