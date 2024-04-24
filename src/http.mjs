@@ -277,7 +277,6 @@ export async function prepareHttpServer(config, sd, master) {
             break;
 
           case "text":
-            ctx.response.set("content-type", "text/plain");
             const lines = [];
 
             for await (const object of master.all(query, options)) {
@@ -301,7 +300,21 @@ export async function prepareHttpServer(config, sd, master) {
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
             if (object) {
-              ctx.body = object.toJSON();
+              switch (ctx.accepts("json", "text")) {
+                case "json":
+                  ctx.body = object.toJSON();
+                  break;
+                case "text":
+                  const lines = [];
+                  for await (const line of object.text(context)) {
+                    lines.push(line);
+                  }
+                  ctx.body = lines.join("\n");
+                  break;
+                case false:
+                  ctx.throw(406, "only json and text");
+                  break;
+              }
             } else {
               ctx.throw(404, `No such ${type}`);
             }
@@ -312,8 +325,7 @@ export async function prepareHttpServer(config, sd, master) {
           extra: [BodyParser()],
           exec: async (ctx, master) => {
             const name = ctx.params[typeDefinition.parameter];
-            delete ctx.params[type];
-
+            delete ctx.params[typeDefinition.parameter];
             const factory = master.factories[type];
 
             let parent;
@@ -330,6 +342,7 @@ export async function prepareHttpServer(config, sd, master) {
               ...ctx.request.body,
               [parent?.type]: parent
             });
+
             await object.write(context);
             ctx.body = { message: "added" };
           }
