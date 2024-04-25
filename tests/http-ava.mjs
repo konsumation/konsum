@@ -110,16 +110,12 @@ test("list category meters", async t => {
   t.deepEqual(JSON.parse(response.body), [
     {
       name: "M-1",
-      fractionalDigits: 2,
       serial: "12345",
-      unit: "kWh",
       validFrom: "1970-01-01T00:00:00.000Z"
     },
     {
       name: "M-2",
-      fractionalDigits: 2,
       serial: "123456",
-      unit: "kWh",
       validFrom: "1970-01-01T00:00:00.000Z"
     }
   ]);
