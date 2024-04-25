@@ -47,7 +47,7 @@ test("delete category unknown", async t => {
 });
 
 test("add category", async t => {
-  let response = await got.put(`${t.context.url}/category/CAT8`, {
+  const response = await got.put(`${t.context.url}/category/CAT8`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
       description: "a new Unit",
@@ -55,6 +55,22 @@ test("add category", async t => {
     }
   });
   t.is(response.statusCode, 200);
+
+  const master = t.context.master;
+  const context = master.context;
+
+  const categories = [];
+  for await (const category of await master.categories(context)) {
+    categories.push(category);
+  }
+
+  t.deepEqual(categories[0].toJSON(), {
+    name: "CAT8",
+    unit: "m3",
+    description: "a new Unit",
+    fractionalDigits: 2,
+    order: 1
+  });
 });
 
 test("delete category", async t => {
@@ -212,6 +228,10 @@ test("insert + get values", async t => {
 
   await value.write(context);
 
+  /*for await (const value of await meter.values(context)) {
+    console.log(value);
+  }*/
+
   let response;
 
   response = await got.put(
@@ -225,9 +245,9 @@ test("insert + get values", async t => {
       }
     }
   );
+  console.log(response.body);
 
   t.deepEqual(JSON.parse(response.body), { message: "added" });
-
 
   /*for await (const v of meter.values(context)) {
     console.log(v.toJSON());
@@ -286,7 +306,7 @@ test("insert + can delete", async t => {
       Authorization: `Bearer ${t.context.token}`
     }
   });
- // t.log(response.body);
+  t.log(response.body);
   t.regex(response.body, /\s+77.34/);
 
   response = await got.get(`${t.context.url}/category/${catName}/value`, {
@@ -297,15 +317,18 @@ test("insert + can delete", async t => {
   });
 
   let result = JSON.parse(response.body)[0];
- // console.log(result);
+  // console.log(result);
 
   t.is(result.value, 77.34);
 
-  response = await got.delete(`${t.context.url}/category/${catName}/value/${result.date}`, {
-    headers: { Authorization: `Bearer ${t.context.token}` },
-    json: {
-      key: now
+  response = await got.delete(
+    `${t.context.url}/category/${catName}/value/${result.date}`,
+    {
+      headers: { Authorization: `Bearer ${t.context.token}` },
+      json: {
+        key: now
+      }
     }
-  });
+  );
   t.is(await meter.value(context, now), undefined);
 });
