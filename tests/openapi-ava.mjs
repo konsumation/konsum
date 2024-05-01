@@ -1,7 +1,7 @@
 import test from "ava";
 import { fileURLToPath } from "node:url";
 import { startServer, stopServer } from "./helpers/server.mjs";
-import { loadOpenAPI, openapiPathTest } from "./helpers/openapi.mjs";
+import { loadOpenAPI, openapiPathTest } from "ava-openapi";
 
 test.before(async t => {
   await startServer(
@@ -28,7 +28,11 @@ test.before(async t => {
 
 test.after.always(t => stopServer(t));
 
-const parameters = { category: "CAT-0", meter: "M-1" };
+const parameters = {
+  category: "CAT-0",
+  meter: "M-0",
+  date: "2020-07-31T07:49:58.000Z"
+};
 
 test(openapiPathTest, "/authenticate", {
   post: [
@@ -68,35 +72,45 @@ test(openapiPathTest, "/category/{category}", {
   }
 });
 
-test(openapiPathTest, "/category/{category}/value", {
+test(openapiPathTest, /\/category\/{category}\/(value|meter|note)$/, {
   get: {
+    parameters
+  }
+});
+
+test(openapiPathTest, "/category/{category}/meter/{meter}", {
+  get: {
+    parameters
+  },
+  put: {
     parameters,
-    200: {}
-  }
-});
-
-test(openapiPathTest, "/category/{category}/meter", {
-  get: {
-    parameters
-  }
-});
-
-test(openapiPathTest, "/category/{category}/note", {
-  get: {
-    parameters
-  }
-});
-
-test(openapiPathTest, "/category/{category}/meter/{meter}/note", {
-  get: {
-    parameters
-  }
-});
-
-test(openapiPathTest, "/category/{category}/meter/{meter}/value", {
-  get: {
+    200: { request: { body: { unit: "m3" } } }
+  },
+  post: {
     parameters,
-    200: {}
+    200: { request: { body: { description: "post" } } }
+  },
+  delete: {
+    parameters
+  }
+});
+
+test(openapiPathTest, /\/category\/{category}(\/meter\/{meter})?\/value\/{date}/, {
+  get: {
+    parameters
+  },
+  put: {
+    parameters,
+    200: { request: { body: { value: 1.23 } } }
+  },
+  delete: {
+    parameters
+  }
+});
+
+test(openapiPathTest, /\/category\/{category}\/meter\/{meter}\/(note|value)$/, {
+  get: {
+    parameters
   }
 });
 
@@ -111,5 +125,4 @@ test(openapiPathTest, "/admin/backup", {
   }
 });
 
-test(openapiPathTest, "/admin/reload");
-test(openapiPathTest, "/admin/stop");
+test(openapiPathTest, /\/admin\/.*/);

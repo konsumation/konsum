@@ -31,7 +31,8 @@
           "konsum", 
           "konsum.admin.backup",
           "konsum.admin.stop",
-          "konsum.admin.reload"
+          "konsum.admin.reload",
+          "konsum.admin.token"
         ]
       }
     },

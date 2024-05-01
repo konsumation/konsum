@@ -220,20 +220,34 @@ export async function prepareHttpServer(config, sd, master) {
 
   app.use(router.middleware());
 
+  function reportAction(ctx, object, verb) {
+    switch (ctx.accepts("json", "text")) {
+      case "json":
+        ctx.body = { message: verb };
+        break;
+      default:
+        ctx.body = verb;
+    }
+  }
+
   const typeDefinitions = {
     category: {
+      parameter: "category",
       paths: ["/category"]
     },
     meter: {
+      parameter: "meter",
       paths: ["/category/:category/meter"]
     },
     note: {
+      parameter: "note",
       paths: [
         "/category/:category/note",
         "/category/:category/meter/:meter/note"
       ]
     },
     value: {
+      parameter: "date",
       paths: [
         "/category/:category/value",
         "/category/:category/meter/:meter/value"
@@ -273,7 +287,6 @@ export async function prepareHttpServer(config, sd, master) {
             break;
 
           case "text":
-            ctx.response.set("content-type", "text/plain");
             const lines = [];
 
             for await (const object of master.all(query, options)) {
@@ -284,8 +297,8 @@ export async function prepareHttpServer(config, sd, master) {
             ctx.body = lines.join("\n");
             break;
 
-            case false:
-              ctx.throw(406, "only json and text");
+          case false:
+            ctx.throw(406, "only json and text");
         }
 
         return next();
@@ -294,11 +307,25 @@ export async function prepareHttpServer(config, sd, master) {
       for (const [method, config] of Object.entries({
         GET: {
           entitlement: "get",
-          selector: `/:${type}`,
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
+
             if (object) {
-              ctx.body = object.toJSON();
+              switch (ctx.accepts("json", "text")) {
+                case "json":
+                  ctx.body = object.toJSON();
+                  break;
+                case "text":
+                  const lines = [];
+                  for await (const line of object.text(context)) {
+                    lines.push(line);
+                  }
+                  ctx.body = lines.join("\n");
+                  break;
+                case false:
+                  ctx.throw(406, "only json and text");
+                  break;
+              }
             } else {
               ctx.throw(404, `No such ${type}`);
             }
@@ -306,30 +333,42 @@ export async function prepareHttpServer(config, sd, master) {
         },
         PUT: {
           entitlement: "add",
-          selector: `/:${type}`,
           extra: [BodyParser()],
           exec: async (ctx, master) => {
-            const name = ctx.params[type];
-            delete ctx.params[type];
-            const parent = await master.one(ctx.params);
-            const object = new master.factories[type]({
+            const name = ctx.params[typeDefinition.parameter];
+            delete ctx.params[typeDefinition.parameter];
+            const factory = master.factories[type];
+
+            let parent;
+            if (factory.parentType) {
+              parent = await master.one(ctx.params);
+              if (parent && parent.type !== factory.parentType) {
+                parent = await parent.activeMeter(context); // TODO move into Value write
+              }
+
+              if (!parent) {
+                ctx.throw(404, `No such ${factory.parentType}`);
+              }
+            }
+
+            const object = new factory({
               name,
               ...ctx.request.body,
               [parent?.type]: parent
             });
+
             await object.write(context);
-            ctx.body = { message: "added" };
+            reportAction(ctx, object, "added");
           }
         },
         POST: {
           entitlement: "modify",
-          selector: `/:${type}`,
           extra: [BodyParser()],
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
             if (object) {
               await object.write(context);
-              ctx.body = { message: "modified" };
+              reportAction(ctx, object, "modified");
             } else {
               ctx.throw(404, `No such ${type}`);
             }
@@ -337,13 +376,12 @@ export async function prepareHttpServer(config, sd, master) {
         },
         DELETE: {
           entitlement: "delete",
-          selector: `/:${type}`,
           exec: async (ctx, master) => {
             const object = await master.one(ctx.params);
 
             if (object) {
               await object.delete(context);
-              ctx.body = { message: "deleted" };
+              reportAction(ctx, object, "deleted");
             } else {
               ctx.throw(404, `No such ${type}`);
             }
@@ -357,7 +395,7 @@ export async function prepareHttpServer(config, sd, master) {
 
         router.addRoute(
           method,
-          `${path}${config.selector}`,
+          `${path}/:${typeDefinition.parameter}`,
           extra,
           async (ctx, next) => {
             //  enshureEntitlement(ctx, `konsum.${type}.${config.entitlement}`);

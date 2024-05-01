@@ -19,6 +19,7 @@ const defaultUsers = {
       "konsum.admin.backup",
       "konsum.admin.reload",
       "konsum.admin.stop",
+      "konsum.admin.token",
       "konsum.category.get",
       "konsum.category.add",
       "konsum.category.modify",
