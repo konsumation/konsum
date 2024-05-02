@@ -259,8 +259,6 @@ export async function prepareHttpServer(config, sd, master) {
 
   for (const [type, typeDefinition] of Object.entries(typeDefinitions)) {
     for (const path of typeDefinition.paths) {
-      const parts = path.split("/");
-
       router.addRoute("GET", path, restricted, async (ctx, next) => {
         setNoCacheHeaders(ctx);
 
@@ -269,7 +267,7 @@ export async function prepareHttpServer(config, sd, master) {
           limit: parseInt(ctx.query.limit, 10) || -1
         };
 
-        const query = { ...ctx.params, [parts[parts.length - 1]]: "*" };
+        const query = { ...ctx.params, [typeDefinition.parameter]: "*" };
 
         switch (ctx.accepts("json", "text")) {
           case "json":

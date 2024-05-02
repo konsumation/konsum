@@ -206,7 +206,7 @@ test("list category notes", async t => {
   */
 });
 
-test("insert + get values", async t => {
+test("insert / get values", async t => {
   const master = t.context.master;
   const context = master.context;
   const catName = "CAT1";
@@ -274,7 +274,7 @@ test("insert + get values", async t => {
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
-test("insert + can delete", async t => {
+test("insert / delete values", async t => {
   const master = t.context.master;
   const context = master.context;
 
@@ -289,6 +289,7 @@ test("insert + can delete", async t => {
   await category.write(context);
   const meter = category.addMeter(context, { name: meterName });
   await meter.write(master.context);
+
   const value = await category.addValue(context, {
     date: now,
     value: 77.34
@@ -296,16 +297,16 @@ test("insert + can delete", async t => {
 
   await value.write(context);
 
-  let response = await got.get(`${t.context.url}/category/${catName}/value`, {
+  let response = await got.get(`${t.context.url}/category/${catName}/meter/${meter.name}/value`, {
     headers: {
       Accept: "text/plain",
       Authorization: `Bearer ${t.context.token}`
     }
   });
-  t.log(response.body);
+
   t.regex(response.body, /\s+77.34/);
 
-  response = await got.get(`${t.context.url}/category/${catName}/value`, {
+  response = await got.get(`${t.context.url}/category/${catName}/meter/${meter.name}/value`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${t.context.token}`
@@ -313,7 +314,6 @@ test("insert + can delete", async t => {
   });
 
   let result = JSON.parse(response.body)[0];
-  // console.log(result);
 
   t.is(result.value, 77.34);
 
