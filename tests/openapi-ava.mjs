@@ -95,18 +95,22 @@ test(openapiPathTest, "/category/{category}/meter/{meter}", {
   }
 });
 
-test(openapiPathTest, /\/category\/{category}(\/meter\/{meter})?\/value\/{date}/, {
-  get: {
-    parameters
-  },
-  put: {
-    parameters,
-    200: { request: { body: { value: 1.23 } } }
-  },
-  delete: {
-    parameters
+test(
+  openapiPathTest,
+  /\/category\/{category}(\/meter\/{meter})?\/value\/{date}/,
+  {
+    get: {
+      parameters
+    },
+    put: {
+      parameters,
+      200: { request: { body: { value: 1.23 } } }
+    },
+    delete: {
+      parameters
+    }
   }
-});
+);
 
 test(openapiPathTest, /\/category\/{category}\/meter\/{meter}\/(note|value)$/, {
   get: {
@@ -125,4 +129,4 @@ test(openapiPathTest, "/admin/backup", {
   }
 });
 
-test(openapiPathTest, /\/admin\/.*/);
+test(openapiPathTest, /\/admin\/(?!backup)/);
