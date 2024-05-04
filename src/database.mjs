@@ -4,7 +4,7 @@ export const defaultDatabaseConfig = {
   }
 };
 
-export async function prepareDatabase(config) {
+export async function prepareDatabase(config, sd) {
   for (const [name, option] of Object.entries(config.database)) {
     return { master: await (await import(name)).default.initialize(option) };
   }
