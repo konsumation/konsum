@@ -207,7 +207,7 @@ export async function prepareHttpServer(config, sd, master) {
           access_token,
           refresh_token,
           token_type: "bearer",
-          expires_in: ms(jwt.options?.expiresIn || "1h") / 1000
+          expires_in: Number(ms(jwt.options?.expiresIn || "1h")) / 1000
         };
 
         return next();
