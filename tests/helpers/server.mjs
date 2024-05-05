@@ -46,7 +46,7 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
     recursive: true
   });
 
-  //const databaseFile = pn(`../../build/db-${port}`);
+  const databaseFile = pn(`../../build/db-${port}`);
   const configFile = `${configDir}/config.json`;
   const config = {
     version: "1.2.3",
@@ -73,7 +73,7 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
   t.context.config = config;
   t.context.port = config.http.port;
   t.context.url = `http://localhost:${config.http.port}`;
- // t.context.databaseFile = databaseFile;
+  t.context.databaseFile = databaseFile;
   t.context.configDir = configDir;
   t.context.configFile = configFile;
 
