@@ -10,7 +10,7 @@ function pn(path) {
 }
 
 async function allDatabases(t, title, exec) {
-  //console.log(title)
+  console.log(title)
 
   let port = 3500;
   port = port++
