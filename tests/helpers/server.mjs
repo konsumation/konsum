@@ -130,8 +130,7 @@ export async function* allContexts(context, users, dataFile) {
           await rm(databaseFile, { recursive: true });
         }
       };
-    }
-    /*
+    },
     async () => {
       const schemaName = "testintegration";
       const sql = postgres(process.env.POSTGRES_URL);
@@ -150,7 +149,6 @@ export async function* allContexts(context, users, dataFile) {
         }
       };
     }
-    */
   ]) {
     port = port++;
     const { database, cleanup } = await db();
