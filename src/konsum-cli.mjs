@@ -62,7 +62,7 @@ program.command("restore [file]").action(async input => {
   );
   await master.close();
   console.log(
-    `${input} restored (${statistics.category} categories, ${statistics.meter} meters, ${statistics.value} values)`
+    `${input} restored (${statistics.category} categories, ${statistics.meter} meters, ${statistics.value} values, ${statistics.line} lines)`
   );
 });
 
