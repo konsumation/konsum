@@ -14,15 +14,13 @@ let port = 3500;
 async function allDatabases(t, exec, ...args) {
 
   port = port++
-  t.context.databaseFile = pn(`../build/db-${port}`);
-  //t.context.master = "LEVEL";
-  await startServer(t, port, { "@konsumation/db-level": t.context.databaseFile })
+  const databaseFile = pn(`../build/db-${port}`);
+  await startServer(t, port, { "@konsumation/db-level": databaseFile })
   await exec(t, ...args);
   await stopServer(t);
-  t.context.databaseFile && await rm(t.context.databaseFile, { recursive: true });
+  await rm(databaseFile, { recursive: true });
 
   port = port++
-  //t.context.master = "POSTGRES";
   const schemaName = "testintegration"
   const sql = postgres(process.env.POSTGRES_URL);
   await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
