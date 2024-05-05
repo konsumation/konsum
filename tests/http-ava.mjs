@@ -1,11 +1,8 @@
 import test from "ava";
 import got from "got";
-import { allDatabases } from "./all-databases-ava.mjs"
+import { execAllContexts } from "./helpers/server.mjs";
 
-//let port = 3151;
-
-
-test.serial("list categories", allDatabases, async t => {
+test.serial("list categories", execAllContexts, async t => {
   const response = await got.get(`${t.context.url}/category`, {
     headers: { Authorization: `Bearer ${t.context.token}` }
   });
@@ -13,7 +10,7 @@ test.serial("list categories", allDatabases, async t => {
   t.is(response.statusCode, 200);
 });
 
-test.serial("update category", allDatabases, async t => {
+test.serial("update category", execAllContexts, async t => {
   let response = await got.put(`${t.context.url}/category/CAT7`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
@@ -33,7 +30,7 @@ test.serial("update category", allDatabases, async t => {
   t.is(response.statusCode, 200);
 });
 
-test.serial("delete category unknown", allDatabases, async t => {
+test.serial("delete category unknown", execAllContexts, async t => {
   try {
     const response = await got.delete(`${t.context.url}/category/CAT7777`, {
       headers: { Authorization: `Bearer ${t.context.token}` }
@@ -44,8 +41,7 @@ test.serial("delete category unknown", allDatabases, async t => {
   }
 });
 
-//TODO
-test.skip("add category", allDatabases, async t => {
+test.serial("add category", execAllContexts, async t => {
   const response = await got.put(`${t.context.url}/category/CAT8`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
@@ -71,8 +67,7 @@ test.skip("add category", allDatabases, async t => {
     order: 1  });
 });
 
-//TODO
-test.skip("delete category", allDatabases, async t => {
+test.serial("delete category", execAllContexts, async t => {
   let response = await got.put(`${t.context.url}/category/CAT7`, {
     headers: { Authorization: `Bearer ${t.context.token}` },
     json: {
@@ -87,7 +82,7 @@ test.skip("delete category", allDatabases, async t => {
   t.is(response.statusCode, 200);
 });
 
-test.serial("list category meters", allDatabases, async t => {
+test.serial("list category meters", execAllContexts, async t => {
   const master = t.context.master;
   const context = master.context;
 
@@ -120,7 +115,7 @@ test.serial("list category meters", allDatabases, async t => {
   ]);
 });
 
-test.serial("insert category meters", allDatabases, async t => {
+test.serial("insert category meters", execAllContexts, async t => {
   const master = t.context.master;
   const context = master.context;
 
@@ -163,7 +158,7 @@ test.serial("insert category meters", allDatabases, async t => {
   ]);
 });
 
-test.serial("list category notes", allDatabases, async t => {
+test.serial("list category notes", execAllContexts, async t => {
   const catName = "CAT1";
   const master = t.context.master;
   const context = master.context;
@@ -206,7 +201,7 @@ test.serial("list category notes", allDatabases, async t => {
   */
 });
 
-test.serial("insert / get values", allDatabases, async t => {
+test.serial("insert / get values", execAllContexts, async t => {
   const master = t.context.master;
   const context = master.context;
   const catName = "CAT1";
@@ -273,8 +268,7 @@ test.serial("insert / get values", allDatabases, async t => {
   t.is(JSON.parse(response.body)[0].value, 77.34);
 });
 
-//TODO
-test.skip("insert / delete values", allDatabases, async t => {
+test.serial("insert / delete values", execAllContexts, async t => {
   const master = t.context.master;
   const context = master.context;
 
@@ -297,21 +291,27 @@ test.skip("insert / delete values", allDatabases, async t => {
 
   await value.write(context);
 
-  let response = await got.get(`${t.context.url}/category/${catName}/meter/${meter.name}/value`, {
-    headers: {
-      Accept: "text/plain",
-      Authorization: `Bearer ${t.context.token}`
+  let response = await got.get(
+    `${t.context.url}/category/${catName}/meter/${meter.name}/value`,
+    {
+      headers: {
+        Accept: "text/plain",
+        Authorization: `Bearer ${t.context.token}`
+      }
     }
-  });
+  );
 
   t.regex(response.body, /\s+77.34/);
 
-  response = await got.get(`${t.context.url}/category/${catName}/meter/${meter.name}/value`, {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${t.context.token}`
+  response = await got.get(
+    `${t.context.url}/category/${catName}/meter/${meter.name}/value`,
+    {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${t.context.token}`
+      }
     }
-  });
+  );
 
   let result = JSON.parse(response.body)[0];
 

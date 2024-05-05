@@ -1,20 +1,9 @@
 import test from "ava";
 import { fileURLToPath } from "node:url";
-import { startServer, stopServer } from "./helpers/server.mjs";
+import { allContexts } from "./helpers/server.mjs";
 import { loadOpenAPI, openapiPathTest } from "ava-openapi";
 
-test.before(async t => {
-  await startServer(
-    t,
-    3190,
-    undefined,
-    fileURLToPath(
-      new URL(
-        "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt",
-        import.meta.url
-      )
-    )
-  );
+export async function openapiPathTestAllContexts(t, ...args) {
   await loadOpenAPI(
     t,
     fileURLToPath(
@@ -24,9 +13,22 @@ test.before(async t => {
       )
     )
   );
-});
 
-test.after.always(t => stopServer(t));
+  for await (const context of allContexts(
+    t.context,
+    undefined,
+    fileURLToPath(
+      new URL(
+        "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt",
+        import.meta.url
+      )
+    )
+  )) {
+    await openapiPathTest(t, ...args);
+  }
+}
+
+openapiPathTestAllContexts.title = openapiPathTest.title;
 
 const parameters = {
   category: "CAT-0",
@@ -34,7 +36,7 @@ const parameters = {
   date: "2020-07-31T07:49:58.000Z"
 };
 
-test(openapiPathTest, "/authenticate", {
+test.serial(openapiPathTestAllContexts, "/authenticate", {
   post: [
     {
       request: { body: { username: "admin", password: "start123" } },
@@ -47,15 +49,15 @@ test(openapiPathTest, "/authenticate", {
   ]
 });
 
-test(openapiPathTest, "/state", {
+test.serial(openapiPathTestAllContexts, "/state", {
   get: {
     200: { version: "1.2.3", database: { schemaVersion: "3" } }
   }
 });
 
-test(openapiPathTest, "/category");
+test.serial(openapiPathTestAllContexts, "/category");
 
-test(openapiPathTest, "/category/{category}", {
+test.serial(openapiPathTestAllContexts, "/category/{category}", {
   get: {
     parameters
   },
@@ -72,13 +74,17 @@ test(openapiPathTest, "/category/{category}", {
   }
 });
 
-test(openapiPathTest, /\/category\/{category}\/(value|meter|note)$/, {
-  get: {
-    parameters
+test.serial(
+  openapiPathTestAllContexts,
+  /\/category\/{category}\/(value|meter|note)$/,
+  {
+    get: {
+      parameters
+    }
   }
-});
+);
 
-test(openapiPathTest, "/category/{category}/meter/{meter}", {
+test.serial(openapiPathTestAllContexts, "/category/{category}/meter/{meter}", {
   get: {
     parameters
   },
@@ -95,8 +101,8 @@ test(openapiPathTest, "/category/{category}/meter/{meter}", {
   }
 });
 
-test(
-  openapiPathTest,
+test.serial(
+  openapiPathTestAllContexts,
   /\/category\/{category}(\/meter\/{meter})?\/value\/{date}/,
   {
     get: {
@@ -112,13 +118,17 @@ test(
   }
 );
 
-test(openapiPathTest, /\/category\/{category}\/meter\/{meter}\/(note|value)$/, {
-  get: {
-    parameters
+test.serial(
+  openapiPathTestAllContexts,
+  /\/category\/{category}\/meter\/{meter}\/(note|value)$/,
+  {
+    get: {
+      parameters
+    }
   }
-});
+);
 
-test(openapiPathTest, "/admin/backup", {
+test.serial(openapiPathTestAllContexts, "/admin/backup", {
   get: {
     200: `schemaVersion=3
   
@@ -129,4 +139,4 @@ test(openapiPathTest, "/admin/backup", {
   }
 });
 
-test(openapiPathTest, /\/admin\/(?!backup)/);
+test.serial(openapiPathTestAllContexts, /\/admin\/(?!backup)/);
