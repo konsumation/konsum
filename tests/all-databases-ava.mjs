@@ -9,37 +9,38 @@ function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
 }
 
-async function allDatabases(t, title, exec) {
+let port = 3500;
+
+async function allDatabases(t, title, exec,...args) {
   console.log(title)
 
-  let port = 3500;
   port = port++
   t.context.databaseFile = pn(`../build/db-${port}`);
   //t.context.master = "LEVEL";
   await startServer(t, port, { "@konsumation/db-level": t.context.databaseFile })
-  await exec(t);
+  await exec(t,...args);
   await stopServer(t);
   t.context.databaseFile &&
     await rm(t.context.databaseFile, { recursive: true });
 
-
+  port = port++
   //t.context.master = "POSTGRES";
   const schemaName = "testintegration"
   const sql = postgres(process.env.POSTGRES_URL);
   await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
   await sql`CREATE SCHEMA ${sql(schemaName)}`;
 
-  await startServer(t, port++, {
+  await startServer(t, port, {
     "@konsumation/db-postgresql": setSchema(process.env.POSTGRES_URL, schemaName)
   })
-  await exec(t);
+  await exec(t,...args);
   await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
   await sql.end();
   await stopServer(t)
 }
 
-allDatabases.title = (providedTitle = "databases",a,b,c) =>
-  `${providedTitle} ${a} ${b}`.trim();
+allDatabases.title = (providedTitle = "databases",a) =>
+  `${providedTitle} ${a}`.trim();
 
 test(allDatabases, "check constructor1", async t => {
   //t.log("########", t.context.master.constructor.name);
