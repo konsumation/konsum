@@ -38,10 +38,15 @@ async function allDatabases(t, title, exec) {
   await stopServer(t)
 }
 
-allDatabases.title = (providedTitle = "databases") =>
-  `${providedTitle}`.trim();
+allDatabases.title = (providedTitle = "databases",a,b,c) =>
+  `${providedTitle} ${a} ${b}`.trim();
 
-test(allDatabases, "check constructor", async t => {
+test(allDatabases, "check constructor1", async t => {
+  //t.log("########", t.context.master.constructor.name);
+  t.true(t.context.master.constructor.name === "level" || t.context.master.constructor.name === "postgresql");
+});
+
+test(allDatabases, "check constructor2", async t => {
   //t.log("########", t.context.master.constructor.name);
   t.true(t.context.master.constructor.name === "level" || t.context.master.constructor.name === "postgresql");
 });
