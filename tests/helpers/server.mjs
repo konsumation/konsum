@@ -48,12 +48,10 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
 
   //const databaseFile = pn(`../../build/db-${port}`);
   const configFile = `${configDir}/config.json`;
-  const urli=setSchema(process.env.POSTGRES_URL,"temp");
-  console.log(urli,typeof(urli))
   const config = {
     version: "1.2.3",
     database: {
-      "@konsumation/db-postgresql": urli
+      "@konsumation/db-postgresql": setSchema(process.env.POSTGRES_URL,"testintegration")
     },
     auth: {
       jwt: {
@@ -86,7 +84,6 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
 
 export async function startServer(t, port, users, dataFile) {
   const config = await createConfig(t, port, users);
-  console.log(config)
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
