@@ -39,7 +39,7 @@
     "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs"
   },
   "dependencies": {
-    "@konsumation/db-level": "^9.0.15",
+    "@konsumation/db-level": "^9.0.16",
     "@konsumation/db-postgresql": "^4.2.9",
     "commander": "^12.0.0",
     "config-expander": "^14.0.3",
@@ -51,7 +51,7 @@
     "ldapts": "^7.0.11"
   },
   "devDependencies": {
-    "@konsumation/db-test": "^4.2.4",
+    "@konsumation/db-test": "^4.2.5",
     "@konsumation/openapi": "^2.3.10",
     "@semantic-release/commit-analyzer": "^12.0.0",
     "@semantic-release/exec": "^6.0.3",
@@ -63,7 +63,7 @@
     "execa": "^8.0.1",
     "got": "^14.2.1",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^15.3.4",
+    "npm-pkgbuild": "^15.3.6",
     "semantic-release": "^23.0.8",
     "tmp": "^0.2.1",
     "typescript": "^5.4.5"
