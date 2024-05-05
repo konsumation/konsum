@@ -30,9 +30,9 @@ async function allDatabases(t, exec, ...args) {
     "@konsumation/db-postgresql": setSchema(process.env.POSTGRES_URL, schemaName)
   })
   await exec(t, ...args);
+  await stopServer(t)
   await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
   await sql.end();
-  await stopServer(t)
   //t.context = {}
 }
 
