@@ -1,4 +1,5 @@
 import test from "ava";
+import postgres from "postgres";
 import { fileURLToPath } from "node:url";
 import { rm } from "node:fs/promises";
 import { setSchema } from "@konsumation/db-postgresql";
@@ -9,6 +10,7 @@ function pn(path) {
 }
 
 async function allDatabases(t, title, exec) {
+  //console.log(title)
 
   let port = 3500;
   port = port++
@@ -23,22 +25,24 @@ async function allDatabases(t, title, exec) {
 
   //t.context.master = "POSTGRES";
   const schemaName = "testintegration"
+  const sql = postgres(process.env.POSTGRES_URL);
+  await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
+  await sql`CREATE SCHEMA ${sql(schemaName)}`;
+
   await startServer(t, port++, {
     "@konsumation/db-postgresql": setSchema(process.env.POSTGRES_URL, schemaName)
   })
-
-  const sql = t.context.master.context;
-  await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
-  await sql`CREATE SCHEMA ${sql(schemaName)}`;
   await exec(t);
   await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
+  await sql.end();
   await stopServer(t)
 }
 
-allDatabases.title = (providedTitle = "databases",) =>
+allDatabases.title = (providedTitle = "databases") =>
   `${providedTitle}`.trim();
 
-test(allDatabases, "list categories", async t => {
+test(allDatabases, "check constructor", async t => {
   //t.log("########", t.context.master.constructor.name);
   t.true(t.context.master.constructor.name === "level" || t.context.master.constructor.name === "postgresql");
 });
+
