@@ -5,6 +5,7 @@ import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
 import postgres from "postgres";
 import { setSchema } from "@konsumation/db-postgresql";
+import getPort from '@ava/get-port';
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -118,11 +119,10 @@ export async function wait(msecs = 1000) {
   await new Promise(resolve => setTimeout(resolve, msecs));
 }
 
-let port = 3150;
 
 export async function* allContexts(context, users, dataFile) {
   for (const db of [
-    async () => {
+    async (port) => {
       const databaseFile = pn(`../build/db-${port}`);
       return {
         database: { "@konsumation/db-level": databaseFile },
@@ -131,7 +131,7 @@ export async function* allContexts(context, users, dataFile) {
         }
       };
     },
-    async () => {
+    async (port) => {
       const schemaName = "testintegration";
       const sql = postgres(process.env.POSTGRES_URL);
       await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
@@ -150,8 +150,8 @@ export async function* allContexts(context, users, dataFile) {
       };
     }
   ]) {
-    port = port++;
-    const { database, cleanup } = await db();
+    const port = await getPort();
+    const { database, cleanup } = await db(port);
     await startServer(context, port, database, users, dataFile);
     yield context;
 
