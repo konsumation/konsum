@@ -11,17 +11,15 @@ function pn(path) {
 
 let port = 3500;
 
-async function allDatabases(t, title, exec,...args) {
-  console.log(title)
+async function allDatabases(t, exec, ...args) {
 
   port = port++
   t.context.databaseFile = pn(`../build/db-${port}`);
   //t.context.master = "LEVEL";
   await startServer(t, port, { "@konsumation/db-level": t.context.databaseFile })
-  await exec(t,...args);
+  await exec(t, ...args);
   await stopServer(t);
-  t.context.databaseFile &&
-    await rm(t.context.databaseFile, { recursive: true });
+  t.context.databaseFile && await rm(t.context.databaseFile, { recursive: true });
 
   port = port++
   //t.context.master = "POSTGRES";
@@ -33,21 +31,22 @@ async function allDatabases(t, title, exec,...args) {
   await startServer(t, port, {
     "@konsumation/db-postgresql": setSchema(process.env.POSTGRES_URL, schemaName)
   })
-  await exec(t,...args);
+  await exec(t, ...args);
   await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
   await sql.end();
   await stopServer(t)
+  //t.context = {}
 }
 
-allDatabases.title = (providedTitle = "databases",a) =>
-  `${providedTitle} ${a}`.trim();
+allDatabases.title = (providedTitle = "databases") =>
+  `${providedTitle}`.trim();
 
-test(allDatabases, "check constructor1", async t => {
+test.serial("check constructor1", allDatabases, async t => {
   //t.log("########", t.context.master.constructor.name);
   t.true(t.context.master.constructor.name === "level" || t.context.master.constructor.name === "postgresql");
 });
 
-test(allDatabases, "check constructor2", async t => {
+test.serial("check constructor2", allDatabases, async t => {
   //t.log("########", t.context.master.constructor.name);
   t.true(t.context.master.constructor.name === "level" || t.context.master.constructor.name === "postgresql");
 });
