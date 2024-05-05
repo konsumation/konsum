@@ -10,9 +10,7 @@ function pn(path) {
 }
 
 let port = 3500;
-
-async function allDatabases(t, exec, ...args) {
-
+export async function allDatabases(t, exec, ...args) {
   port = port++
   t.context.databaseFile = pn(`../build/db-${port}`);
   //t.context.master = "LEVEL";
@@ -35,11 +33,8 @@ async function allDatabases(t, exec, ...args) {
   await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
   await sql.end();
   await stopServer(t)
-  //t.context = {}
 }
 
-allDatabases.title = (providedTitle = "databases") =>
-  `${providedTitle}`.trim();
 
 test.serial("check constructor1", allDatabases, async t => {
   //t.log("########", t.context.master.constructor.name);
