@@ -1,5 +1,5 @@
 import { readFileSync, createReadStream } from "node:fs";
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
@@ -8,7 +8,7 @@ function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
 }
 
-const sd = { notify: () => {}, listeners: () => [] };
+const sd = { notify: () => { }, listeners: () => [] };
 
 const defaultUsers = {
   admin: {
@@ -38,20 +38,17 @@ const defaultUsers = {
   }
 };
 
-export async function createConfig(t, port = 3150, users = defaultUsers) {
+export async function createConfig(t, port = 3150, users = defaultUsers, database) {
   const configDir = pn(`../../build/config-${port}`);
 
   await mkdir(configDir, {
     recursive: true
   });
 
-  const databaseFile = pn(`../../build/db-${port}`);
   const configFile = `${configDir}/config.json`;
   const config = {
     version: "1.2.3",
-    database: {
-      "@konsumation/db-level": databaseFile
-    },
+    database,
     auth: {
       jwt: {
         public: readFileSync(pn("../../config/demo.rsa.pub")),
@@ -72,17 +69,15 @@ export async function createConfig(t, port = 3150, users = defaultUsers) {
   t.context.config = config;
   t.context.port = config.http.port;
   t.context.url = `http://localhost:${config.http.port}`;
-  t.context.databaseFile = databaseFile;
   t.context.configDir = configDir;
   t.context.configFile = configFile;
 
   await writeFile(configFile, JSON.stringify(config, undefined, 2), "utf8");
-
   return config;
 }
 
-export async function startServer(t, port, users, dataFile) {
-  const config = await createConfig(t, port, users);
+export async function startServer(t, port, database, users, dataFile) {
+  const config = await createConfig(t, port, users, database);
   const { master } = await prepareDatabase(config);
   const { server } = await prepareHttpServer(config, sd, master);
 
@@ -110,9 +105,6 @@ export async function stopServer(t) {
   t.context.server?.close();
   t.context.server?.unref();
   await t.context.master?.close();
-  if (t.context.databaseFile) {
-    await rm(t.context.databaseFile, { recursive: true });
-  }
 }
 
 export async function wait(msecs = 1000) {
