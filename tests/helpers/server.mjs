@@ -163,14 +163,12 @@ export async function* allContexts(context, users, dataFile) {
 
     try {
       yield context;
-    }
-    catch(e) {
+    } catch (e) {
       console.error(e);
-    }
-
-    finally {
+      throw e;
+    } finally {
       await stopServer(context);
-      await cleanup();  
+      await cleanup();
     }
   }
 }
@@ -178,7 +176,11 @@ export async function* allContexts(context, users, dataFile) {
 export async function execAllContexts(t, exec, ...args) {
   for await (const context of allContexts(t.context)) {
     t.log(context.title);
-    await exec(t, ...args);
+    try {
+      await exec(t, ...args);
+    } catch (e) {
+      t.log(e);
+    }
   }
 }
 
