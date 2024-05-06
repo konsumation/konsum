@@ -179,7 +179,7 @@ export async function execAllContexts(t, exec, ...args) {
     try {
       await exec(t, ...args);
     } catch (e) {
-      t.log(e);
+      t.fail(e);
     }
   }
 }
