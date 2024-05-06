@@ -124,6 +124,7 @@ export async function* allContexts(context, users, dataFile) {
     async port => {
       const databaseFile = pn(`../build/db-${port}`);
       return {
+        title: "level",
         database: { "@konsumation/db-level": databaseFile },
         async cleanup() {
           await rm(databaseFile, { recursive: true });
@@ -139,6 +140,7 @@ export async function* allContexts(context, users, dataFile) {
       await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
       await sql`CREATE SCHEMA ${sql(schemaName)}`;
       return {
+        title: "postgres",
         database: {
           "@konsumation/db-postgresql": setSchema(
             process.env.POSTGRES_URL,
@@ -155,7 +157,8 @@ export async function* allContexts(context, users, dataFile) {
 
   for (const db of dbs) {
     const port = await getPort();
-    const { database, cleanup } = await db(port);
+    const { database, cleanup, title } = await db(port);
+    context.title = title;
     await startServer(context, port, database, users, dataFile);
     yield context;
 
@@ -167,6 +170,7 @@ export async function* allContexts(context, users, dataFile) {
 
 export async function execAllContexts(t, exec, ...args) {
   for await (const context of allContexts(t.context)) {
+    t.log(context.title);
     await exec(t, ...args);
   }
 }
