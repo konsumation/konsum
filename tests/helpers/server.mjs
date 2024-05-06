@@ -134,7 +134,7 @@ export async function* allContexts(context, users, dataFile) {
 
   if (process.env.POSTGRES_URL) {
     dbs.push(async port => {
-      const schemaName = "testintegration";
+      const schemaName = `testintegration${port}`;
       const sql = postgres(process.env.POSTGRES_URL);
       await sql`DROP SCHEMA IF EXISTS ${sql(schemaName)} CASCADE`;
       await sql`CREATE SCHEMA ${sql(schemaName)}`;
