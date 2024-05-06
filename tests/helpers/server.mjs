@@ -160,11 +160,18 @@ export async function* allContexts(context, users, dataFile) {
     const { database, cleanup, title } = await db(port);
     context.title = title;
     await startServer(context, port, database, users, dataFile);
-    yield context;
 
-    await stopServer(context);
+    try {
+      yield context;
+    }
+    catch(e) {
+      console.error(e);
+    }
 
-    await cleanup();
+    finally {
+      await stopServer(context);
+      await cleanup();  
+    }
   }
 }
 
