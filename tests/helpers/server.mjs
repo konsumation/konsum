@@ -1,11 +1,11 @@
 import { readFileSync, createReadStream } from "node:fs";
 import { mkdir, writeFile, rm } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
+import postgres from "postgres";
+import getPort from "@ava/get-port";
+import { setSchema } from "@konsumation/db-postgresql";
 import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
-import postgres from "postgres";
-import { setSchema } from "@konsumation/db-postgresql";
-import getPort from "@ava/get-port";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
