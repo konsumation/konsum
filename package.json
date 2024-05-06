@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@konsumation/db-level": "^9.0.18",
-    "@konsumation/db-postgresql": "^4.2.9",
+    "@konsumation/db-postgresql": "^4.2.10",
     "commander": "^12.0.0",
     "config-expander": "^14.0.3",
     "jsonwebtoken": "^9.0.2",
@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@ava/get-port": "^2.0.0",
-    "@konsumation/db-test": "^4.2.8",
+    "@konsumation/db-test": "^4.2.9",
     "@konsumation/openapi": "^2.3.10",
     "@semantic-release/commit-analyzer": "^12.0.0",
     "@semantic-release/exec": "^6.0.3",
