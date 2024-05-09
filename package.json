@@ -61,7 +61,7 @@
     "ava-openapi": "^1.2.2",
     "c8": "^9.1.0",
     "documentation": "^14.0.3",
-    "execa": "^8.0.1",
+    "execa": "^9.0.1",
     "got": "^14.2.1",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^15.3.6",
