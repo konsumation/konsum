@@ -1,10 +1,14 @@
 import test from "ava";
-import { mkdir, stat } from "node:fs/promises";
+import { mkdir, rmdir, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { execa } from "execa";
 import { createConfig } from "./helpers/server.mjs";
+import getPort from "@ava/get-port";
 
-test.before(t => createConfig(t.context));
+test.before(async t => {
+  return createConfig(t.context, await getPort());
+});
+test.after(t => rmdir(t.context.configDir, { recursive: true }));
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -16,28 +20,34 @@ async function wait(msecs = 1000) {
 
 test("cli version", async t => {
   const p = await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "--version"
   ]);
   t.regex(p.stdout, /\d+/);
+
+  await p;
 });
 
 test.serial("cli insert category", async t => {
   await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "restore",
     pn(
       "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
     )
   ]);
   await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "insert",
     "CAT-0",
     "99.99"
   ]);
   const p = await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "list",
     "CAT-0"
   ]);
@@ -46,23 +56,28 @@ test.serial("cli insert category", async t => {
 
 test.serial("cli list category", async t => {
   await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "restore",
     pn(
       "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
     )
   ]);
   const p = await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "list",
     "CAT-0"
   ]);
   t.regex(p.stdout, /77.34/);
+
+  await p;
 });
 
 test.serial("cli restore database", async t => {
   const p = await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "restore",
     pn(
       "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
@@ -76,7 +91,8 @@ test.serial("cli backup database", async t => {
   const dumpFile = pn("../build/database.txt");
   await mkdir(pn("../build"), { recursive: true });
   const p = await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "backup",
     dumpFile
   ]);
@@ -88,18 +104,28 @@ test.serial("cli backup database", async t => {
 
 test.serial("cli backup database stdout", async t => {
   const p = await execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "backup"
   ]);
   t.regex(p.stdout, /77.34/);
+
+  await p;
 });
 
 test.serial("cli start", async t => {
   const p = execa(pn("../src/konsum-cli.mjs"), [
-    "--config", t.context.configDir,
+    "--config",
+    t.context.configDir,
     "start"
   ]);
-  await wait(200);
-  p.cancel();
+  await wait(500);
+
+  /*
+   const url = t.context.url + "/admin/stop"
+    const rc = await fetch(url, { method: "POST" });
+    console.log(rc);
+*/
+
   t.true(true);
 });
