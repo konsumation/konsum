@@ -1,5 +1,5 @@
 import test from "ava";
-import { mkdir, rmdir, stat } from "node:fs/promises";
+import { mkdir, rm, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { execa } from "execa";
 import { createConfig, login } from "./helpers/server.mjs";
@@ -8,7 +8,7 @@ import getPort from "@ava/get-port";
 test.before(async t => {
   return createConfig(t.context, await getPort());
 });
-test.after(t => rmdir(t.context.configDir, { recursive: true }));
+test.after(t => rm(t.context.configDir, { recursive: true }));
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
