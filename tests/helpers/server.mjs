@@ -175,6 +175,7 @@ export async function* allContexts(context, users, dataFile) {
     } finally {
       await stopServer(context);
       await cleanup();
+      await rm(context.configDir, { recursive: true });
     }
   }
 }
