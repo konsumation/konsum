@@ -2,7 +2,7 @@ import test from "ava";
 import { mkdir, rmdir, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { execa } from "execa";
-import { createConfig } from "./helpers/server.mjs";
+import { createConfig, login } from "./helpers/server.mjs";
 import getPort from "@ava/get-port";
 
 test.before(async t => {
@@ -119,8 +119,12 @@ test.serial("cli start", async t => {
     t.context.configDir,
     "start"
   ]);
-  await wait(500);
+  await wait(1000);
 
+  /*
+  await login(t.context);
+  t.log(t.context.token);
+ */
   /*
    const url = t.context.url + "/admin/stop"
     const rc = await fetch(url, { method: "POST" });

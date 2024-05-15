@@ -84,6 +84,20 @@ export async function createConfig(
   return config;
 }
 
+export async function login(context, username="admin")
+{
+  const response = await fetch(`${context.url}/authenticate`, {
+    method: "POST",
+    headers: { "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify({
+      username,
+      password: context.config.auth.users[username].password
+    })
+  });
+
+  context.token = (await response.json()).access_token;
+}
+
 export async function startServer(context, port, database, users, dataFile) {
   const config = await createConfig(context, port, users, database);
   const { master } = await prepareDatabase(config);
@@ -95,16 +109,8 @@ export async function startServer(context, port, database, users, dataFile) {
     await wait(50);
   }
 
-  const response = await fetch(`http://localhost:${port}/authenticate`, {
-    method: "POST",
-    headers: { "content-type": "application/json", accept: "application/json" },
-    body: JSON.stringify({
-      username: "admin",
-      password: config.auth.users.admin.password
-    })
-  });
+  await login(context);
 
-  context.token = (await response.json()).access_token;
   context.master = master;
   context.server = server;
 }
