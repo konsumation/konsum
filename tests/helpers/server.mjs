@@ -80,7 +80,11 @@ export async function createConfig(
   context.configDir = configDir;
   context.configFile = configFile;
 
-  await writeFile(configFile, JSON.stringify(config, undefined, 2), "utf8");
+  const cfg = JSON.parse(JSON.stringify(config));
+  cfg.auth.jwt.public = "${document('../../config/demo.rsa.pub')}";
+  cfg.auth.jwt.private = "${document('../../config/demo.rsa')}";
+  await writeFile(configFile, JSON.stringify(cfg, undefined, 2), "utf8");
+
   return config;
 }
 
@@ -128,7 +132,7 @@ export async function wait(msecs = 1000) {
 export async function* allContexts(context, users, dataFile) {
   const dbs = [
     async port => {
-      const databaseFile = pn(`../build/db-${port}`);
+      const databaseFile = pn(`../../build/db-${port}`);
       return {
         title: "level",
         database: { "@konsumation/db-level": databaseFile },
