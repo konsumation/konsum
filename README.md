@@ -52,7 +52,7 @@ npm -g install konsum
 # create a linux package
 
 ```shell
-npm run pkg
+npx npm-pkgbuild
 ```
 
 # how to configure
