@@ -99,7 +99,8 @@
           "type": "npm-pack"
         },
         {
-          "type": "node-modules"
+          "type": "node-modules",
+	  "withoutDevelpmentDependencies": false
         }
       ]
     },
