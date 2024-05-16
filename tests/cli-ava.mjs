@@ -38,8 +38,8 @@ test("cli version", async t => {
   await p;
 });
 
-test.serial("cli insert category", async t => {
-  await execa(pn("../src/konsum-cli.mjs"), [
+test.serial("cli restore database", async t => {
+  const p = await execa(pn("../src/konsum-cli.mjs"), [
     "--config",
     t.context.configDir,
     "restore",
@@ -47,6 +47,11 @@ test.serial("cli insert category", async t => {
       "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
     )
   ]);
+
+  t.regex(p.stdout, /database-version-3.txt restored/);
+});
+
+test.serial("cli insert category", async t => {
   await execa(pn("../src/konsum-cli.mjs"), [
     "--config",
     t.context.configDir,
@@ -81,19 +86,6 @@ test.serial("cli list category", async t => {
   t.regex(p.stdout, /77.34/);
 
   await p;
-});
-
-test.serial("cli restore database", async t => {
-  const p = await execa(pn("../src/konsum-cli.mjs"), [
-    "--config",
-    t.context.configDir,
-    "restore",
-    pn(
-      "../node_modules/@konsumation/db-test/src/fixtures/database-version-3.txt"
-    )
-  ]);
-
-  t.regex(p.stdout, /database-version-3.txt restored/);
 });
 
 test.serial("cli backup database", async t => {
@@ -141,4 +133,8 @@ test.serial("cli start", async t => {
 */
 
   t.true(true);
+
+  setTimeout(() => {
+    p.kill();
+  }, 3000);
 });
