@@ -64,7 +64,7 @@
     "execa": "^9.1.0",
     "got": "^14.2.1",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^15.3.10",
+    "npm-pkgbuild": "^15.3.12",
     "semantic-release": "^23.1.1",
     "tmp": "^0.2.1",
     "typescript": "^5.4.5"
