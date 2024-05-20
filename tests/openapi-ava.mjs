@@ -4,6 +4,8 @@ import { allContexts } from "./helpers/server.mjs";
 import { loadOpenAPI, openapiPathTest } from "ava-openapi";
 
 export async function openapiPathTestAllContexts(t, ...args) {
+  t.context.parameters = parameters;
+
   await loadOpenAPI(
     t,
     fileURLToPath(
@@ -58,46 +60,25 @@ test.serial(openapiPathTestAllContexts, "/state", {
 test.serial(openapiPathTestAllContexts, "/category");
 
 test.serial(openapiPathTestAllContexts, "/category/{category}", {
-  get: {
-    parameters
-  },
   put: {
-    parameters,
     request: { body: { unit: "m3" } }
   },
   post: {
-    parameters,
     request: { body: { description: "post" } }
-  },
-  delete: {
-    parameters
   }
 });
 
 test.serial(
   openapiPathTestAllContexts,
-  /\/category\/{category}\/(value|meter|note)$/,
-  {
-    get: {
-      parameters
-    }
-  }
+  /\/category\/{category}\/(value|meter|note)$/
 );
 
 test.serial(openapiPathTestAllContexts, "/category/{category}/meter/{meter}", {
-  get: {
-    parameters
-  },
   put: {
-    parameters,
     200: { request: { body: { unit: "m3" } } }
   },
   post: {
-    parameters,
     200: { request: { body: { description: "post" } } }
-  },
-  delete: {
-    parameters
   }
 });
 
@@ -105,15 +86,8 @@ test.serial(
   openapiPathTestAllContexts,
   /\/category\/{category}(\/meter\/{meter})?\/value\/{date}/,
   {
-    get: {
-      parameters
-    },
     put: {
-      parameters,
       200: { request: { body: { value: 1.23 } } }
-    },
-    delete: {
-      parameters
     }
   }
 );
@@ -121,11 +95,7 @@ test.serial(
 test.serial(
   openapiPathTestAllContexts,
   /\/category\/{category}\/meter\/{meter}\/(note|value)$/,
-  {
-    get: {
-      parameters
-    }
-  }
+  {}
 );
 
 test.serial(openapiPathTestAllContexts, "/admin/backup", {
