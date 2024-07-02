@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@ava/get-port": "^2.0.0",
-    "@konsumation/db-test": "^4.2.12",
+    "@konsumation/db-test": "^4.2.13",
     "@konsumation/openapi": "^2.4.4",
     "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/exec": "^6.0.3",
