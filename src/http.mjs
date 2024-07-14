@@ -341,7 +341,7 @@ export async function prepareHttpServer(config, sd, master) {
             if (factory.parentType) {
               parent = await master.one(ctx.params);
               if (parent && parent.type !== factory.parentType) {
-                parent = await parent.activeMeter(context); // TODO move into Value write
+                parent = await parent.activeMeter(context, true); // TODO move into Value write
               }
 
               if (!parent) {
