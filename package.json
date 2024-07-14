@@ -39,7 +39,7 @@
     "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs"
   },
   "dependencies": {
-    "@konsumation/db-level": "^9.0.22",
+    "@konsumation/db-level": "^9.0.23",
     "@konsumation/db-postgresql": "^4.5.13",
     "commander": "^12.1.0",
     "config-expander": "^14.0.4",
@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@ava/get-port": "^2.0.0",
-    "@konsumation/db-test": "^4.2.13",
+    "@konsumation/db-test": "^4.2.14",
     "@konsumation/openapi": "^2.4.4",
     "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/exec": "^6.0.3",
