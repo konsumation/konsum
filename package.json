@@ -39,10 +39,10 @@
     "lint:typescript": "tsc --allowJs --checkJs --noEmit --resolveJsonModule -t esnext -m esnext --module nodenext --moduleResolution nodenext ./src**/*.mjs"
   },
   "dependencies": {
-    "@konsumation/db-level": "^9.0.26",
+    "@konsumation/db-level": "^9.0.27",
     "@konsumation/db-postgresql": "^4.5.15",
     "commander": "^12.1.0",
-    "config-expander": "^14.0.4",
+    "config-expander": "^14.0.6",
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.3",
     "koa-better-router": "^2.1.1",
