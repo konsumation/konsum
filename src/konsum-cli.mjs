@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --title konsum
+#!/usr/bin/env -S node --unhandled-rejections=strict --trace-uncaught --trace-warnings --title konsum
 import { readFileSync, createWriteStream, createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
