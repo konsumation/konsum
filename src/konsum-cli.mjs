@@ -3,15 +3,20 @@ import { readFileSync, createWriteStream, createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { program } from "commander";
 import { expand } from "config-expander";
-import { prepareDatabase, defaultDatabaseConfig,prepareHttpServer, defaultHttpServerConfig,defaultAuthConfig } from "@konsumation/konsum";
+import {
+  prepareDatabase,
+  defaultDatabaseConfig,
+  prepareHttpServer,
+  defaultHttpServerConfig,
+  defaultAuthConfig
+} from "@konsumation/konsum";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
 }
-const encodingOptions = "utf8";
 
 const { version, description } = JSON.parse(
-  readFileSync(pn("../package.json"), encodingOptions)
+  readFileSync(pn("../package.json"), "utf8")
 );
 
 program
@@ -42,9 +47,7 @@ program.command("backup [file]").action(async output => {
   const { master } = await prepareConfig();
 
   output =
-    output === undefined
-      ? process.stdout
-      : createWriteStream(output, encodingOptions);
+    output === undefined ? process.stdout : createWriteStream(output, "utf8");
 
   for await (const line of master.text()) {
     output.write(line + "\n");
@@ -56,9 +59,7 @@ program.command("backup [file]").action(async output => {
 program.command("restore [file]").action(async input => {
   const { master } = await prepareConfig();
   const statistics = await master.fromText(
-    input === undefined
-      ? process.stdin
-      : createReadStream(input, encodingOptions)
+    input === undefined ? process.stdin : createReadStream(input, "utf8")
   );
   await master.close();
   console.log(
