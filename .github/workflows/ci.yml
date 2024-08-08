@@ -18,7 +18,7 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 22.5.1
+          - 22.6.0
     env:
       POSTGRES_URL_DISABLED: postgresql://postgres:postgres@localhost:5432/ci_db_test
       POSTGRES_USER: postgres
@@ -56,6 +56,8 @@ jobs:
       - run: npm ci
       - run: node tests/helpers/ldapadd.mjs -h localhost:389 -D
           cn=admin,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif
+      - name: null
+        run: npm ci
       - run: npm run cover --if-present
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@v2
@@ -72,6 +74,7 @@ jobs:
       - self-hosted
       - linux
       - ARM64
+      - ubuntu-latest
     permissions:
       contents: write
       issues: write
@@ -97,10 +100,12 @@ jobs:
       - uses: actions/checkout@v4.1.7
       - uses: actions/setup-node@v4.0.3
         with:
-          node-version: 22.5.1
+          node-version: 22.6.0
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
+      - name: checkout
+        run: npm ci
       - run: npx semantic-release
         env:
           CI: "true"
