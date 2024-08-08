@@ -18,7 +18,7 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 22.5.1
+          - 22.6.0
     env:
       POSTGRES_URL_DISABLED: postgresql://postgres:postgres@localhost:5432/ci_db_test
       POSTGRES_USER: postgres
@@ -72,6 +72,7 @@ jobs:
       - self-hosted
       - linux
       - ARM64
+      - ubuntu-latest
     permissions:
       contents: write
       issues: write
@@ -97,7 +98,7 @@ jobs:
       - uses: actions/checkout@v4.1.7
       - uses: actions/setup-node@v4.0.3
         with:
-          node-version: 22.5.1
+          node-version: 22.6.0
           cache: npm
           cache-dependency-path: package-lock.json
       - run: npm ci
@@ -108,6 +109,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PKGBUILD_PUBLISH: ${{ secrets.PKGBUILD_PUBLISH }}
           PKGEXT: .pkg.tar.xz
+      - name: checkout
+        run: npm ci
   finish:
     needs:
       - test-node
