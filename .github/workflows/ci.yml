@@ -47,7 +47,8 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4.1.7
+      - name: checkout
+        uses: actions/checkout@v4.1.7
       - uses: actions/setup-node@v4.0.3
         with:
           node-version: ${{ matrix.node-version }}
@@ -96,7 +97,8 @@ jobs:
           sudo apt-get install -f ./pacman-utils_5.2.2-3_amd64.deb
 
           fi
-      - uses: actions/checkout@v4.1.7
+      - name: checkout
+        uses: actions/checkout@v4.1.7
       - uses: actions/setup-node@v4.0.3
         with:
           node-version: 22.6.0
