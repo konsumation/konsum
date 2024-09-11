@@ -48,7 +48,7 @@
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.3.0",
     "koa-jwt": "^4.0.4",
-    "ldapts": "^7.1.1"
+    "ldapts": "^7.2.0"
   },
   "devDependencies": {
     "@ava/get-port": "^2.0.0",
