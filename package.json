@@ -42,7 +42,7 @@
     "@konsumation/db-level": "^9.0.29",
     "@konsumation/db-postgresql": "^4.6.1",
     "commander": "^12.1.0",
-    "config-expander": "^14.0.8",
+    "config-expander": "^14.0.9",
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.3",
     "koa-better-router": "^2.1.1",
