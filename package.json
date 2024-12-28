@@ -8,8 +8,8 @@
   "types": "./types/server.d.mts",
   "exports": {
     ".": {
-      "default": "./src/server.mjs",
-      "types": "./types/server.d.mts"
+      "types": "./types/server.d.mts",
+      "default": "./src/server.mjs"
     }
   },
   "description": "Collect resource usage in a home environment",
