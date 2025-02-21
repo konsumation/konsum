@@ -65,7 +65,7 @@
     "execa": "^9.5.2",
     "got": "^14.4.5",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^15.6.11",
+    "npm-pkgbuild": "^16.0.1",
     "semantic-release": "^24.2.3",
     "tmp": "^0.2.1",
     "typescript": "^5.7.3"
@@ -95,14 +95,12 @@
       "${tmpfiles.config.dir}${name}.conf": "pkg/tmpfiles.conf",
       "${sysusers.config.dir}${name}.conf": "pkg/sysusers.conf",
       "${config.dir}config.json": "config/config.json",
-      "${install.dir}": [
-        {
-          "type": "npm-pack"
-        },
-        {
-          "type": "node-modules"
-        }
-      ]
+      "${install.dir}": {
+        "type": "npm-pack"
+      },
+      "${install.dir}/node_modules": {
+        "type": "node-modules"
+      }
     },
     "hooks": "pkg/hooks.sh",
     "backup": "${config.dir}config.json",
