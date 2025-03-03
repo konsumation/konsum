@@ -71,7 +71,7 @@
     "typescript": "^5.8.2"
   },
   "optionalDependencies": {
-    "mf-hosting": "^2.8.8",
+    "mf-hosting": "^2.8.9",
     "sd-daemon": "^2.0.1"
   },
   "engines": {
