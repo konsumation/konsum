@@ -68,7 +68,7 @@
     "npm-pkgbuild": "^17.5.1",
     "semantic-release": "^24.2.3",
     "tmp": "^0.2.1",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "optionalDependencies": {
     "mf-hosting": "^2.8.9",
