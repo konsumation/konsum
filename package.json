@@ -56,7 +56,7 @@
     "@konsumation/openapi": "^2.4.4",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/exec": "^7.1.0",
-    "@semantic-release/github": "^11.0.2",
+    "@semantic-release/github": "^11.0.3",
     "@semantic-release/release-notes-generator": "^14.0.3",
     "ava": "^6.3.0",
     "ava-openapi": "^1.4.9",
@@ -66,7 +66,7 @@
     "got": "^14.4.7",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^18.2.8",
-    "semantic-release": "^24.2.4",
+    "semantic-release": "^24.2.5",
     "tmp": "^0.2.1",
     "typescript": "^5.8.3"
   },
