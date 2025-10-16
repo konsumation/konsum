@@ -19,7 +19,7 @@ jobs:
           - ubuntu-latest
         node-version:
           - 22.20.0
-          - 24.9.0
+          - 24.10.0
     env:
       POSTGRES_URL_DISABLED: postgresql://postgres:postgres@localhost:5432/ci_db_test
       POSTGRES_USER: postgres
