@@ -18,7 +18,7 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 22.20.0
+          - 22.21.0
           - 24.10.0
     env:
       POSTGRES_URL_DISABLED: postgresql://postgres:postgres@localhost:5432/ci_db_test
@@ -100,7 +100,7 @@ jobs:
       - name: prepare node
         uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.20.0
+          node-version: 22.21.0
           cache: npm
           cache-dependency-path: package-lock.json
       - name: checkout
