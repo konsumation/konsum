@@ -54,8 +54,6 @@ jobs:
         uses: actions/setup-node@v6.0.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-          cache-dependency-path: package-lock.json
       - run: node tests/helpers/ldapadd.mjs -h localhost:389 -D
           cn=admin,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif
       - name: checkout
@@ -101,8 +99,6 @@ jobs:
         uses: actions/setup-node@v6.0.0
         with:
           node-version: 24.11.1
-          cache: npm
-          cache-dependency-path: package-lock.json
       - name: checkout
         run: npm ci
       - name: install
