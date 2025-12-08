@@ -54,7 +54,8 @@ jobs:
         uses: actions/setup-node@v6.1.0
         with:
           node-version: ${{ matrix.node-version }}
-      - run: node tests/helpers/ldapadd.mjs -h localhost:389 -D
+      - name: prepare
+        run: node tests/helpers/ldapadd.mjs -h localhost:389 -D
           cn=admin,dc=example,dc=com -w test -f tests/fixtures/ldap/base.ldif
       - name: checkout
         run: npm ci
