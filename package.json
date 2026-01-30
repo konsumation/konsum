@@ -67,7 +67,7 @@
     "got": "^14.6.6",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^20.2.3",
-    "semantic-release": "^25.0.2",
+    "semantic-release": "^25.0.3",
     "tmp": "^0.2.1",
     "typescript": "^5.9.3"
   },
