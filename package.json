@@ -42,7 +42,7 @@
   "dependencies": {
     "@konsumation/db-level": "^9.0.45",
     "@konsumation/db-postgresql": "^4.6.5",
-    "commander": "^14.0.2",
+    "commander": "^14.0.3",
     "config-expander": "^14.0.9",
     "jsonwebtoken": "^9.0.3",
     "koa": "^3.1.1",
