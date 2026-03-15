@@ -6,7 +6,6 @@ import { parse as parseExif } from "exifr";
 
 export const defaultMeterPhotoConfig = {
   meterPhoto: {
-    enabled: false,
     vision: {
       apiKey: "${first(env.VISION_API_KEY, env.GOOGLE_AI_STUDIO_API_KEY,'')}",
       apiEndpoint:

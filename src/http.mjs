@@ -224,7 +224,7 @@ export async function prepareHttpServer(config, sd, master) {
    * Expects JSON body: { "image": "<base64>", "mimeType": "image/jpeg" }
    * Returns: { "value": "12345.6", "raw": "<full AI response>" }
    */
-  if (config.meterPhoto?.enabled) {
+  if (config.meterPhoto?.vision?.apiKey) {
     router.addRoute(
       "POST",
       "/category/:category/meter-photo",
