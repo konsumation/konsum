@@ -2,6 +2,7 @@
  * Meter photo OCR via external AI vision API.
  * All connection details are taken from config — nothing is hardcoded.
  */
+import { parse as parseExif } from "exifr";
 
 export const defaultMeterPhotoConfig = {
   meterPhoto: {
@@ -20,44 +21,70 @@ export const defaultMeterPhotoConfig = {
 };
 
 /**
+ * Extract the capture date from image EXIF data.
+ * Returns an ISO 8601 string or null if no date is found.
+ *
+ * @param {Buffer} imageBuffer
+ * @returns {Promise<string|null>}
+ */
+export async function extractExifDate(imageBuffer) {
+  try {
+    const exif = await parseExif(imageBuffer, {
+      pick: ["DateTimeOriginal", "CreateDate", "DateTimeDigitized", "DateTime"]
+    });
+
+    const date =
+      exif?.DateTimeOriginal ??
+      exif?.CreateDate ??
+      exif?.DateTimeDigitized ??
+      exif?.DateTime ??
+      null;
+
+    return date instanceof Date ? date.toISOString() : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Send an image to the configured AI vision API and return the recognized meter value.
+ * Runs EXIF date extraction and AI recognition in parallel.
  *
  * @param {object} config - the meterPhoto config section
  * @param {string} imageBase64 - base64-encoded image data
  * @param {string} mimeType - MIME type of the image (e.g. "image/jpeg")
- * @returns {Promise<{value: string, raw: string}>}
+ * @returns {Promise<{value: string, raw: string, date: string|null}>}
  */
 export async function recognizeMeterValue(config, imageBase64, mimeType) {
   const { apiKey, apiEndpoint, model, prompt, maxOutputTokens, temperature } =
     config.vision;
 
-  const url = `${apiEndpoint}/models/${model}:generateContent?key=${apiKey}`;
+  const imageBuffer = Buffer.from(imageBase64, "base64");
 
-  const body = {
-    contents: [
-      {
-        parts: [
-          { text: prompt },
+  const visionRequest = fetch(
+    `${apiEndpoint}/models/${model}:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
           {
-            inlineData: {
-              mimeType,
-              data: imageBase64
-            }
+            parts: [
+              { text: prompt },
+              { inlineData: { mimeType, data: imageBase64 } }
+            ]
           }
-        ]
-      }
-    ],
-    generationConfig: {
-      maxOutputTokens,
-      temperature
+        ],
+        generationConfig: { maxOutputTokens, temperature }
+      })
     }
-  };
+  );
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
+  // Run EXIF extraction and AI call in parallel
+  const [date, response] = await Promise.all([
+    extractExifDate(imageBuffer),
+    visionRequest
+  ]);
 
   if (!response.ok) {
     const error = await response.text();
@@ -71,5 +98,5 @@ export async function recognizeMeterValue(config, imageBase64, mimeType) {
   const match = raw.match(/[\d]+([.,][\d]+)?/);
   const value = match ? match[0].replace(",", ".") : raw;
 
-  return { value, raw };
+  return { value, raw, date };
 }
