@@ -5,6 +5,7 @@ import ms from "ms";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
+import { recognizeMeterValue } from "./meter-photo.mjs";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
@@ -217,6 +218,42 @@ export async function prepareHttpServer(config, sd, master) {
     ctx.throw(401, "Authentication failed");
     return next();
   });
+
+  /**
+   * Recognize meter value from a photo via AI vision API.
+   * Expects JSON body: { "image": "<base64>", "mimeType": "image/jpeg" }
+   * Returns: { "value": "12345.6", "raw": "<full AI response>" }
+   */
+  if (config.meterPhoto?.enabled) {
+    router.addRoute(
+      "POST",
+      "/category/:category/meter-photo",
+      restricted,
+      BodyParser(),
+      async (ctx, next) => {
+        setNoCacheHeaders(ctx);
+
+        const { image, mimeType } = ctx.request.body ?? {};
+
+        if (!image) {
+          ctx.throw(400, "Missing 'image' field (base64 encoded)");
+        }
+
+        try {
+          const result = await recognizeMeterValue(
+            config.meterPhoto,
+            image,
+            mimeType ?? "image/jpeg"
+          );
+          ctx.body = result;
+        } catch (e) {
+          ctx.throw(502, `Meter recognition failed: ${e.message}`);
+        }
+
+        return next();
+      }
+    );
+  }
 
   app.use(router.middleware());
 
