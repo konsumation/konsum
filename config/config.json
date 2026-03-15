@@ -50,11 +50,11 @@
   },
   "meterPhoto": {
     "enabled": "${first(env.METER_PHOTO_ENABLED, false)}",
-    "gemini": {
-      "apiKey": "${first(env.GEMINI_API_KEY, '')}",
-      "apiEndpoint": "${first(env.GEMINI_ENDPOINT, 'https://generativelanguage.googleapis.com/v1beta')}",
-      "model": "${first(env.GEMINI_MODEL, 'gemini-2.0-flash')}",
-      "prompt": "${first(env.GEMINI_PROMPT, 'Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.')}",
+    "vision": {
+      "apiKey": "${first(env.VISION_API_KEY, '')}",
+      "apiEndpoint": "${first(env.VISION_API_ENDPOINT, 'https://generativelanguage.googleapis.com/v1beta')}",
+      "model": "${first(env.VISION_API_MODEL, 'gemini-2.0-flash')}",
+      "prompt": "${first(env.VISION_API_PROMPT, 'Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.')}",
       "maxOutputTokens": 64,
       "temperature": 0
     }

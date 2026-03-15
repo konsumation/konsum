@@ -6,13 +6,13 @@
 export const defaultMeterPhotoConfig = {
   meterPhoto: {
     enabled: false,
-    gemini: {
-      apiKey: "${first(env.GEMINI_API_KEY,'')}",
+    vision: {
+      apiKey: "${first(env.VISION_API_KEY,'')}",
       apiEndpoint:
-        "${first(env.GEMINI_ENDPOINT,'https://generativelanguage.googleapis.com/v1beta')}",
-      model: "${first(env.GEMINI_MODEL,'gemini-2.0-flash')}",
+        "${first(env.VISION_API_ENDPOINT,'https://generativelanguage.googleapis.com/v1beta')}",
+      model: "${first(env.VISION_API_MODEL,'gemini-2.0-flash')}",
       prompt:
-        "${first(env.GEMINI_PROMPT,'Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.')}",
+        "${first(env.VISION_API_PROMPT,'Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.')}",
       maxOutputTokens: 64,
       temperature: 0
     }
@@ -29,7 +29,7 @@ export const defaultMeterPhotoConfig = {
  */
 export async function recognizeMeterValue(config, imageBase64, mimeType) {
   const { apiKey, apiEndpoint, model, prompt, maxOutputTokens, temperature } =
-    config.gemini;
+    config.vision;
 
   const url = `${apiEndpoint}/models/${model}:generateContent?key=${apiKey}`;
 
@@ -61,7 +61,7 @@ export async function recognizeMeterValue(config, imageBase64, mimeType) {
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`Gemini API error ${response.status}: ${error}`);
+    throw new Error(`Vision API error ${response.status}: ${error}`);
   }
 
   const data = await response.json();
