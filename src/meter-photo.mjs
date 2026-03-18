@@ -2,7 +2,7 @@
  * Meter photo OCR via external AI vision API.
  * All connection details are taken from config — nothing is hardcoded.
  */
-import { parse as parseExif } from "exifr";
+import exifr from "exifr";
 
 export const defaultMeterPhotoConfig = {
   meterPhoto: {
@@ -28,7 +28,7 @@ export const defaultMeterPhotoConfig = {
  */
 export async function extractExifDate(imageBuffer) {
   try {
-    const exif = await parseExif(imageBuffer, {
+    const exif = await exifr.parse(imageBuffer, {
       pick: ["DateTimeOriginal", "CreateDate", "DateTimeDigitized", "DateTime"]
     });
 
