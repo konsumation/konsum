@@ -26,6 +26,7 @@ const API_KEY =
   "";
 
 const FIXTURE = pn("./fixtures/meter.jpg");
+const FIXTURE2 = pn("./fixtures/meter2.jpg");
 
 const VISION_CONFIG = {
   apiKey: API_KEY,
@@ -67,8 +68,10 @@ if (!API_KEY) {
     );
   });
 
-  async function postMeterPhoto(url, token) {
-    const imageBase64 = readFileSync(FIXTURE).toString("base64");
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  async function postMeterPhoto(url, token, fixturePath = FIXTURE) {
+    const imageBase64 = readFileSync(fixturePath).toString("base64");
     return fetch(`${url}/category/electricity/meter-photo`, {
       method: "POST",
       headers: {
@@ -95,6 +98,7 @@ if (!API_KEY) {
   });
 
   test.serial("meter-photo: recognized value is ~19777.9 kWh", async t => {
+    await sleep(5000);
     const response = await postMeterPhoto(t.context.url, t.context.token);
     const { value } = await response.json();
 
@@ -106,6 +110,22 @@ if (!API_KEY) {
     t.true(
       numeric >= 1975 && numeric < 19780,
       `Expected ~1977 or ~19777, got ${numeric}`
+    );
+  });
+
+  test.serial("meter-photo: reads Heliowatt meter (meter2) as ~10137 kWh", async t => {
+    await sleep(5000);
+    const response = await postMeterPhoto(t.context.url, t.context.token, FIXTURE2);
+
+    t.is(response.status, 200);
+    const body = await response.json();
+    t.log("value:", body.value, "raw:", body.raw);
+
+    const numeric = parseFloat(body.value.replace(",", "."));
+    // Meter shows 10137.1 — decimal digit may vary, integer part should match
+    t.true(
+      numeric >= 10135 && numeric < 10140,
+      `Expected ~10137, got ${numeric}`
     );
   });
 
