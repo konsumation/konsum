@@ -1,5 +1,6 @@
 /**
  * Meter photo OCR via external AI vision API.
+ * Uses OpenAI-compatible chat completions format (works with OpenRouter, OpenAI, Ollama, etc.)
  * All connection details are taken from config — nothing is hardcoded.
  */
 import exifr from "exifr";
@@ -7,12 +8,11 @@ import exifr from "exifr";
 export const defaultMeterPhotoConfig = {
   meterPhoto: {
     vision: {
-      apiKey: "${first(env.VISION_API_KEY, env.GOOGLE_AI_STUDIO_API_KEY,'')}",
-      apiEndpoint:
-        "${first(env.VISION_API_ENDPOINT,'https://generativelanguage.googleapis.com/v1beta')}",
-      model: "${first(env.VISION_API_MODEL,'gemini-2.0-flash')}",
+      apiKey: "${first(env.VISION_API_KEY, env.OPENROUTER_API_KEY, env.GOOGLE_AI_STUDIO_API_KEY, '')}",
+      apiEndpoint: "${first(env.VISION_API_ENDPOINT, 'https://openrouter.ai/api/v1')}",
+      model: "${first(env.VISION_API_MODEL, 'google/gemma-3-12b-it:free')}",
       prompt:
-        "${first(env.VISION_API_PROMPT,'Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.')}",
+        "${first(env.VISION_API_PROMPT, 'Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.')}",
       maxOutputTokens: 64,
       temperature: 0
     }
@@ -47,6 +47,7 @@ export async function extractExifDate(imageBuffer) {
 
 /**
  * Send an image to the configured AI vision API and return the recognized meter value.
+ * Uses OpenAI-compatible chat completions format.
  * Runs EXIF date extraction and AI recognition in parallel.
  *
  * @param {object} config - the meterPhoto config section
@@ -60,24 +61,30 @@ export async function recognizeMeterValue(config, imageBase64, mimeType) {
 
   const imageBuffer = Buffer.from(imageBase64, "base64");
 
-  const visionRequest = fetch(
-    `${apiEndpoint}/models/${model}:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              { text: prompt },
-              { inlineData: { mimeType, data: imageBase64 } }
-            ]
-          }
-        ],
-        generationConfig: { maxOutputTokens, temperature }
-      })
-    }
-  );
+  const visionRequest = fetch(`${apiEndpoint}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            {
+              type: "image_url",
+              image_url: { url: `data:${mimeType};base64,${imageBase64}` }
+            }
+          ]
+        }
+      ],
+      max_tokens: maxOutputTokens,
+      temperature
+    })
+  });
 
   // Run EXIF extraction and AI call in parallel
   const [date, response] = await Promise.all([
@@ -91,7 +98,7 @@ export async function recognizeMeterValue(config, imageBase64, mimeType) {
   }
 
   const data = await response.json();
-  const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? "";
+  const raw = data?.choices?.[0]?.message?.content?.trim() ?? "";
 
   // Extract the first number (with optional decimal point) from the response
   const match = raw.match(/[\d]+([.,][\d]+)?/);
