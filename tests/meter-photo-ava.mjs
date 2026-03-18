@@ -91,17 +91,17 @@ if (!API_KEY) {
     t.true("date" in body, "should have a date field (null if no EXIF)");
   });
 
-  test.serial("meter-photo: recognized value is ~1977 kWh", async t => {
+  test.serial("meter-photo: recognized value is ~19777.9 kWh", async t => {
     const response = await postMeterPhoto(t.context.url, t.context.token);
     const { value } = await response.json();
 
     const numeric = parseFloat(value.replace(",", "."));
     t.log("Numeric value:", numeric);
 
-    // Meter shows 01977, allow ±5 tolerance for last digit uncertainty
+    // Meter shows 019777.9, allow ±2 tolerance for last digit uncertainty
     t.true(
-      numeric >= 1972 && numeric < 1983,
-      `Expected ~1977, got ${numeric}`
+      numeric >= 19775 && numeric < 19780,
+      `Expected ~19777.9, got ${numeric}`
     );
   });
 
