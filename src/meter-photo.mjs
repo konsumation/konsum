@@ -8,7 +8,7 @@ import exifr from "exifr";
 export const defaultMeterPhotoConfig = {
   meterPhoto: {
     vision: {
-      apiKey: "${first(env.VISION_API_KEY, env.OPENROUTER_API_KEY, env.GOOGLE_AI_STUDIO_API_KEY, '')}",
+      apiKey: "${first(env.VISION_API_KEY, env.OPENROUTER_API_KEY, '')}",
       apiEndpoint: "${first(env.VISION_API_ENDPOINT, 'https://openrouter.ai/api/v1')}",
       model: "${first(env.VISION_API_MODEL, 'google/gemma-3-12b-it:free')}",
       prompt:
