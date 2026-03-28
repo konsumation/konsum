@@ -46,11 +46,11 @@
     "config-expander": "^14.0.9",
     "exifr": "^7.1.3",
     "jsonwebtoken": "^9.0.3",
-    "koa": "^3.1.1",
+    "koa": "^3.1.2",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.4.1",
     "koa-jwt": "^4.0.4",
-    "ldapts": "^8.1.6"
+    "ldapts": "^8.1.7"
   },
   "devDependencies": {
     "@ava/get-port": "^2.0.0",
@@ -60,24 +60,24 @@
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/github": "^12.0.6",
     "@semantic-release/release-notes-generator": "^14.1.0",
-    "ava": "^6.4.1",
+    "ava": "^7.0.0",
     "ava-openapi": "^1.4.18",
-    "c8": "^10.1.3",
+    "c8": "^11.0.0",
     "documentation": "^14.0.3",
     "execa": "^9.6.0",
     "got": "^14.6.6",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^20.6.3",
+    "npm-pkgbuild": "^20.6.4",
     "semantic-release": "^25.0.3",
     "tmp": "^0.2.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "optionalDependencies": {
-    "mf-hosting": "^3.0.1",
+    "mf-hosting": "^3.0.6",
     "sd-daemon": "^2.0.1"
   },
   "engines": {
-    "node": ">=24.13.1"
+    "node": ">=24.14.0"
   },
   "cpu": [
     "arm64",
