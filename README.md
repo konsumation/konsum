@@ -101,6 +101,32 @@ Or directly calling the executable
 konsum insert ev 90091.3 '2019-06-22T13:44:17'
 ```
 
+# AI Vision (Meter Photo)
+
+To enable AI-powered meter value recognition from photos:
+
+1. Create a free API key at [OpenRouter](https://openrouter.ai/keys)
+2. Set the environment variable:
+
+```shell
+export OPENROUTER_API_KEY="sk-or-v1-..."
+```
+
+Or use a config file:
+
+```json
+{
+  "meterPhoto": {
+    "vision": {
+      "apiKey": "${OPENROUTER_API_KEY}",
+      "model": "nvidia/nemotron-nano-12b-v2-vl:free"
+    }
+  }
+}
+```
+
+The feature auto-activates when `apiKey` is configured. Check status via `GET /meter-photo/status`.
+
 # openapi
 
 see [openapi](https://konsumation.github.io/index.html)
@@ -118,6 +144,14 @@ see [openapi](https://konsumation.github.io/index.html)
 *   [addRoute](#addroute-4)
 *   [addRoute](#addroute-5)
 *   [addRoute](#addroute-6)
+*   [addRoute](#addroute-7)
+*   [meterPhoto](#meterphoto)
+*   [exifr](#exifr)
+*   [defaultMeterPhotoConfig](#defaultmeterphotoconfig)
+*   [extractExifDate](#extractexifdate)
+    *   [Parameters](#parameters)
+*   [recognizeMeterValue](#recognizemetervalue)
+    *   [Parameters](#parameters-1)
 
 ## addRoute
 
@@ -147,3 +181,47 @@ Retrieve service state.
 
 Login to request api token.
 At least one entitlement starting with "konsum" is required.
+
+## addRoute
+
+Return whether the meter-photo AI feature is configured.
+GET /meter-photo/status → { "enabled": true|false }
+
+## meterPhoto
+
+Recognize meter value from a photo via AI vision API.
+Expects JSON body: { "image": "<base64>", "mimeType": "image/jpeg" }
+Returns: { "value": "12345.6", "raw": "<full AI response>" }
+
+## exifr
+
+Meter photo OCR via external AI vision API.
+Uses OpenAI-compatible chat completions format (works with OpenRouter, OpenAI, Ollama, etc.)
+All connection details are taken from config — nothing is hardcoded.
+
+## defaultMeterPhotoConfig
+
+Template config for config-expander — env vars resolved at startup.
+
+## extractExifDate
+
+Extract the capture date from image EXIF data.
+Returns an ISO 8601 string or null if no date is found.
+
+### Parameters
+
+*   `imageBuffer` **[Buffer](https://nodejs.org/api/buffer.html)**&#x20;
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | null)>**&#x20;
+
+## recognizeMeterValue
+
+Send an image to the configured AI vision API and return the recognized meter value.
+Uses OpenAI-compatible chat completions format.
+Runs EXIF date extraction and AI recognition in parallel.
+
+### Parameters
+
+*   `config` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the meterPhoto config section
+*   `imageBase64` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base64-encoded image data
+*   `mimeType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** MIME type of the image (e.g. "image/jpeg")
