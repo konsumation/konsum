@@ -150,8 +150,12 @@ see [openapi](https://konsumation.github.io/index.html)
 *   [defaultMeterPhotoConfig](#defaultmeterphotoconfig)
 *   [extractExifDate](#extractexifdate)
     *   [Parameters](#parameters)
-*   [recognizeMeterValue](#recognizemetervalue)
+*   [ALLOWED\_MIME\_TYPES](#allowed_mime_types)
     *   [Parameters](#parameters-1)
+*   [ALLOWED\_MIME\_TYPES](#allowed_mime_types-1)
+*   [MAX\_IMAGE\_BASE64\_LENGTH](#max_image_base64_length)
+*   [recognizeMeterValue](#recognizemetervalue)
+    *   [Parameters](#parameters-2)
 
 ## POST\_admin\_stop
 
@@ -212,6 +216,28 @@ Returns an ISO 8601 string or null if no date is found.
 *   `imageBuffer` **[Buffer](https://nodejs.org/api/buffer.html)**&#x20;
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)<([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) | null)>**&#x20;
+
+## ALLOWED\_MIME\_TYPES
+
+Send an image to the configured AI vision API and return the recognized meter value.
+Uses OpenAI-compatible chat completions format.
+Runs EXIF date extraction and AI recognition in parallel.
+
+### Parameters
+
+*   `config` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the meterPhoto config section
+*   `imageBase64` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** base64-encoded image data
+*   `mimeType` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** MIME type of the image (e.g. "image/jpeg")
+
+## ALLOWED\_MIME\_TYPES
+
+Allowed MIME types for meter photos.
+
+## MAX\_IMAGE\_BASE64\_LENGTH
+
+Maximum allowed base64 image size in bytes (≈ 20 MB decoded).
+
+Type: [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)
 
 ## recognizeMeterValue
 

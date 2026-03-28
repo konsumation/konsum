@@ -57,7 +57,33 @@ export async function extractExifDate(imageBuffer) {
  * @param {string} mimeType - MIME type of the image (e.g. "image/jpeg")
  * @returns {Promise<{value: string, raw: string, date: string|null}>}
  */
+/** Allowed MIME types for meter photos. */
+export const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+/** Maximum allowed base64 image size in bytes (≈ 20 MB decoded). */
+export const MAX_IMAGE_BASE64_LENGTH = 27_000_000;
+
+/**
+ * Send an image to the configured AI vision API and return the recognized meter value.
+ * Uses OpenAI-compatible chat completions format.
+ * Runs EXIF date extraction and AI recognition in parallel.
+ *
+ * @param {object} config - the meterPhoto config section
+ * @param {string} imageBase64 - base64-encoded image data
+ * @param {string} mimeType - MIME type of the image (e.g. "image/jpeg")
+ * @returns {Promise<{value: string, raw: string, date: string|null}>}
+ */
 export async function recognizeMeterValue(config, imageBase64, mimeType) {
+  // Validate mimeType — prevent injection into data: URI
+  if (!ALLOWED_MIME_TYPES.has(mimeType)) {
+    throw new Error(`Unsupported mime type: ${mimeType}`);
+  }
+
+  // Validate base64 encoding
+  if (!/^[A-Za-z0-9+/\r\n]+=*$/.test(imageBase64)) {
+    throw new Error("Invalid base64 encoding");
+  }
+
   const { apiKey, apiEndpoint, model, prompt, maxOutputTokens, temperature } =
     config.vision;
 
@@ -95,16 +121,18 @@ export async function recognizeMeterValue(config, imageBase64, mimeType) {
   ]);
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`Vision API error ${response.status}: ${error}`);
+    const errorText = await response.text();
+    // Log full error server-side, return only status to client
+    console.error(`Vision API error ${response.status}: ${errorText.slice(0, 500)}`);
+    throw new Error(`Vision API error ${response.status}`);
   }
 
   const data = await response.json();
   const raw = data?.choices?.[0]?.message?.content?.trim() ?? "";
 
-  // Extract the first number (with optional decimal point) from the response
-  const match = raw.match(/[\d]+([.,][\d]+)?/);
-  const value = match ? match[0].replace(",", ".") : raw;
+  // Extract meter value: require at least 3 digits to avoid matching error codes
+  const match = raw.match(/\b(\d{3,}(?:[.,]\d+)?)\b/);
+  const value = match ? match[1].replace(",", ".") : "";
 
   return { value, raw, date };
 }
