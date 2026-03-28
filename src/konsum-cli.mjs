@@ -8,9 +8,9 @@ import {
   defaultDatabaseConfig,
   prepareHttpServer,
   defaultHttpServerConfig,
-  defaultAuthConfig
+  defaultAuthConfig,
+  defaultMeterPhotoConfig
 } from "@konsumation/konsum";
-import { defaultMeterPhotoConfig } from "./meter-photo.mjs";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
