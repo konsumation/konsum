@@ -220,6 +220,16 @@ export async function prepareHttpServer(config, sd, master) {
   });
 
   /**
+   * Return whether the meter-photo AI feature is configured.
+   * GET /meter-photo/status → { "enabled": true|false }
+   */
+  router.addRoute("GET", "/meter-photo/status", restricted, async (ctx, next) => {
+    setNoCacheHeaders(ctx);
+    ctx.body = { enabled: Boolean(config.meterPhoto?.vision?.apiKey) };
+    return next();
+  });
+
+  /**
    * Recognize meter value from a photo via AI vision API.
    * Expects JSON body: { "image": "<base64>", "mimeType": "image/jpeg" }
    * Returns: { "value": "12345.6", "raw": "<full AI response>" }
