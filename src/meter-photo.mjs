@@ -10,10 +10,10 @@ export const defaultMeterPhotoConfig = {
     vision: {
       apiKey: "${first(env.VISION_API_KEY, env.OPENROUTER_API_KEY, '')}",
       apiEndpoint: "${first(env.VISION_API_ENDPOINT, 'https://openrouter.ai/api/v1')}",
-      model: "${first(env.VISION_API_MODEL, 'google/gemma-3-12b-it:free')}",
+      model: "${first(env.VISION_API_MODEL, 'nvidia/nemotron-nano-12b-v2-vl:free')}",
       prompt:
         "${first(env.VISION_API_PROMPT, 'Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.')}",
-      maxOutputTokens: 64,
+      maxOutputTokens: 1024,
       temperature: 0
     }
   }
