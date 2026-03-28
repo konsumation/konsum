@@ -5,17 +5,6 @@
  */
 import exifr from "exifr";
 
-/** Resolved defaults — usable directly (e.g. in tests) without config-expander. */
-export const defaultVisionConfig = {
-  apiKey: "",
-  apiEndpoint: "https://openrouter.ai/api/v1",
-  model: "nvidia/nemotron-nano-12b-v2-vl:free",
-  prompt:
-    "Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.",
-  maxOutputTokens: 2048,
-  temperature: 0
-};
-
 /** Template config for config-expander — env vars resolved at startup. */
 export const defaultMeterPhotoConfig = {
   meterPhoto: {

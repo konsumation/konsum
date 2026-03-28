@@ -4,8 +4,10 @@ import { fileURLToPath } from "node:url";
 import postgres from "postgres";
 import getPort from "@ava/get-port";
 import { setSchema } from "@konsumation/db-postgresql";
+import { expand } from "config-expander";
 import { prepareHttpServer } from "../../src/http.mjs";
 import { prepareDatabase } from "../../src/database.mjs";
+import { defaultMeterPhotoConfig } from "../../src/meter-photo.mjs";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -84,6 +86,10 @@ export async function createConfig(
   cfg.auth.jwt.public = "${document('../../config/demo.rsa.pub')}";
   cfg.auth.jwt.private = "${document('../../config/demo.rsa')}";
   await writeFile(configFile, JSON.stringify(cfg, undefined, 2), "utf8");
+
+  // Expand meterPhoto defaults so tests get resolved values (not template strings)
+  const expandedMeterPhoto = await expand(defaultMeterPhotoConfig);
+  config.meterPhoto = expandedMeterPhoto.meterPhoto;
 
   return config;
 }

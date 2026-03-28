@@ -12,7 +12,7 @@ import getPort from "@ava/get-port";
 import { createConfig, login, stopServer } from "./helpers/server.mjs";
 import { prepareHttpServer } from "../src/http.mjs";
 import { prepareDatabase } from "../src/database.mjs";
-import { defaultVisionConfig } from "../src/meter-photo.mjs";
+
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -29,10 +29,8 @@ const API_KEY =
 const FIXTURE = pn("./fixtures/meter.jpg");
 const FIXTURE2 = pn("./fixtures/meter2.jpg");
 
-const VISION_CONFIG = {
-  ...defaultVisionConfig,
-  apiKey: API_KEY
-};
+// VISION_CONFIG will be config.meterPhoto.vision from createConfig (already expanded)
+// We just override apiKey with the actual key from env
 
 if (!API_KEY) {
   test("meter-photo: no API key configured — skipping", t => t.pass());
@@ -45,8 +43,8 @@ if (!API_KEY) {
       "@konsumation/db-level": databaseFile
     });
 
-    // Inject meterPhoto config — endpoint activates automatically when apiKey is set
-    config.meterPhoto = { vision: VISION_CONFIG };
+    // Override apiKey in the already-expanded meterPhoto config
+    config.meterPhoto.vision.apiKey = API_KEY;
 
     const { master } = await prepareDatabase(config);
     const { server } = await prepareHttpServer(config, sd, master);
