@@ -51,6 +51,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Stop konsum server.
+   * @alias POST_admin_stop
    */
   router.addRoute("POST", "/admin/stop", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.stop");
@@ -61,6 +62,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Reload konsum systemd config.
+   * @alias POST_admin_reload
    */
   router.addRoute("POST", "/admin/reload", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.reload");
@@ -72,6 +74,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Create backup on server.
+   * @alias POST_admin_backup
    */
   router.addRoute(
     "POST",
@@ -98,6 +101,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Backup data as text.
+   * @alias GET_admin_backup
    */
   router.addRoute("GET", "/admin/backup", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.backup");
@@ -120,6 +124,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Create token.
+   * @alias POST_admin_token
    */
   router.addRoute(
     "POST",
@@ -148,6 +153,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Retrieve service state.
+   * @alias GET_state
    */
   router.addRoute("GET", "/state", async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -172,6 +178,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * Login to request api token.
    * At least one entitlement starting with "konsum" is required.
+   * @alias POST_authenticate
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
@@ -221,7 +228,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Return whether the meter-photo AI feature is configured.
-   * GET /meter-photo/status → { "enabled": true|false }
+   * @alias GET_meter_photo_status
    */
   router.addRoute("GET", "/meter-photo/status", restricted, async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -232,7 +239,8 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * Recognize meter value from a photo via AI vision API.
    * Expects JSON body: { "image": "<base64>", "mimeType": "image/jpeg" }
-   * Returns: { "value": "12345.6", "raw": "<full AI response>" }
+   * Returns: { "value": "12345.6", "raw": "<full AI response>", "date": "ISO8601|null" }
+   * @alias POST_category_meter_photo
    */
   if (config.meterPhoto?.vision?.apiKey) {
     router.addRoute(

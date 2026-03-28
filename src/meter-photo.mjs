@@ -2,6 +2,7 @@
  * Meter photo OCR via external AI vision API.
  * Uses OpenAI-compatible chat completions format (works with OpenRouter, OpenAI, Ollama, etc.)
  * All connection details are taken from config — nothing is hardcoded.
+ * @module meter-photo
  */
 import exifr from "exifr";
 

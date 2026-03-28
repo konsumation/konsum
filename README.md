@@ -105,8 +105,8 @@ konsum insert ev 90091.3 '2019-06-22T13:44:17'
 
 To enable AI-powered meter value recognition from photos:
 
-1. Create a free API key at [OpenRouter](https://openrouter.ai/keys)
-2. Set the environment variable:
+1.  Create a free API key at [OpenRouter](https://openrouter.ai/keys)
+2.  Set the environment variable:
 
 ```shell
 export OPENROUTER_API_KEY="sk-or-v1-..."
@@ -137,63 +137,62 @@ see [openapi](https://konsumation.github.io/index.html)
 
 ### Table of Contents
 
-*   [addRoute](#addroute)
-*   [addRoute](#addroute-1)
-*   [addRoute](#addroute-2)
-*   [addRoute](#addroute-3)
-*   [addRoute](#addroute-4)
-*   [addRoute](#addroute-5)
-*   [addRoute](#addroute-6)
-*   [addRoute](#addroute-7)
-*   [meterPhoto](#meterphoto)
-*   [exifr](#exifr)
+*   [POST\_admin\_stop](#post_admin_stop)
+*   [POST\_admin\_reload](#post_admin_reload)
+*   [POST\_admin\_backup](#post_admin_backup)
+*   [GET\_admin\_backup](#get_admin_backup)
+*   [POST\_admin\_token](#post_admin_token)
+*   [GET\_state](#get_state)
+*   [POST\_authenticate](#post_authenticate)
+*   [GET\_meter\_photo\_status](#get_meter_photo_status)
+*   [POST\_category\_meter\_photo](#post_category_meter_photo)
+*   [meter-photo](#meter-photo)
 *   [defaultMeterPhotoConfig](#defaultmeterphotoconfig)
 *   [extractExifDate](#extractexifdate)
     *   [Parameters](#parameters)
 *   [recognizeMeterValue](#recognizemetervalue)
     *   [Parameters](#parameters-1)
 
-## addRoute
+## POST\_admin\_stop
 
 Stop konsum server.
 
-## addRoute
+## POST\_admin\_reload
 
 Reload konsum systemd config.
 
-## addRoute
+## POST\_admin\_backup
 
 Create backup on server.
 
-## addRoute
+## GET\_admin\_backup
 
 Backup data as text.
 
-## addRoute
+## POST\_admin\_token
 
 Create token.
 
-## addRoute
+## GET\_state
 
 Retrieve service state.
 
-## addRoute
+## POST\_authenticate
 
 Login to request api token.
 At least one entitlement starting with "konsum" is required.
 
-## addRoute
+## GET\_meter\_photo\_status
 
 Return whether the meter-photo AI feature is configured.
-GET /meter-photo/status → { "enabled": true|false }
 
-## meterPhoto
+## POST\_category\_meter\_photo
 
 Recognize meter value from a photo via AI vision API.
 Expects JSON body: { "image": "<base64>", "mimeType": "image/jpeg" }
-Returns: { "value": "12345.6", "raw": "<full AI response>" }
+Returns: { "value": "12345.6", "raw": "<full AI response>", "date": "ISO8601|null" }
 
-## exifr
+## meter-photo
 
 Meter photo OCR via external AI vision API.
 Uses OpenAI-compatible chat completions format (works with OpenRouter, OpenAI, Ollama, etc.)
