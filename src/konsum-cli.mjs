@@ -10,6 +10,7 @@ import {
   defaultHttpServerConfig,
   defaultAuthConfig
 } from "@konsumation/konsum";
+import { defaultMeterPhotoConfig } from "./meter-photo.mjs";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -114,7 +115,8 @@ async function prepareConfig() {
       description,
       ...defaultAuthConfig,
       ...defaultDatabaseConfig,
-      ...defaultHttpServerConfig
+      ...defaultHttpServerConfig,
+      ...defaultMeterPhotoConfig
     }
   });
 
