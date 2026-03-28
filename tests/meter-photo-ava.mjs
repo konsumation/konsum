@@ -12,6 +12,7 @@ import getPort from "@ava/get-port";
 import { createConfig, login, stopServer } from "./helpers/server.mjs";
 import { prepareHttpServer } from "../src/http.mjs";
 import { prepareDatabase } from "../src/database.mjs";
+import { defaultVisionConfig } from "../src/meter-photo.mjs";
 
 function pn(path) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -29,13 +30,8 @@ const FIXTURE = pn("./fixtures/meter.jpg");
 const FIXTURE2 = pn("./fixtures/meter2.jpg");
 
 const VISION_CONFIG = {
-  apiKey: API_KEY,
-  apiEndpoint: "https://openrouter.ai/api/v1",
-  model: "google/gemma-3-12b-it:free",
-  prompt:
-    "Read the meter display in this image and return only the numeric value with decimal point. No units, no text, just the number.",
-  maxOutputTokens: 64,
-  temperature: 0
+  ...defaultVisionConfig,
+  apiKey: API_KEY
 };
 
 if (!API_KEY) {
