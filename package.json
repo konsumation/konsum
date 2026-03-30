@@ -45,7 +45,7 @@
     "commander": "^14.0.3",
     "config-expander": "^14.0.9",
     "jsonwebtoken": "^9.0.3",
-    "koa": "^3.1.2",
+    "koa": "^3.2.0",
     "koa-better-router": "^2.1.1",
     "koa-bodyparser": "^4.4.1",
     "koa-jwt": "^4.0.4",
@@ -72,7 +72,7 @@
     "typescript": "^6.0.2"
   },
   "optionalDependencies": {
-    "mf-hosting": "^3.0.6",
+    "mf-hosting": "^3.0.7",
     "sd-daemon": "^2.0.1"
   },
   "engines": {
