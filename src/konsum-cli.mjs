@@ -8,7 +8,8 @@ import {
   defaultDatabaseConfig,
   prepareHttpServer,
   defaultHttpServerConfig,
-  defaultAuthConfig
+  defaultAuthConfig,
+  defaultMeterPhotoConfig
 } from "@konsumation/konsum";
 
 function pn(path) {
@@ -114,7 +115,8 @@ async function prepareConfig() {
       description,
       ...defaultAuthConfig,
       ...defaultDatabaseConfig,
-      ...defaultHttpServerConfig
+      ...defaultHttpServerConfig,
+      ...defaultMeterPhotoConfig
     }
   });
 

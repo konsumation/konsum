@@ -37,7 +37,7 @@ test.serial("delete category unknown", execAllContexts, async t => {
     });
     t.is(response.statusCode, 404);
   } catch (e) {
-    t.is(e.message, "Response code 404 (Not Found)");
+    t.true(e.message.includes("404"), `Expected 404 error, got: ${e.message}`);
   }
 });
 

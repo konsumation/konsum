@@ -5,6 +5,7 @@ import ms from "ms";
 import KoaJWT from "koa-jwt";
 import Router from "koa-better-router";
 import BodyParser from "koa-bodyparser";
+import { recognizeMeterValue, MAX_IMAGE_BASE64_LENGTH } from "./meter-photo.mjs";
 import { authenticate } from "./auth.mjs";
 
 export const defaultHttpServerConfig = {
@@ -50,6 +51,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Stop konsum server.
+   * @alias POST_admin_stop
    */
   router.addRoute("POST", "/admin/stop", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.stop");
@@ -60,6 +62,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Reload konsum systemd config.
+   * @alias POST_admin_reload
    */
   router.addRoute("POST", "/admin/reload", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.reload");
@@ -71,6 +74,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Create backup on server.
+   * @alias POST_admin_backup
    */
   router.addRoute(
     "POST",
@@ -97,6 +101,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Backup data as text.
+   * @alias GET_admin_backup
    */
   router.addRoute("GET", "/admin/backup", restricted, async (ctx, next) => {
     enshureEntitlement(ctx, "konsum.admin.backup");
@@ -119,6 +124,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Create token.
+   * @alias POST_admin_token
    */
   router.addRoute(
     "POST",
@@ -147,6 +153,7 @@ export async function prepareHttpServer(config, sd, master) {
 
   /**
    * Retrieve service state.
+   * @alias GET_state
    */
   router.addRoute("GET", "/state", async (ctx, next) => {
     setNoCacheHeaders(ctx);
@@ -171,6 +178,7 @@ export async function prepareHttpServer(config, sd, master) {
   /**
    * Login to request api token.
    * At least one entitlement starting with "konsum" is required.
+   * @alias POST_authenticate
    */
   router.addRoute("POST", "/authenticate", BodyParser(), async (ctx, next) => {
     const q = ctx.request.body;
@@ -217,6 +225,59 @@ export async function prepareHttpServer(config, sd, master) {
     ctx.throw(401, "Authentication failed");
     return next();
   });
+
+  /**
+   * Return whether the meter-photo AI feature is configured.
+   * @alias GET_meter_photo_status
+   */
+  router.addRoute("GET", "/meter-photo/status", restricted, async (ctx, next) => {
+    setNoCacheHeaders(ctx);
+    ctx.body = { enabled: Boolean(config.meterPhoto?.vision?.apiKey) };
+    return next();
+  });
+
+  /**
+   * Recognize meter value from a photo via AI vision API.
+   * Expects JSON body: { "image": "<base64>", "mimeType": "image/jpeg" }
+   * Returns: { "value": "12345.6", "raw": "<full AI response>", "date": "ISO8601|null" }
+   * @alias POST_category_meter_photo
+   */
+  router.addRoute(
+    "POST",
+    "/category/:category/meter-photo",
+    restricted,
+    BodyParser({ jsonLimit: "25mb" }),
+    async (ctx, next) => {
+      setNoCacheHeaders(ctx);
+
+      if (!config.meterPhoto?.vision?.apiKey) {
+        ctx.throw(501, "Meter photo feature not configured");
+      }
+
+      const { image, mimeType = "image/jpeg" } = ctx.request.body ?? {};
+
+      if (!image) {
+        ctx.throw(400, "Missing 'image' field (base64 encoded)");
+      }
+
+      if (image.length > MAX_IMAGE_BASE64_LENGTH) {
+        ctx.throw(413, "Image too large (max 20 MB)");
+      }
+
+      try {
+        const result = await recognizeMeterValue(
+          config.meterPhoto,
+          image,
+          mimeType
+        );
+        ctx.body = result;
+      } catch (e) {
+        ctx.throw(502, `Meter recognition failed: ${e.message}`);
+      }
+
+      return next();
+    }
+  );
 
   app.use(router.middleware());
 
