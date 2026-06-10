@@ -23,7 +23,7 @@
       "name": "Konstantin Karpman"
     }
   ],
-  "license": "BSD-2-Clause",
+  "license": "0BSD",
   "bin": {
     "konsum": "src/konsum-cli.mjs"
   },
@@ -66,8 +66,8 @@
     "execa": "^9.6.0",
     "got": "^15.0.5",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^20.7.1",
-    "semantic-release": "^25.0.3",
+    "npm-pkgbuild": "^20.7.2",
+    "semantic-release": "^25.0.5",
     "tmp": "^0.2.1",
     "typescript": "^6.0.3"
   },
