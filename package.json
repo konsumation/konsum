@@ -63,7 +63,7 @@
     "ava-openapi": "^1.4.18",
     "c8": "^11.0.0",
     "documentation": "^14.0.3",
-    "execa": "^9.6.0",
+    "execa": "^10.0.0",
     "got": "^15.1.0",
     "ldif": "^0.5.1",
     "npm-pkgbuild": "^20.8.2",
@@ -72,7 +72,7 @@
     "typescript": "^7.0.2"
   },
   "optionalDependencies": {
-    "mf-hosting": "^3.0.13",
+    "mf-hosting": "^3.0.14",
     "sd-daemon": "^2.0.1"
   },
   "overrides": {
