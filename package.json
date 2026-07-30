@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": false
   },
-  "packageManager": "npm@11.6.3+sha512.4085a763162e0e3acd19a4e9d23ad3aa0978e501ccf947dd7233c12a689ae0bb0190763c4ef12366990056b34eec438903ffed38fde4fbd722a17c2a7407ee92",
+  "packageManager": "npm@11.18.0",
   "types": "./types/server.d.mts",
   "exports": {
     ".": {
@@ -66,7 +66,7 @@
     "execa": "^10.0.0",
     "got": "^15.1.0",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^20.8.7",
+    "npm-pkgbuild": "^20.8.8",
     "semantic-release": "^25.0.8",
     "tmp": "^0.2.1",
     "typescript": "^7.0.2"
