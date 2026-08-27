@@ -19,7 +19,7 @@ jobs:
         os:
           - ubuntu-latest
         node-version:
-          - 26.7.0
+          - 26.8.1
     env:
       POSTGRES_URL_DISABLED: postgresql://postgres:postgres@localhost:5432/ci_db_test
       POSTGRES_USER: postgres
@@ -92,7 +92,7 @@ jobs:
       - name: prepare node
         uses: actions/setup-node@v7.0.0
         with:
-          node-version: 24.19.0
+          node-version: 24.20.0
       - name: install
         run: npm ci
       - name: install dependencies
