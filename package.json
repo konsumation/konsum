@@ -66,13 +66,13 @@
     "execa": "^10.0.1",
     "got": "^16.0.0",
     "ldif": "^0.5.1",
-    "npm-pkgbuild": "^22.1.4",
+    "npm-pkgbuild": "^22.1.6",
     "semantic-release": "^25.0.9",
     "tmp": "^0.2.1",
     "typescript": "^7.0.2"
   },
   "optionalDependencies": {
-    "mf-hosting": "^3.1.1",
+    "mf-hosting": "^3.1.2",
     "sd-daemon": "^2.0.1"
   },
   "engines": {
